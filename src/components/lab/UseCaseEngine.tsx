@@ -17,6 +17,7 @@ import { RUN_STAGES } from "@/lib/ai-engine";
 import type { UseCase } from "@/lib/lab-types";
 import { COMPANY_CONTEXT, USE_CASES } from "@/data/useCases";
 import { OutputRenderer } from "@/components/lab/outputs";
+import { StepVisual, StepPipeline, getStepConfig } from "@/components/lab/StepVisuals";
 
 const CATEGORIES = ["All", "Research", "Create", "Optimize", "Operate"] as const;
 
@@ -105,6 +106,103 @@ function UseCaseGrid({ onOpen }: { onOpen: (uc: UseCase) => void }) {
   );
 }
 
+// ── Inline prompt SVG (used in prompt step) ─────────────────────────────────
+
+function PromptSvg() {
+  return (
+    <svg viewBox="0 0 120 80" fill="none" className="h-full w-full">
+      <rect x="8" y="8" width="104" height="64" rx="6" fill="rgba(34,211,238,0.04)" stroke="#22d3ee" strokeWidth="1" opacity="0.4" />
+      <text x="16" y="22" fill="#67e8f9" fontSize="6" fontWeight="bold" opacity="0.7">CONTEXT</text>
+      <rect x="16" y="25" width="50" height="3" rx="1.5" fill="#22d3ee" opacity="0.2" />
+      <text x="16" y="36" fill="#a78bfa" fontSize="6" fontWeight="bold" opacity="0.7">OBJECTIVE</text>
+      <rect x="16" y="39" width="42" height="3" rx="1.5" fill="#a78bfa" opacity="0.2" />
+      <text x="16" y="50" fill="#34d399" fontSize="6" fontWeight="bold" opacity="0.7">TASK</text>
+      <rect x="16" y="53" width="38" height="3" rx="1.5" fill="#34d399" opacity="0.2" />
+      <text x="16" y="64" fill="#f472b6" fontSize="6" fontWeight="bold" opacity="0.7">CONSTRAINTS</text>
+      <rect x="16" y="67" width="55" height="3" rx="1.5" fill="#f472b6" opacity="0.2" />
+      <rect x="75" y="20" width="32" height="42" rx="4" stroke="#f472b6" strokeWidth="1.2" opacity="0.5" />
+      <text x="91" y="38" textAnchor="middle" fill="#f9a8d4" fontSize="5.5" fontWeight="bold">STRUCTURED</text>
+      <text x="91" y="46" textAnchor="middle" fill="#f9a8d4" fontSize="5.5" fontWeight="bold">PROMPT</text>
+      <path d="M68 35 L75 35" stroke="#67e8f9" strokeWidth="1" opacity="0.5" markerEnd="url(#pArrow)" />
+      <defs><marker id="pArrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L6 3 L0 6" fill="#22d3ee" opacity="0.6" /></marker></defs>
+    </svg>
+  );
+}
+
+// ── Skill step visual ───────────────────────────────────────────────────────
+
+function SkillVisualStep() {
+  const stages = [
+    { k: "INPUT", desc: "Define what raw material enters", color: "from-cyan-400 to-sky-400" },
+    { k: "COLLECT", desc: "Gather into one place", color: "from-sky-400 to-indigo-400" },
+    { k: "CATEGORIZE", desc: "Sort into buckets", color: "from-indigo-400 to-violet-400" },
+    { k: "COMPARE", desc: "Side-by-side on shared dims", color: "from-violet-400 to-fuchsia-400" },
+    { k: "GAPS", desc: "Find what's missing", color: "from-fuchsia-400 to-rose-400" },
+    { k: "INSIGHT", desc: "Synthesize decisions", color: "from-rose-400 to-amber-400" },
+    { k: "QC", desc: "Audit the draft", color: "from-amber-400 to-emerald-400" },
+    { k: "OUTPUT", desc: "Deliver in agreed format", color: "from-emerald-400 to-cyan-400" },
+  ];
+  return (
+    <div>
+      <p className="text-xs font-bold uppercase tracking-widest text-violet-300 mb-3">Skill pipeline · reusable method</p>
+      <div className="flex flex-wrap items-center gap-1.5">
+        {stages.map((s, i) => (
+          <div key={s.k} className="flex items-center gap-1.5">
+            <div className="group relative">
+              <div className={`rounded-xl border border-white/10 bg-gradient-to-br ${s.color} bg-opacity-10 px-3 py-2 text-center transition-all hover:scale-105 hover:border-white/25`}>
+                <p className="text-[10px] font-bold tracking-wider text-foreground/90">{s.k}</p>
+              </div>
+              <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-1 w-36 -translate-x-1/2 rounded-lg border border-white/15 bg-popover/95 p-2 text-[10px] leading-snug text-popover-foreground opacity-0 shadow-xl transition-opacity group-hover:opacity-100">
+                {s.desc}
+              </div>
+            </div>
+            {i < stages.length - 1 && <span className="text-white/20">→</span>}
+          </div>
+        ))}
+      </div>
+      <p className="mt-3 text-xs text-muted-foreground">A prompt = one instruction. A skill = this whole pipeline, reusable every single week.</p>
+    </div>
+  );
+}
+
+// ── Connector step visual ─────────────────────────────────────────────────────
+
+function ConnectorVisualStep({ uc }: { uc: UseCase }) {
+  const sources = [
+    { label: "Documents", desc: uc.steps[2].answer.split(".")[0], icon: "📄" },
+    { label: "Spreadsheets", desc: "Exported data in rows and columns", icon: "📊" },
+    { label: "Public sources", desc: "Pages you collect and paste in", icon: "🌐" },
+  ];
+  return (
+    <div>
+      <p className="text-xs font-bold uppercase tracking-widest text-indigo-300 mb-3">Data flow · where information comes from</p>
+      <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-2">
+          {sources.map((s) => (
+            <div key={s.label} className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+              <span className="text-lg">{s.icon}</span>
+              <div>
+                <p className="text-[11px] font-bold text-foreground/90">{s.label}</p>
+                <p className="text-[10px] text-muted-foreground">{s.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <div className="h-0.5 w-8 bg-gradient-to-r from-indigo-400/50 to-violet-400/50" />
+          <svg width="12" height="8" viewBox="0 0 12 8"><path d="M6 0 L12 4 L6 8" fill="#a78bfa" opacity="0.6" /></svg>
+          <div className="h-10 w-24 rounded-xl border border-violet-300/30 bg-violet-300/[0.08] flex items-center justify-center">
+            <p className="text-[10px] font-bold text-violet-200">CLAUDE</p>
+          </div>
+          <svg width="12" height="8" viewBox="0 0 12 8"><path d="M0 4 L6 0 L12 4 L6 8" fill="#34d399" opacity="0.4" /></svg>
+          <div className="h-0.5 w-8 bg-gradient-to-r from-emerald-400/50 to-cyan-400/50" />
+        </div>
+      </div>
+      <p className="mt-3 text-xs text-muted-foreground">Only supply data you're authorized to use. Claude has no memory of your private information.</p>
+    </div>
+  );
+}
+
 // ── Wizard ───────────────────────────────────────────────────────────────────
 
 function RunPanel({ onDone }: { onDone: () => void }) {
@@ -169,6 +267,8 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
   const total = uc.steps.length;
   const current = uc.steps[step];
   const isOutputStep = step === 6; // OUTPUT stage
+  const stepCfg = getStepConfig(step);
+  const StepIcon = stepCfg.icon;
 
   useEffect(() => {
     topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -205,18 +305,13 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
           <span className="text-2xl">{uc.emoji}</span>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-bold">{uc.title}</p>
-            {/* progress dots */}
-            <div className="mt-1.5 flex items-center gap-1">
-              {uc.steps.map((_, i) => (
-                <span
-                  key={i}
-                  className={`h-1 flex-1 rounded-full transition-colors ${
-                    i <= step ? "bg-gradient-to-r from-cyan-400 to-fuchsia-400" : "bg-white/10"
-                  }`}
-                />
-              ))}
+            <div className="mt-1.5">
+              <StepPipeline currentStep={step} total={total} />
             </div>
           </div>
+          <span className="shrink-0 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-[10px] font-bold tracking-wider text-muted-foreground">
+            {step + 1}/{total}
+          </span>
           <Button
             variant="ghost"
             size="icon"
@@ -239,20 +334,41 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
           >
             {!isOutputStep || outputReady ? (
               <>
-                <div>
-                  <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-cyan-300">
-                    Step {String(step + 1).padStart(2, "0")} / {total} · {current.title}
-                  </p>
-                  <h3 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">{current.question}</h3>
+                {/* ── Step header with illustration ──────────────────────── */}
+                <div className="grid gap-4 sm:grid-cols-[100px_1fr]">
+                  <div className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${stepCfg.bgGlow} p-3`}>  
+                    <div className="aspect-[4/3]">
+                      <StepIcon />
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/40 to-transparent px-3 py-1.5">
+                      <p className={`text-[10px] font-bold tracking-widest ${stepCfg.color}`}>STEP {String(step + 1).padStart(2, "0")}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-cyan-300">
+                      {current.title}
+                    </p>
+                    <h3 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">{current.question}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{current.answer}</p>
+                  </div>
                 </div>
 
+                {/* ── Step-specific content ──────────────────────────────── */}
                 <div className="glass rounded-3xl p-5 sm:p-6">
                   {isOutputStep ? (
                     <OutputRenderer output={uc.output} />
                   ) : step === 4 ? (
                     /* PROMPT step shows the full prompt */
                     <div>
-                      <p className="text-sm leading-relaxed text-muted-foreground">{current.answer}</p>
+                      <div className="grid gap-4 sm:grid-cols-[140px_1fr]">
+                        <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-fuchsia-300/[0.08] to-transparent p-3">
+                          <div className="aspect-[3/2]"><PromptSvg /></div>
+                        </div>
+                        <div className="flex flex-col justify-center">
+                          <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Prompt anatomy</p>
+                          <p className="mt-1.5 text-sm leading-relaxed text-foreground/90">Every section of this prompt has a purpose. Context sets the scene, constraints prevent hallucination, and the output format makes results comparable week over week.</p>
+                        </div>
+                      </div>
                       <div className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.04] p-4">
                         <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-emerald-300">
                           Copy-paste prompt · swap in your own context
@@ -266,12 +382,21 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
                         Copy prompt + company context to clipboard
                       </button>
                     </div>
+                  ) : step === 3 ? (
+                    /* SKILL step shows stages visually */
+                    <SkillVisualStep />
+                  ) : step === 2 ? (
+                    /* CONNECTOR step shows data flow */
+                    <ConnectorVisualStep uc={uc} />
                   ) : (
                     <div className="flex gap-3">
                       <CircleCheck className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" />
                       <p className="leading-relaxed text-foreground/90">{current.answer}</p>
                     </div>
                   )}
+
+                  {/* ── Visual below every non-output step ─────────── */}
+                  {!isOutputStep && <StepVisual stepIndex={step} useCaseName={uc.title} />}
 
                   {isOutputStep && outputReady && (
                     <div className="mt-6 space-y-4 border-t border-white/10 pt-5">
