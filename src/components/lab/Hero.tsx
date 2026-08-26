@@ -99,16 +99,16 @@ export function Hero() {
   const suggestion = useMemo(() => {
     if (query.trim().length < 3) return null;
     const q = query.toLowerCase();
-    const match =
-      HERO_EXAMPLES.find((e) => e.text.toLowerCase().includes(q.slice(0, 12))) ??
-      (q.includes("compet") ? "competitor-analysis" : null) ??
-      (q.includes("campaign") || q.includes("launch") ? "campaign-planning" : null) ??
-      (q.includes("review") || q.includes("customer") ? "customer-research" : null) ??
-      (q.includes("cart") || q.includes("conver") || q.includes("analyt") ? "campaign-analysis" : null) ??
-      (q.includes("email") ? "email-marketing" : null) ??
-      (q.includes("social") || q.includes("instagram") ? "social-media" : null) ??
-      (q.includes("test") ? "ab-testing" : null);
-    return match;
+    const found = HERO_EXAMPLES.find((e) => e.text.toLowerCase().includes(q.slice(0, 12)));
+    if (found) return found.useCaseId;
+    if (q.includes("compet")) return "competitor-analysis";
+    if (q.includes("campaign") || q.includes("launch")) return "campaign-planning";
+    if (q.includes("review") || q.includes("customer")) return "customer-research";
+    if (q.includes("cart") || q.includes("conver") || q.includes("analyt")) return "campaign-analysis";
+    if (q.includes("email")) return "email-marketing";
+    if (q.includes("social") || q.includes("instagram")) return "social-media";
+    if (q.includes("test")) return "ab-testing";
+    return null;
   }, [query]);
 
   const submit = () => {
