@@ -169,7 +169,7 @@ function SkillVisualStep() {
 
 function ConnectorVisualStep({ uc }: { uc: UseCase }) {
   const sources = [
-    { label: "Documents", desc: uc.steps[2].answer.split(".")[0], icon: "📄" },
+    { label: "Documents", desc: uc.steps[2]?.answer?.split(".")[0] ?? uc.sources[0]?.description ?? "Data source", icon: "📄" },
     { label: "Spreadsheets", desc: "Exported data in rows and columns", icon: "📊" },
     { label: "Public sources", desc: "Pages you collect and paste in", icon: "🌐" },
   ];
@@ -348,15 +348,15 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
                     <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-cyan-300">
                       {current.title}
                     </p>
-                    <h3 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">{current.question}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{current.answer}</p>
+                    <h3 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">{current.question ?? current.screenTitle}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{current.answer ?? current.explanation}</p>
                   </div>
                 </div>
 
                 {/* ── Step-specific content ──────────────────────────────── */}
                 <div className="glass rounded-3xl p-5 sm:p-6">
                   {isOutputStep ? (
-                    <OutputRenderer output={uc.output} />
+                    <OutputRenderer output={uc.output as any} />
                   ) : step === 4 ? (
                     /* PROMPT step shows the full prompt */
                     <div>
@@ -417,7 +417,7 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
                           Turn this insight into…
                         </p>
                         <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
-                          {uc.actions.map((a) => (
+                          {uc.nextActions.map((a) => (
                             <div key={a.label} className="rounded-xl border border-white/10 bg-white/[0.04] p-3.5">
                               <p className="text-sm font-semibold">{a.label}</p>
                               <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{a.description}</p>

@@ -47,12 +47,12 @@ function PreviewChain({ useCaseId }: { useCaseId: string }) {
   const uc = USE_CASES.find((u) => u.id === useCaseId);
   if (!uc) return null;
   const chain = [
-    { k: "BUSINESS GOAL", v: uc.steps[0].answer },
+    { k: "BUSINESS GOAL", v: uc.goal },
     { k: "WORKFLOW", v: `${uc.category} workflow · ${uc.steps.length} guided steps` },
-    { k: "SKILL", v: uc.steps[3].answer.split(":")[1]?.split("→")[0]?.trim() ?? "Structured analysis method" },
-    { k: "CONNECTOR", v: uc.steps[2].answer.split(".")[0] },
+    { k: "SKILL", v: uc.capabilityReason.split(".")[0] ?? "Structured analysis method" },
+    { k: "CONNECTOR", v: uc.sources[0]?.name ?? "Public web source" },
     { k: "PROMPT", v: uc.prompt.split("\n")[0] },
-    { k: "EXPECTED OUTPUT", v: uc.summary },
+    { k: "EXPECTED OUTPUT", v: uc.outputDescription },
   ];
   return (
     <motion.div
