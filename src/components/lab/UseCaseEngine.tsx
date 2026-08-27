@@ -343,8 +343,8 @@ function UseCaseGrid({ onOpen }: { onOpen: (uc: UseCase) => void }) {
             aria-pressed={cat === c}
             className={`rounded-full border px-4 py-1.5 text-xs font-semibold transition-all ${
               cat === c
-                ? "border-[#D97757]/50 bg-[#D97757]/10 text-[#F2C88F]"
-                : "border-white/10 text-muted-foreground hover:text-foreground"
+                ? "border-[#D97757]/50 bg-[#D97757]/10 text-[#D97757]"
+                : "border-[#E2E0DB] bg-white/60 text-[#6B6B66] hover:text-[#1C1C1C]"
             }`}
           >
             {c === "All" ? `All · ${USE_CASES.length}` : `${CATEGORY_EMOJI[c]} ${c}`}
@@ -354,7 +354,7 @@ function UseCaseGrid({ onOpen }: { onOpen: (uc: UseCase) => void }) {
 
       {lastUseCaseId && (
         <div className="mx-auto mb-6 w-fit">
-          <Button variant="outline" size="sm" className="rounded-full border-white/15 bg-white/5"
+          <Button variant="outline" size="sm" className="rounded-full border-[#E2E0DB] bg-white/70 text-[#4A4A46]"
             onClick={() => { const uc = USE_CASES.find((u) => u.id === lastUseCaseId); if (uc) onOpen(uc); }}>
             <Repeat className="mr-2 h-3.5 w-3.5" />
             Resume where you left off: {USE_CASES.find((u) => u.id === lastUseCaseId)?.title}
@@ -371,15 +371,15 @@ function UseCaseGrid({ onOpen }: { onOpen: (uc: UseCase) => void }) {
             viewport={{ once: true, margin: "-40px" }}
             transition={{ delay: Math.min(i * 0.03, 0.3) }}
             onClick={() => onOpen(uc)}
-            className={`group relative overflow-hidden rounded-2xl border p-4 text-left transition-all hover:-translate-y-1 hover:border-[#D97757]/40 hover:shadow-[0_8px_40px_rgba(217,119,87,0.12)] focus-visible:border-[#D97757]/50 focus-visible:outline-none ${
+            className={`group relative overflow-hidden rounded-2xl border p-4 text-left transition-all hover:-translate-y-1 hover:border-[#D97757]/40 hover:shadow-lg hover:shadow-[#D97757]/8 focus-visible:border-[#D97757]/50 focus-visible:outline-none ${
               completedUseCases.includes(uc.id)
                 ? "border-[#6B9E8A]/25 bg-[#6B9E8A]/[0.04]"
-                : "border-white/10 bg-white/[0.03]"
+                : "border-[#E2E0DB] bg-white/70"
             }`}
           >
             <span className="pointer-events-none absolute -right-6 -top-6 h-16 w-16 rounded-full bg-[#D97757]/10 blur-xl transition-opacity opacity-0 group-hover:opacity-100" />
             <span className="text-2xl">{uc.emoji}</span>
-            <p className="mt-2 flex items-center gap-1.5 text-sm font-bold tracking-tight group-hover:text-[#F2C88F]">
+            <p className="mt-2 flex items-center gap-1.5 text-sm font-bold tracking-tight text-[#1C1C1C] group-hover:text-[#D97757]">
               {uc.title}
               {completedUseCases.includes(uc.id) && (
                 <CircleCheck className="h-3.5 w-3.5 shrink-0 text-[#6B9E8A]" />
@@ -453,7 +453,7 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[60] workflow-light"
+      className="fixed inset-0 z-[60]"
       role="dialog"
       aria-modal="true"
       aria-label={`${uc.title} workflow`}

@@ -32,15 +32,15 @@ function NodeCard({
         animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         onClick={() => onOpen(node)}
-        className="group relative w-full max-w-md rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-5 text-left backdrop-blur transition-all hover:border-[#D97757]/40 hover:shadow-[0_0_40px_rgba(217,119,87,0.12)] focus-visible:border-[#D97757]/50 focus-visible:outline-none"
+        className="group relative w-full max-w-md rounded-2xl border border-[#E2E0DB] bg-white/80 p-5 text-left shadow-sm shadow-black/[0.03] backdrop-blur transition-all hover:border-[#D97757]/40 hover:shadow-lg hover:shadow-[#D97757]/8 focus-visible:border-[#D97757]/50 focus-visible:outline-none"
       >
         <span className="absolute -top-2.5 left-5 rounded-full bg-[#D97757] px-2 py-0.5 text-[10px] font-bold text-white">
           {String(index + 1).padStart(2, "0")}
         </span>
-        <p className="text-sm font-bold tracking-widest text-foreground group-hover:text-[#F2C88F]">
+        <p className="text-sm font-bold tracking-widest text-[#4A4A46] group-hover:text-[#D97757]">
           {node.label}
         </p>
-        <p className="mt-1.5 text-sm text-muted-foreground">{node.question}</p>
+        <p className="mt-1.5 text-sm text-[#6B6B66]">{node.question}</p>
         <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[#D97757]">
           How Claude helps here <ChevronDown className="h-3 w-3" />
         </span>
@@ -52,7 +52,7 @@ function NodeCard({
           initial={{ scaleY: 0 }}
           animate={inView ? { scaleY: 1 } : {}}
           transition={{ duration: 0.4, delay: 0.3 }}
-          className="h-10 w-px origin-top bg-gradient-to-b from-[#D97757]/50 to-transparent"
+          className="h-10 w-px origin-top bg-gradient-to-b from-[#D97757]/40 to-transparent"
         />
       )}
     </div>
@@ -64,15 +64,15 @@ export function WorkflowSection() {
 
   return (
     <section id="workflow" className="relative py-24 sm:py-32">
-      <div className="aurora-blob left-[5%] top-[30%] h-64 w-64 bg-[#D97757]/10" />
+      <div className="aurora-blob left-[5%] top-[30%] h-64 w-64 bg-[#D97757]/8" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D97757]">The Full Picture</p>
-          <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-5xl">
+          <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-[#1C1C1C] sm:text-5xl">
             Marketing isn't one task.{" "}
             <span className="text-gradient">It's a system.</span>
           </h2>
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-4 text-[#6B6B66]">
             Click any node to see how Claude helps at each stage of the marketing workflow.
           </p>
         </div>
@@ -85,18 +85,18 @@ export function WorkflowSection() {
       </div>
 
       <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
-        <DialogContent className="max-w-lg rounded-3xl border-white/10 bg-[#151922] p-6">
+        <DialogContent className="max-w-lg rounded-3xl border-[#E2E0DB] bg-white p-6 shadow-2xl shadow-black/10">
           {open && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-lg font-bold">{open.label}</DialogTitle>
+                <DialogTitle className="text-lg font-bold text-[#1C1C1C]">{open.label}</DialogTitle>
               </DialogHeader>
-              <p className="mt-2 text-sm text-muted-foreground">{open.explanation}</p>
+              <p className="mt-2 text-sm text-[#6B6B66]">{open.explanation}</p>
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 {(["input", "analysis", "insight"] as const).map((k) => (
-                  <div key={k} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                  <div key={k} className="rounded-xl border border-[#E2E0DB]/60 bg-[#F5F4F0]/60 p-3">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-[#D97757]">{k}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{open.claudeFlow[k]}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-[#6B6B66]">{open.claudeFlow[k]}</p>
                   </div>
                 ))}
               </div>

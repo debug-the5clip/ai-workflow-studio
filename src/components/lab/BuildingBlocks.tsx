@@ -64,24 +64,24 @@ export function BuildingBlocks() {
 
   return (
     <section id="blocks" className="relative py-24 sm:py-32">
-      <div className="aurora-blob left-[10%] top-[20%] h-64 w-64 bg-[#D97757]/10" />
+      <div className="aurora-blob left-[10%] top-[20%] h-64 w-64 bg-[#C47AB0]/8" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* header */}
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D97757]">The five ideas behind the workflow</p>
-          <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-5xl">
+          <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-[#1C1C1C] sm:text-5xl">
             Prompt, Skill, Connector, Loop,{" "}
             <span className="text-gradient">and Routine</span>.
           </h2>
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-4 text-[#6B6B66]">
             Not every task needs the same kind of setup. Learn which approach fits the size of the job.
           </p>
         </div>
 
         {/* Scenario banner */}
-        <div className="mx-auto mb-8 max-w-2xl rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Scenario</p>
-          <p className="mt-1 text-lg font-semibold text-foreground">"Analyze our competitors."</p>
+        <div className="mx-auto mb-8 max-w-2xl rounded-2xl border border-[#E2E0DB] bg-white/80 p-4 text-center shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#9A968F]">Scenario</p>
+          <p className="mt-1 text-lg font-semibold text-[#1C1C1C]">"Analyze our competitors."</p>
         </div>
 
         {/* Tab buttons */}
@@ -95,8 +95,8 @@ export function BuildingBlocks() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
                   active
-                    ? "border border-[#D97757]/60 bg-[#D97757]/15 text-[#F2C88F] shadow-[0_0_20px_rgba(217,119,87,0.15)]"
-                    : "border border-white/10 bg-white/[0.03] text-muted-foreground hover:border-white/25 hover:text-foreground"
+                    ? "border border-[#D97757]/40 bg-[#D97757]/10 text-[#D97757] shadow-sm shadow-[#D97757]/10"
+                    : "border border-[#E2E0DB] bg-white/70 text-[#6B6B66] hover:border-[#D97757]/25 hover:text-[#1C1C1C]"
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -115,27 +115,27 @@ export function BuildingBlocks() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.25 }}
-              className="rounded-3xl border border-white/10 bg-card/60 p-6 sm:p-8 backdrop-blur"
+              className="glass-light rounded-3xl p-6 shadow-lg shadow-black/[0.04] sm:p-8"
             >
               <p className="mb-1 text-xs font-bold uppercase tracking-[0.25em] text-[#D97757]">
                 {activeTab} — {content.definition}
               </p>
-              <h3 className="mt-3 text-xl font-bold leading-snug sm:text-2xl">{content.title}</h3>
-              <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Example</p>
-                <p className="text-sm leading-relaxed text-foreground/90">{content.example}</p>
+              <h3 className="mt-3 text-xl font-bold leading-snug text-[#1C1C1C] sm:text-2xl">{content.title}</h3>
+              <div className="mt-4 rounded-2xl border border-[#E2E0DB]/60 bg-[#F5F4F0]/60 p-4">
+                <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#9A968F]">Example</p>
+                <p className="text-sm leading-relaxed text-[#4A4A46]">{content.example}</p>
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{content.detail}</p>
+              <p className="mt-4 text-sm leading-relaxed text-[#6B6B66]">{content.detail}</p>
             </motion.div>
           </AnimatePresence>
         </div>
 
         {/* Comparison table */}
-        <div className="mx-auto mt-10 max-w-5xl overflow-x-auto rounded-2xl border border-white/10 bg-card/40">
+        <div className="mx-auto mt-10 max-w-5xl overflow-x-auto rounded-2xl border border-[#E2E0DB] bg-white/80 shadow-sm">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
-              <tr className="border-b border-white/10">
-                <th className="px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground"></th>
+              <tr className="border-b border-[#E2E0DB]">
+                <th className="px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#9A968F]"></th>
                 {TABS.map((t) => (
                   <th key={t.id} className="px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#D97757]">
                     {t.label}
@@ -145,13 +145,13 @@ export function BuildingBlocks() {
             </thead>
             <tbody>
               {COMPARISON_TABLE.map((row) => (
-                <tr key={row.col} className="border-b border-white/5 last:border-0">
-                  <td className="px-4 py-3 font-semibold text-foreground/80">{row.col}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{row.prompt}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{row.skill}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{row.connector}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{row.loop}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{row.routine}</td>
+                <tr key={row.col} className="border-b border-[#E2E0DB]/40 last:border-0">
+                  <td className="px-4 py-3 font-semibold text-[#4A4A46]">{row.col}</td>
+                  <td className="px-4 py-3 text-[#6B6B66]">{row.prompt}</td>
+                  <td className="px-4 py-3 text-[#6B6B66]">{row.skill}</td>
+                  <td className="px-4 py-3 text-[#6B6B66]">{row.connector}</td>
+                  <td className="px-4 py-3 text-[#6B6B66]">{row.loop}</td>
+                  <td className="px-4 py-3 text-[#6B6B66]">{row.routine}</td>
                 </tr>
               ))}
             </tbody>
@@ -163,8 +163,8 @@ export function BuildingBlocks() {
           <div className="flex items-start gap-3">
             <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-[#D97757]" />
             <div>
-              <p className="text-sm font-bold text-foreground">Why not just a Prompt?</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+              <p className="text-sm font-bold text-[#1C1C1C]">Why not just a Prompt?</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-[#6B6B66]">
                 A Skill is only worth building when you'll ask the same <em>kind</em> of question more than a few times,
                 when the method matters as much as the answer (so it should stay consistent), or when several teammates
                 need to get the same quality of result without re-explaining the approach. If it's a one-off question,
@@ -175,12 +175,12 @@ export function BuildingBlocks() {
         </div>
 
         {/* Educational note on Routines */}
-        <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+        <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-[#E2E0DB] bg-white/70 p-5 shadow-sm">
           <div className="flex items-start gap-3">
-            <Calendar className="mt-0.5 h-5 w-5 shrink-0 text-[#F2C88F]" />
+            <Calendar className="mt-0.5 h-5 w-5 shrink-0 text-[#D97757]" />
             <div>
-              <p className="text-sm font-bold text-foreground">A note on Routines</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+              <p className="text-sm font-bold text-[#1C1C1C]">A note on Routines</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-[#6B6B66]">
                 Claude does not run recurring schedules by itself inside a chat. A "Routine" in this product is an
                 <strong> educational framing</strong> of how a marketer would sequence repeated Skill + Connector use,
                 not a claim about a built-in autopilot feature. Think of it as a playbook your team follows, not software that runs itself.

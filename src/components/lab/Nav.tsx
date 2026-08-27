@@ -34,18 +34,18 @@ export function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass shadow-lg shadow-black/20" : "bg-transparent"
+        scrolled ? "glass shadow-md shadow-black/5" : "bg-transparent"
       }`}
     >
       {/* scroll progress */}
       <motion.div
-        className="absolute inset-x-0 top-0 h-[2px] origin-left bg-gradient-to-r from-[#D97757] via-[#F2C88F] to-[#D97757]"
+        className="absolute inset-x-0 top-0 h-[2px] origin-left bg-gradient-to-r from-[#D97757] via-[#C47AB0] to-[#D97757]"
         style={{ scaleX: progress }}
       />
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center gap-2.5 font-semibold tracking-tight"
+          className="flex items-center gap-2.5 font-semibold tracking-tight text-[#1C1C1C]"
           aria-label="Claude Marketing Lab — back to top"
         >
           <FlaskConical className="h-5 w-5 text-[#D97757]" />
@@ -58,7 +58,7 @@ export function Nav() {
             <button
               key={l.href}
               onClick={() => go(l.href)}
-              className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-[#6B6B66] transition-colors hover:text-[#1C1C1C]"
             >
               {l.label}
             </button>
@@ -67,7 +67,7 @@ export function Nav() {
 
         <div className="flex items-center gap-3">
           {progressPercent > 0 && (
-            <span className="hidden rounded-full border border-[#D97757]/30 bg-[#D97757]/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-[#D97757] sm:inline">
+            <span className="hidden rounded-full border border-[#D97757]/30 bg-[#D97757]/8 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-[#D97757] sm:inline">
               {progressPercent}% explored
             </span>
           )}
@@ -79,7 +79,7 @@ export function Nav() {
             Start a Workflow
           </Button>
           <button
-            className="rounded-lg p-2 text-muted-foreground hover:text-foreground lg:hidden"
+            className="rounded-lg p-2 text-[#6B6B66] hover:text-[#1C1C1C] lg:hidden"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
@@ -93,13 +93,13 @@ export function Nav() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass border-t border-white/5 px-4 pb-4 pt-2 lg:hidden"
+          className="glass border-t border-white/40 px-4 pb-4 pt-2 lg:hidden"
         >
           {LINKS.map((l) => (
             <button
               key={l.href}
               onClick={() => go(l.href)}
-              className="block w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground hover:text-foreground"
+              className="block w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-[#6B6B66] hover:text-[#1C1C1C]"
             >
               {l.label}
             </button>

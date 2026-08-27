@@ -66,15 +66,15 @@ export function FinalBuilder() {
 
   return (
     <section id="builder" className="relative py-24 sm:py-32">
-      <div className="aurora-blob right-[15%] bottom-[10%] h-80 w-80 bg-[#F2C88F]/8" />
+      <div className="aurora-blob right-[15%] bottom-[10%] h-80 w-80 bg-[#7B8EC9]/6" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D97757]">The Grand Assembly</p>
-          <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-5xl">
+          <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-[#1C1C1C] sm:text-5xl">
             Build your own{" "}
             <span className="text-gradient">Claude marketing workflow</span>.
           </h2>
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-4 text-[#6B6B66]">
             Pick your primary goal. We'll assemble the complete system — Prompt + Skill + Connector +
             Human Review + Loop + Routine — the same architecture a real marketing team would run.
           </p>
@@ -93,15 +93,15 @@ export function FinalBuilder() {
                 whileTap={{ scale: 0.97 }}
                 className={`relative rounded-3xl border p-5 text-center transition-all focus-visible:outline-none ${
                   on
-                    ? "border-[#D97757]/60 bg-[#D97757]/[0.08] shadow-[0_0_30px_rgba(217,119,87,0.15)]"
-                    : "border-white/10 bg-white/[0.03] hover:border-white/25"
+                    ? "border-[#D97757]/50 bg-[#D97757]/[0.06] shadow-md shadow-[#D97757]/10"
+                    : "border-[#E2E0DB] bg-white/70 hover:border-[#D97757]/25"
                 }`}
               >
                 <span className="text-3xl">{goal.emoji}</span>
-                <p className="mt-2 text-sm font-bold">{goal.label}</p>
+                <p className="mt-2 text-sm font-bold text-[#1C1C1C]">{goal.label}</p>
                 <span
                   className={`absolute right-3 top-3 grid h-5 w-5 place-items-center rounded-full border transition-colors ${
-                    on ? "border-[#D97757] bg-[#D97757] text-white" : "border-white/20 text-transparent"
+                    on ? "border-[#D97757] bg-[#D97757] text-white" : "border-[#E2E0DB] text-transparent"
                   }`}
                 >
                   <CircleCheck className="h-3 w-3" />
@@ -119,7 +119,7 @@ export function FinalBuilder() {
             className={`rounded-full px-8 font-semibold ${
               selectedGoal
                 ? "bg-[#D97757] text-white glow-primary hover:bg-[#c06545]"
-                : "bg-white/10 text-muted-foreground"
+                : "bg-[#E2E0DB] text-[#9A968F]"
             }`}
           >
             <Sparkles className="mr-2 h-4 w-4" />
@@ -129,7 +129,7 @@ export function FinalBuilder() {
             <Button
               variant="outline"
               size="lg"
-              className="rounded-full border-white/15"
+              className="rounded-full border-[#E2E0DB] text-[#6B6B66]"
               onClick={() => { setSelectedGoal(null); setShowAssembled(false); }}
             >
               <RotateCcw className="mr-2 h-4 w-4" /> Start over
@@ -154,10 +154,10 @@ export function FinalBuilder() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.12 }}
-                    className="rounded-2xl border border-white/10 bg-card/60 p-4 backdrop-blur"
+                    className="glass-light rounded-2xl p-4 shadow-sm shadow-black/[0.04]"
                   >
                     <p className="text-xs font-bold tracking-widest text-[#D97757]">{block.block}</p>
-                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{block.note}</p>
+                    <p className="mt-1.5 text-xs leading-relaxed text-[#6B6B66]">{block.note}</p>
                   </motion.div>
                 ))}
               </div>
@@ -167,10 +167,10 @@ export function FinalBuilder() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8 }}
-                className="mt-8 rounded-3xl border border-[#D97757]/30 bg-gradient-to-br from-[#D97757]/10 to-[#F2C88F]/5 p-6 text-center"
+                className="mt-8 rounded-3xl border border-[#D97757]/20 bg-gradient-to-br from-[#D97757]/[0.06] to-[#C47AB0]/[0.04] p-6 text-center shadow-md shadow-[#D97757]/5"
               >
                 <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#D97757]">Your Claude-Assisted Marketing System</p>
-                <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-foreground/80">
+                <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#4A4A46]">
                   {selectedGoal === "customer-research" && "Every month, a Customer Research Skill uses your connected review data to cluster customer themes, a human reviews the findings, and validated insights feed into your content and product planning Loop."}
                   {selectedGoal === "competitor-analysis" && "Every quarter, a Competitor Intelligence Skill uses web research and your past reports to compare your top competitors, a human reviews the findings, and gaps get added to your campaign planning Loop."}
                   {selectedGoal === "campaign-planning" && "Before every launch, a Campaign Planning Skill pulls from your brand docs and calendar to build a structured brief, a human reviews the strategy, and results feed back into the next planning cycle."}
@@ -182,8 +182,8 @@ export function FinalBuilder() {
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
                   {CHAIN.map((step, i) => (
                     <span key={step} className="flex items-center gap-2">
-                      <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-foreground/80">{step}</span>
-                      {i < CHAIN.length - 1 && <span className="text-white/20">→</span>}
+                      <span className="rounded-full bg-[#E2E0DB]/60 px-3 py-1 text-xs font-bold text-[#4A4A46]">{step}</span>
+                      {i < CHAIN.length - 1 && <span className="text-[#9A968F]">→</span>}
                     </span>
                   ))}
                 </div>
@@ -212,7 +212,7 @@ export function FinalBuilder() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-full border-white/15"
+                    className="rounded-full border-[#E2E0DB] text-[#6B6B66]"
                     onClick={() => { setSelectedGoal(null); setShowAssembled(false); }}
                   >
                     Explore Another Goal
@@ -226,13 +226,13 @@ export function FinalBuilder() {
         {/* Progress */}
         {progressPercent > 0 && (
           <div className="mx-auto mt-16 max-w-md text-center">
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#E2E0DB]">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#D97757] to-[#F2C88F]"
+                className="h-full rounded-full bg-gradient-to-r from-[#D97757] to-[#C47AB0]"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="mt-2 text-xs text-[#6B6B66]">
               {progressPercent}% of the lab explored
               {progressPercent === 100 && " — you've completed the full journey!"}
             </p>
@@ -240,7 +240,7 @@ export function FinalBuilder() {
               <Button
                 variant="outline"
                 size="sm"
-                className="mt-3 rounded-full border-white/15"
+                className="mt-3 rounded-full border-[#E2E0DB] text-[#6B6B66]"
                 onClick={resetProgress}
               >
                 <RotateCcw className="mr-1.5 h-3.5 w-3.5" /> Start fresh

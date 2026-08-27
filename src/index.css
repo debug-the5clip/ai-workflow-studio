@@ -40,51 +40,16 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  /* Lab-specific tokens */
+  /* Lab-specific tokens — glossy light palette */
   --color-clay: #D97757;
   --color-clay-light: #F2C88F;
-  --color-clay-glow: rgba(217, 119, 87, 0.15);
+  --color-clay-glow: rgba(217, 119, 87, 0.12);
 }
 
-/* Claude Marketing Lab — warm clay accent + deep charcoal-navy dark shell */
+/* Claude Marketing Lab — Glossy Light Theme */
 :root {
   --radius: 1rem;
-  --background: #0E1116;
-  --foreground: #F0EDE8;
-  --card: #151922;
-  --card-foreground: #F0EDE8;
-  --popover: #1A1F2B;
-  --popover-foreground: #F0EDE8;
-  --primary: #D97757;
-  --primary-foreground: #FFFFFF;
-  --secondary: #1E2433;
-  --secondary-foreground: #C8C4BD;
-  --muted: #1E2433;
-  --muted-foreground: #8A8680;
-  --accent: #2A3042;
-  --accent-foreground: #F0EDE8;
-  --destructive: #E5534B;
-  --border: rgba(240, 237, 232, 0.08);
-  --input: rgba(240, 237, 232, 0.12);
-  --ring: rgba(217, 119, 87, 0.5);
-  --chart-1: #D97757;
-  --chart-2: #F2C88F;
-  --chart-3: #6B9E8A;
-  --chart-4: #7B8EC9;
-  --chart-5: #C47AB0;
-  --sidebar: #0E1116;
-  --sidebar-foreground: #F0EDE8;
-  --sidebar-primary: #D97757;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1E2433;
-  --sidebar-accent-foreground: #F0EDE8;
-  --sidebar-border: rgba(240, 237, 232, 0.08);
-  --sidebar-ring: rgba(217, 119, 87, 0.5);
-}
-
-/* Light workflow window tokens (used via .workflow-light class) */
-.workflow-light {
-  --background: #FAFAF8;
+  --background: #F5F4F0;
   --foreground: #1C1C1C;
   --card: #FFFFFF;
   --card-foreground: #1C1C1C;
@@ -92,16 +57,29 @@
   --popover-foreground: #1C1C1C;
   --primary: #D97757;
   --primary-foreground: #FFFFFF;
-  --secondary: #F2F1EE;
+  --secondary: #EDEAE5;
   --secondary-foreground: #4A4A46;
-  --muted: #F2F1EE;
+  --muted: #EDEAE5;
   --muted-foreground: #6B6B66;
-  --accent: #EDEAE5;
+  --accent: #F7F6F3;
   --accent-foreground: #1C1C1C;
   --destructive: #E5534B;
-  --border: #E8E6E1;
-  --input: #E8E6E1;
+  --border: #E2E0DB;
+  --input: #E2E0DB;
   --ring: rgba(217, 119, 87, 0.4);
+  --chart-1: #D97757;
+  --chart-2: #F2C88F;
+  --chart-3: #6B9E8A;
+  --chart-4: #7B8EC9;
+  --chart-5: #C47AB0;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1C1C1C;
+  --sidebar-primary: #D97757;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EDEAE5;
+  --sidebar-accent-foreground: #1C1C1C;
+  --sidebar-border: #E2E0DB;
+  --sidebar-ring: rgba(217, 119, 87, 0.4);
 }
 
 .dark {
@@ -145,8 +123,9 @@
   body {
     @apply bg-background text-foreground;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(217, 119, 87, 0.06), transparent),
-      radial-gradient(ellipse 50% 40% at 85% 110%, rgba(242, 200, 143, 0.04), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(217, 119, 87, 0.07), transparent),
+      radial-gradient(ellipse 50% 40% at 85% 110%, rgba(242, 200, 143, 0.06), transparent),
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(107, 158, 138, 0.04), transparent);
     background-attachment: fixed;
   }
   button:not([disabled]),
@@ -156,34 +135,48 @@
 }
 
 @layer utilities {
-  /* Glass panel — dark shell */
+  /* Glossy light glass panel — main landing cards */
   .glass {
     background: linear-gradient(
       160deg,
-      rgba(240, 237, 232, 0.05) 0%,
-      rgba(240, 237, 232, 0.02) 45%,
-      transparent 100%
-    ), rgba(21, 25, 34, 0.85);
-    backdrop-filter: blur(18px);
-    border: 1px solid rgba(240, 237, 232, 0.08);
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.65) 50%,
+      rgba(245, 244, 240, 0.8) 100%
+    );
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.03),
+      0 4px 16px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
   }
-  /* Glass panel — light workflow window */
+  /* Glossy light panel — elevated cards */
   .glass-light {
-    background: #FFFFFF;
-    backdrop-filter: blur(12px);
-    border: 1px solid #E8E6E1;
-    box-shadow: 0 2px 12px rgba(20, 20, 20, 0.05);
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.75) 100%
+    );
+    backdrop-filter: blur(16px) saturate(1.3);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 8px 32px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
   }
   .glow-primary {
     box-shadow:
-      0 0 24px rgba(217, 119, 87, 0.2),
-      0 0 64px rgba(217, 119, 87, 0.08);
+      0 0 20px rgba(217, 119, 87, 0.18),
+      0 0 60px rgba(217, 119, 87, 0.08),
+      0 4px 24px rgba(217, 119, 87, 0.12);
   }
   .text-gradient {
     background: linear-gradient(
       92deg,
       #D97757 0%,
-      #F2C88F 55%,
+      #C47AB0 45%,
       #D97757 100%
     );
     -webkit-background-clip: text;
@@ -193,9 +186,9 @@
   .text-gradient-cool {
     background: linear-gradient(
       92deg,
-      #F2C88F 0%,
-      #D97757 55%,
-      #F2C88F 100%
+      #D97757 0%,
+      #7B8EC9 55%,
+      #D97757 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -203,48 +196,48 @@
   }
   .grid-bg {
     background-image:
-      linear-gradient(rgba(240, 237, 232, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(240, 237, 232, 0.04) 1px, transparent 1px);
-    background-size: 44px 44px;
+      linear-gradient(rgba(28, 28, 28, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(28, 28, 28, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
   .grid-bg-light {
     background-image:
-      linear-gradient(rgba(28, 28, 28, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(28, 28, 28, 0.04) 1px, transparent 1px);
-    background-size: 44px 44px;
+      linear-gradient(rgba(28, 28, 28, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(28, 28, 28, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
   .aurora-blob {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(90px);
+    filter: blur(100px);
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.6;
   }
-  /* Noise texture overlay */
+  /* Subtle noise texture for glossy depth */
   .noise-overlay::before {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.025;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 256px 256px;
     z-index: 1;
   }
-  /* Sample data badge */
+  /* Sample data badge — light version */
   .sample-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     border-radius: 9999px;
-    border: 1px solid rgba(234, 179, 8, 0.3);
-    background: rgba(234, 179, 8, 0.08);
+    border: 1px solid rgba(217, 119, 87, 0.25);
+    background: rgba(217, 119, 87, 0.06);
     padding: 2px 10px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #FCD34D;
+    color: #D97757;
   }
 }
 
