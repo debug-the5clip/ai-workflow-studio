@@ -1,20 +1,11 @@
-// @ts-nocheck — will be rebuilt with new UseCaseOutput types
 import { motion } from "framer-motion";
-import {
-  AlertTriangle,
-  BadgeCheck,
-  CircleCheck,
-  Lightbulb,
-  Mail,
-  Search,
-  ShieldQuestion,
-} from "lucide-react";
+import { AlertTriangle, TrendingDown, TrendingUp, Minus } from "lucide-react";
 import type { UseCaseOutput } from "@/lib/lab-types";
 
 function SampleBadge() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-amber-300/30 bg-amber-300/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-200">
-      <AlertTriangle className="h-3 w-3" /> Sample / demo data
+    <span className="inline-flex items-center gap-1 rounded-full border border-amber-300/40 bg-amber-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+      <AlertTriangle className="h-3 w-3" /> SAMPLE DATA — FOR DEMONSTRATION ONLY
     </span>
   );
 }
@@ -25,546 +16,679 @@ const fade = (i: number) => ({
   transition: { delay: i * 0.06 },
 });
 
-// ── Competitor dashboard ─────────────────────────────────────────────────────
+function TrendIcon({ trend }: { trend: "up" | "down" | "flat" }) {
+  if (trend === "up") return <TrendingUp className="h-3.5 w-3.5 text-[#6B9E8A]" />;
+  if (trend === "down") return <TrendingDown className="h-3.5 w-3.5 text-[#E5534B]" />;
+  return <Minus className="h-3.5 w-3.5 text-[#6B6B66]" />;
+}
 
-function CompetitorDashboard({ data }: { data: Extract<UseCaseOutput, { kind: "competitorDashboard" }> }) {
+// ── Theme Clusters (Customer Research, Review Analysis) ─────────────────────────
+
+function ThemeClusters({ data }: { data: Extract<UseCaseOutput, { kind: "themeClusters" }> }) {
   return (
     <div className="space-y-4">
       <SampleBadge />
-      {/* Positioning map */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-        <p className="mb-4 text-xs font-bold uppercase tracking-widest text-cyan-300">Positioning map</p>
-        <div className="relative h-64 w-full rounded-xl border border-white/5 grid-bg sm:h-72">
-          <div className="absolute inset-x-0 top-1 text-center text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">Premium</div>
-          <div className="absolute inset-x-0 bottom-1 text-center text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">Budget</div>
-          <div className="absolute inset-y-0 left-1 flex items-center text-[9px] font-semibold tracking-widest text-muted-foreground [writing-mode:vertical-lr]">Function-led</div>
-          <div className="absolute inset-y-0 right-1 flex items-center justify-center text-[9px] font-semibold tracking-widest text-muted-foreground [writing-mode:vertical-lr]">Emotion-led</div>
-          {data.competitors.map((c, i) => (
-            <motion.div
-              key={c.name}
-              {...fade(i)}
-              className="group absolute -translate-x-1/2 -translate-y-1/2"
-              style={{
-                left: `${18 + ((i * 23) % 60)}%`,
-                top: `${16 + i * 19}%`,
-              }}
-            >
-              <div className="rounded-full border border-white/20 bg-card px-2.5 py-1 text-[11px] font-semibold shadow-lg transition-transform group-hover:scale-110">
-                {c.name}
-              </div>
-              <div className="pointer-events-none absolute left-1/2 top-full z-10 mt-1 hidden w-44 -translate-x-1/2 rounded-lg border border-white/15 bg-popover p-2 text-[11px] leading-snug text-popover-foreground shadow-xl group-hover:block">
-                <b>{c.positioning}</b> · {c.priceTier} tier
-                <br />
-                {c.messaging} — signature: {c.signatureFeature}
-              </div>
-            </motion.div>
+      {data.sentiment && (
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { label: "Positive", value: data.sentiment.positive, color: "bg-[#6B9E8A]/10 text-[#6B9E8A] border-[#6B9E8A]/20" },
+            { label: "Negative", value: data.sentiment.negative, color: "bg-[#E5534B]/10 text-[#E5534B] border-[#E5534B]/20" },
+            { label: "Mixed", value: data.sentiment.mixed, color: "bg-[#F2C88F]/10 text-[#D97757] border-[#F2C88F]/30" },
+          ].map((s) => (
+            <div key={s.label} className={`rounded-xl border px-3 py-2 text-center ${s.color}`}>
+              <p className="text-[10px] font-bold uppercase tracking-wider">{s.label}</p>
+              <p className="text-lg font-bold">{s.value}</p>
+            </div>
           ))}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6, type: "spring" }}
-            className="glow-primary absolute left-[62%] top-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-300 bg-cyan-400/25 px-3 py-1.5 text-[11px] font-extrabold text-cyan-100 backdrop-blur"
-          >
-            VOYARA
-          </motion.div>
-          <div className="absolute right-2 top-8 max-w-[130px] rounded-lg border border-dashed border-cyan-300/40 p-2 text-[10px] leading-snug text-cyan-200/80">
-            open space ↖ premium function-led territory
-          </div>
         </div>
+      )}
+      <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Customer themes</p>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {data.themes.map((theme, i) => (
+          <motion.div
+            key={theme.title}
+            {...fade(i)}
+            className="rounded-2xl border border-[#E8E6E1] bg-white p-4 shadow-sm"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <p className="text-sm font-bold text-[#1C1C1C]">{theme.title}</p>
+              <span className="shrink-0 rounded-full bg-[#D97757]/10 px-2 py-0.5 text-[10px] font-bold text-[#D97757]">
+                {theme.count} mentions
+              </span>
+            </div>
+            <p className="mt-1.5 text-xs leading-relaxed text-[#6B6B66]">{theme.description}</p>
+            <div className="mt-2 flex items-center gap-1.5">
+              <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                theme.confidence === "high" ? "bg-[#6B9E8A]/10 text-[#6B9E8A]" :
+                theme.confidence === "medium" ? "bg-[#F2C88F]/15 text-[#D97757]" :
+                "bg-[#E8E6E1] text-[#6B6B66]"
+              }`}>
+                {theme.confidence} confidence
+              </span>
+            </div>
+          </motion.div>
+        ))}
       </div>
+    </div>
+  );
+}
 
-      {/* Feature comparison */}
-      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-cyan-300">Feature comparison</p>
-        <table className="w-full min-w-[560px] text-left text-sm">
+// ── Comparison Matrix (Competitor Analysis, Product Comparison) ─────────────────
+
+function ComparisonMatrix({ data }: { data: Extract<UseCaseOutput, { kind: "comparisonMatrix" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="overflow-x-auto rounded-2xl border border-[#E8E6E1] bg-white">
+        <table className="w-full min-w-[500px] text-left text-sm">
           <thead>
-            <tr className="text-[11px] uppercase tracking-wider text-muted-foreground">
-              <th className="pb-2 pr-4">Competitor</th>
-              <th className="pb-2 pr-4">Positioning</th>
-              <th className="pb-2 pr-4">Price tier</th>
-              <th className="pb-2 pr-4">Signature feature</th>
-              <th className="pb-2">Message</th>
+            <tr className="border-b border-[#E8E6E1]">
+              <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Feature</th>
+              {data.competitors.map((c) => (
+                <th key={c.name} className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#D97757]">{c.name}</th>
+              ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
-            {data.competitors.map((c) => (
-              <tr key={c.name} className="align-top">
-                <td className="py-2.5 pr-4 font-semibold">{c.name}</td>
-                <td className="py-2.5 pr-4 text-muted-foreground">{c.positioning}</td>
-                <td className="py-2.5 pr-4">
-                  <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-                    c.priceTier === "Budget" ? "bg-emerald-300/10 text-emerald-200" :
-                    c.priceTier === "Mid" ? "bg-sky-300/10 text-sky-200" :
-                    "bg-fuchsia-300/10 text-fuchsia-200"}`}>
-                    {c.priceTier}
-                  </span>
-                </td>
-                <td className="py-2.5 pr-4 text-muted-foreground">{c.signatureFeature}</td>
-                <td className="py-2.5 italic text-muted-foreground">{c.messaging}</td>
+          <tbody>
+            <tr className="border-b border-[#F2F1EE]">
+              <td className="px-4 py-2.5 font-semibold text-[#1C1C1C]">Price</td>
+              {data.competitors.map((c) => (
+                <td key={c.name} className="px-4 py-2.5 text-[#6B6B66]">{c.price}</td>
+              ))}
+            </tr>
+            {data.competitors[0]?.features.map((_, fi) => (
+              <tr key={fi} className="border-b border-[#F2F1EE] last:border-0">
+                <td className="px-4 py-2.5 font-semibold text-[#1C1C1C]">Feature {fi + 1}</td>
+                {data.competitors.map((c) => (
+                  <td key={c.name} className="px-4 py-2.5 text-xs text-[#6B6B66]">{c.features[fi] || "—"}</td>
+                ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        {[
-          { title: "Strengths (Voyara)", items: data.strengths, icon: BadgeCheck, color: "text-emerald-300", ring: "border-emerald-300/20 bg-emerald-300/[0.04]" },
-          { title: "Potential gaps", items: data.gaps, icon: Search, color: "text-amber-300", ring: "border-amber-300/20 bg-amber-300/[0.04]" },
-          { title: "Opportunities", items: data.opportunities, icon: Lightbulb, color: "text-cyan-300", ring: "border-cyan-300/20 bg-cyan-300/[0.04]" },
-          { title: "Questions to investigate", items: data.investigate, icon: ShieldQuestion, color: "text-violet-300", ring: "border-violet-300/20 bg-violet-300/[0.04]" },
-        ].map((block) => (
-          <div key={block.title} className={`rounded-2xl border p-4 ${block.ring}`}>
-            <p className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${block.color}`}>
-              <block.icon className="h-3.5 w-3.5" /> {block.title}
-            </p>
-            <ul className="mt-3 space-y-2">
-              {block.items.map((item) => (
-                <li key={item} className="flex gap-2 text-sm leading-snug text-foreground/85">
-                  <span className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${block.color.replace("text-", "bg-")}`} />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      {data.summary && (
+        <div className="rounded-2xl border border-[#D97757]/20 bg-[#D97757]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Key takeaway</p>
+          <p className="mt-1 text-sm leading-relaxed text-[#1C1C1C]">{data.summary}</p>
+        </div>
+      )}
     </div>
   );
 }
 
-// ── Theme clusters ───────────────────────────────────────────────────────────
+// ── Opportunity Card (Product Opportunity) ──────────────────────────────────────
 
-function Themes({ data }: { data: Extract<UseCaseOutput, { kind: "themes" }> }) {
-  const sentimentColor = {
-    positive: "bg-emerald-300",
-    negative: "bg-rose-300",
-    mixed: "bg-amber-300",
-  };
+function OpportunityCard({ data }: { data: Extract<UseCaseOutput, { kind: "opportunityCard" }> }) {
   return (
     <div className="space-y-4">
       <SampleBadge />
-      <h3 className="text-lg font-bold">{data.headline}</h3>
-      <div className="space-y-2.5">
-        {data.themes.map((t, i) => (
-          <motion.div key={t.theme} {...fade(i)} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-sm font-semibold">{t.theme}</p>
-              <div className="flex items-center gap-2">
-                <span className={`h-2 w-2 rounded-full ${sentimentColor[t.sentiment]}`} />
-                <span className="text-xs capitalize text-muted-foreground">{t.sentiment}</span>
-                <span className="ml-2 text-xs font-bold text-cyan-200">{t.share}% of mentions</span>
-              </div>
-            </div>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/5">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${t.share * 3}%` }}
-                transition={{ duration: 0.8, delay: 0.2 + i * 0.08 }}
-                className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-400"
-              />
-            </div>
-            <p className="mt-2 text-xs italic text-muted-foreground">{t.quote}</p>
-          </motion.div>
-        ))}
-      </div>
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-2xl border border-rose-300/20 bg-rose-300/[0.04] p-4">
-          <p className="text-xs font-bold uppercase tracking-widest text-rose-300">Pain points</p>
-          <ul className="mt-3 space-y-1.5 text-sm text-foreground/85">
-            {data.pains.map((p) => <li key={p}>• {p}</li>)}
-          </ul>
-        </div>
-        <div className="rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.04] p-4">
-          <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">Underlying needs</p>
-          <ul className="mt-3 space-y-1.5 text-sm text-foreground/85">
-            {data.needs.map((n) => <li key={n}>• {n}</li>)}
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Opportunity scorecard ────────────────────────────────────────────────────
-
-function Scorecard({ data }: { data: Extract<UseCaseOutput, { kind: "scorecard" }> }) {
-  return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-lg font-bold">{data.title}</h3>
-        <SampleBadge />
+      <div className="rounded-2xl border border-[#6B9E8A]/30 bg-[#6B9E8A]/[0.04] p-5">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#6B9E8A]">Opportunity</p>
+        <p className="mt-2 text-lg font-bold text-[#1C1C1C]">{data.opportunity}</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        {data.fields.map((f, i) => (
-          <motion.div key={f.label} {...fade(i)} className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent p-4">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-cyan-300">{f.label}</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-foreground/90">{f.value}</p>
-          </motion.div>
+        {[
+          { label: "Customer Need", value: data.customerNeed, color: "border-[#D97757]/20" },
+          { label: "Competitive Context", value: data.competitiveContext, color: "border-[#7B8EC9]/20" },
+          { label: "Potential Benefit", value: data.potentialBenefit, color: "border-[#6B9E8A]/20" },
+          { label: "Next Investigation", value: data.nextInvestigation, color: "border-[#F2C88F]/30" },
+        ].map((f) => (
+          <div key={f.label} className={`rounded-xl border bg-white p-3 ${f.color}`}>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">{f.label}</p>
+            <p className="mt-1 text-sm text-[#1C1C1C]">{f.value}</p>
+          </div>
         ))}
       </div>
-      <div className="glass flex items-center gap-3 rounded-2xl p-4">
-        <ShieldQuestion className="h-5 w-5 shrink-0 text-amber-300" />
-        <p className="text-sm text-amber-100/90">{data.disclaimer}</p>
+      <div className="rounded-2xl border border-[#E8E6E1] bg-white p-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Risks</p>
+        <ul className="mt-1.5 space-y-1">
+          {data.risks.map((r) => (
+            <li key={r} className="flex items-start gap-2 text-xs text-[#6B6B66]">
+              <span className="mt-0.5 text-[#E5534B]">•</span> {r}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="rounded-2xl border border-[#E8E6E1] bg-[#FAFAF8] p-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Questions to validate</p>
+        <ul className="mt-1.5 space-y-1">
+          {data.questions.map((q) => (
+            <li key={q} className="flex items-start gap-2 text-xs text-[#6B6B66]">
+              <span className="mt-0.5 text-[#D97757]">?</span> {q}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
 
-// ── Campaign canvas ──────────────────────────────────────────────────────────
+// ── Campaign Canvas ─────────────────────────────────────────────────────────────
 
 function CampaignCanvas({ data }: { data: Extract<UseCaseOutput, { kind: "campaignCanvas" }> }) {
   return (
     <div className="space-y-4">
       <SampleBadge />
-      <motion.div {...fade(0)} className="glow-primary rounded-2xl border border-cyan-300/25 bg-gradient-to-br from-cyan-300/10 to-fuchsia-400/10 p-6 text-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">Campaign concept</p>
-        <p className="mx-auto mt-2 max-w-md text-balance text-xl font-extrabold tracking-tight">{data.concept}</p>
-      </motion.div>
-      <div className="grid gap-3 md:grid-cols-2">
-        {data.pieces.map((p, i) => (
-          <motion.div key={p.kind + p.title} {...fade(i + 1)} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <div className="flex items-center justify-between">
-              <span className="rounded-full bg-fuchsia-300/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-fuchsia-200">{p.kind}</span>
-            </div>
-            <p className="mt-2.5 text-sm font-semibold">{p.title}</p>
-            <p className="mt-1.5 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{p.body}</p>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Copy lab ─────────────────────────────────────────────────────────────────
-
-function CopyLab({ data }: { data: Extract<UseCaseOutput, { kind: "copyLab" }> }) {
-  return (
-    <div className="space-y-4">
-      <SampleBadge />
-      <div className="glass grid gap-3 rounded-2xl p-4 sm:grid-cols-3">
-        {[["Platform", data.platform], ["Goal", data.goal], ["Tone", data.tone]].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{k}</p>
-            <p className="text-sm font-semibold">{v}</p>
-          </div>
-        ))}
-      </div>
-      <div className="grid gap-4 lg:grid-cols-3">
-        {data.variants.map((v, i) => (
-          <motion.div key={v.angle} {...fade(i)}>
-            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-cyan-300">
-              Variant {String.fromCharCode(65 + i)} · {v.angle}
-            </p>
-            <div className="rounded-2xl border border-fuchsia-300/20 bg-gradient-to-b from-fuchsia-300/[0.06] to-transparent p-4">
-              <div className="mb-2 flex gap-1">
-                {[0, 1, 2].map((d) => <span key={d} className="h-1.5 w-1.5 rounded-full bg-white/15" />)}
-              </div>
-              <p className="whitespace-pre-line text-[13px] leading-relaxed text-foreground/90">{v.copy}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Email preview ────────────────────────────────────────────────────────────
-
-import { useState } from "react";
-import { Eye, FlaskConical } from "lucide-react";
-
-function EmailPreview({ data }: { data: Extract<UseCaseOutput, { kind: "emailPreview" }> }) {
-  const [view, setView] = useState<"output" | "prompt" | "why">("output");
-  return (
-    <div className="space-y-4">
-      <SampleBadge />
-      <div className="flex gap-2">
-        {(
-          [
-            ["output", "Output", Eye],
-            ["prompt", "Prompt", FlaskConical],
-            ["why", "Why this works", CircleCheck],
-          ] as const
-        ).map(([key, label, Icon]) => (
-          <button
-            key={key}
-            onClick={() => setView(key)}
-            aria-pressed={view === key}
-            className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all ${
-              view === key
-                ? "border-cyan-300/50 bg-cyan-300/10 text-cyan-200"
-                : "border-white/10 text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Icon className="h-3.5 w-3.5" /> {label}
-          </button>
-        ))}
-      </div>
-
-      {view === "output" && (
-        <motion.div {...fade(0)} className="mx-auto max-w-xl overflow-hidden rounded-3xl border border-white/10 bg-white/[0.97] text-slate-900 shadow-2xl">
-          <div className="flex items-center gap-2 border-b border-slate-200 px-4 py-2.5">
-            <Mail className="h-4 w-4 text-slate-500" />
-            <span className="text-xs text-slate-500">Voyara · Launch announcement</span>
-          </div>
-          <div className="p-5">
-            <p className="text-base font-bold">{data.subject}</p>
-            <p className="mt-0.5 text-sm text-slate-500">{data.preheader}</p>
-            <div className="mt-4 whitespace-pre-line rounded-2xl bg-slate-50 p-4 text-sm leading-relaxed">
-              {data.body[0]}
-            </div>
-            <button className="mt-4 w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white">
-              SEE THE FIT DATA →
-            </button>
-            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-200 pt-3 text-xs text-slate-500">
-              <p><b>Audience:</b> {data.audience}</p>
-              <p><b>Objective:</b> {data.objective}</p>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {view === "prompt" && (
-        <motion.div {...fade(0)} className="glass rounded-2xl p-4">
-          <p className="whitespace-pre-line font-mono text-[13px] leading-relaxed text-foreground/85">{EMAIL_PROMPT}</p>
-        </motion.div>
-      )}
-
-      {view === "why" && (
-        <motion.ul {...fade(0)} className="space-y-2.5">
-          {data.whyItWorks.map((w) => (
-            <li key={w} className="flex items-start gap-2.5 rounded-xl border border-emerald-300/20 bg-emerald-300/[0.04] p-3.5 text-sm">
-              <CircleCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
-              {w}
-            </li>
-          ))}
-        </motion.ul>
-      )}
-    </div>
-  );
-}
-
-const EMAIL_PROMPT = `Write a launch-waitlist email for Voyara's Voyager Pro.
-
-SEGMENT: Browsers who viewed the product page ≥2 times in 90 days but didn't buy.
-OBJECTIVE: Launch-day conversion (pre-order click).
-DELIVERABLES
-- 3 subject lines: curiosity / direct / urgency (≤42 chars)
-- 1 preheader per subject (≤80 chars)
-- Body ≤180 words: acknowledge their visit, present the fit-data proof,
-  pre-order incentive, single CTA.
-Constraints: claims from the capability sheet only; no false scarcity.`;
-
-// ── Social board ─────────────────────────────────────────────────────────────
-
-function SocialBoard({ data }: { data: Extract<UseCaseOutput, { kind: "socialBoard" }> }) {
-  return (
-    <div className="space-y-4">
-      <SampleBadge />
-      <p className="text-xs text-muted-foreground">
-        Instagram & YouTube shown as marketing-channel examples — not claims of direct integrations.
-      </p>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {data.posts.map((p, i) => (
-          <motion.div key={p.headline} {...fade(i)} className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-            <div className={`px-4 py-2 text-[11px] font-bold uppercase tracking-widest ${
-              p.platform === "Instagram" ? "bg-gradient-to-r from-fuchsia-500/25 to-amber-400/25 text-fuchsia-100" :
-              p.platform === "YouTube" ? "bg-red-500/15 text-red-200" : "bg-cyan-400/10 text-cyan-200"
-            }`}>
-              {p.platform}
-            </div>
-            <div className="p-4">
-              <p className="text-sm font-semibold leading-snug">{p.headline}</p>
-              <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">{p.body}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Analytics dashboard ──────────────────────────────────────────────────────
-
-function Analytics({ data }: { data: Extract<UseCaseOutput, { kind: "analytics" }> }) {
-  return (
-    <div className="space-y-4">
-      <div className="rounded-2xl border border-amber-300/25 bg-amber-300/[0.05] p-3">
-        <p className="text-xs font-semibold text-amber-100">{data.disclaimer}</p>
-      </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-        {data.metrics.map((m, i) => (
-          <motion.div key={m.label} {...fade(i)} className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-transparent p-3.5">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{m.label}</p>
-            <p className="mt-1 text-lg font-extrabold tracking-tight">{m.value}</p>
-            <p className={`text-[11px] font-semibold ${m.good ? "text-emerald-300" : "text-rose-300"}`}>
-              {m.delta > 0 ? "+" : ""}{m.delta}% vs prior
-            </p>
-          </motion.div>
-        ))}
-      </div>
-      <div className="grid gap-4 lg:grid-cols-2">
-        {[
-          { title: "What worked", items: data.worked, color: "text-emerald-300", ring: "border-emerald-300/20 bg-emerald-300/[0.04]", icon: CircleCheck },
-          { title: "What didn't", items: data.didnt, color: "text-rose-300", ring: "border-rose-300/20 bg-rose-300/[0.04]", icon: AlertTriangle },
-          { title: "Possible reasons (hypotheses)", items: data.reasons, color: "text-amber-300", ring: "border-amber-300/20 bg-amber-300/[0.04]", icon: ShieldQuestion },
-          { title: "What to test next", items: data.testNext, color: "text-cyan-300", ring: "border-cyan-300/20 bg-cyan-300/[0.04]", icon: FlaskConical },
-        ].map((block) => (
-          <div key={block.title} className={`rounded-2xl border p-4 ${block.ring}`}>
-            <p className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${block.color}`}>
-              <block.icon className="h-3.5 w-3.5" /> {block.title}
-            </p>
-            <ul className="mt-3 space-y-2 text-sm leading-snug text-foreground/85">
-              {block.items.map((i) => <li key={i}>• {i}</li>)}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Experiment card ──────────────────────────────────────────────────────────
-
-function Experiment({ data }: { data: Extract<UseCaseOutput, { kind: "experiment" }> }) {
-  return (
-    <div className="space-y-3">
-      <SampleBadge />
-      {[
-        ["Hypothesis", data.hypothesis, ShieldQuestion],
-        ["The change", data.change, FlaskConical],
-        ["Measurement", data.measure, Search],
-        ["Success criteria", data.successCriteria, CircleCheck],
-        ["Timeline & power math", data.timeline, Lightbulb],
-      ].map(([label, value, Icon], i) => {
-        const I = Icon as typeof ShieldQuestion;
-        return (
-          <motion.div key={label as string} {...fade(i)} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-cyan-300">
-              <I className="h-3.5 w-3.5" /> {label as string}
-            </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-foreground/90">{value as string}</p>
-          </motion.div>
-        );
-      })}
-    </div>
-  );
-}
-
-// ── Insights board ───────────────────────────────────────────────────────────
-
-function Insights({ data }: { data: Extract<UseCaseOutput, { kind: "insights" }> }) {
-  return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <h3 className="text-lg font-bold">{data.headline}</h3>
-        <SampleBadge />
+      <div className="rounded-2xl border border-[#D97757]/20 bg-[#D97757]/[0.04] p-5">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Campaign Insight</p>
+        <p className="mt-2 text-lg font-bold text-[#1C1C1C]">{data.insight}</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        {data.cards.map((c, i) => (
-          <motion.div
-            key={c.title}
-            {...fade(i)}
-            className={`rounded-2xl border p-4 ${
-              c.tone === "positive" ? "border-emerald-300/20 bg-emerald-300/[0.04]" :
-              c.tone === "risk" ? "border-rose-300/20 bg-rose-300/[0.04]" :
-              "border-white/10 bg-white/[0.03]"
-            }`}
-          >
-            <p className={`text-sm font-bold ${
-              c.tone === "positive" ? "text-emerald-200" :
-              c.tone === "risk" ? "text-rose-200" : "text-foreground"
-            }`}>{c.title}</p>
-            <p className="mt-1.5 whitespace-pre-line text-sm leading-relaxed text-foreground/85">{c.body}</p>
-          </motion.div>
-        ))}
+        <div className="rounded-xl border border-[#E8E6E1] bg-white p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Key Message</p>
+          <p className="mt-1 text-sm font-semibold text-[#1C1C1C]">{data.message}</p>
+        </div>
+        <div className="rounded-xl border border-[#E8E6E1] bg-white p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Audience</p>
+          <p className="mt-1 text-sm text-[#1C1C1C]">{data.audience}</p>
+        </div>
       </div>
+      <div className="rounded-xl border border-[#E8E6E1] bg-white p-4">
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Channels</p>
+        <div className="flex flex-wrap gap-2">
+          {data.channels.map((ch) => (
+            <span key={ch} className="rounded-full bg-[#D97757]/10 px-3 py-1 text-xs font-semibold text-[#D97757]">{ch}</span>
+          ))}
+        </div>
+      </div>
+      <div className="rounded-xl border border-[#6B9E8A]/30 bg-[#6B9E8A]/[0.04] p-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B9E8A]">Call to Action</p>
+        <p className="mt-1 text-sm font-semibold text-[#1C1C1C]">{data.cta}</p>
+      </div>
+      {data.metrics.length > 0 && (
+        <div className="rounded-xl border border-[#E8E6E1] bg-white p-4">
+          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Success Metrics</p>
+          <div className="flex flex-wrap gap-1.5">
+            {data.metrics.map((m) => (
+              <span key={m} className="rounded-full border border-[#E8E6E1] bg-[#FAFAF8] px-2.5 py-0.5 text-[10px] font-medium text-[#6B6B66]">{m}</span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-// ── Positioning map ──────────────────────────────────────────────────────────
+// ── Ad Preview ──────────────────────────────────────────────────────────────────
 
-function PositioningMap({ data }: { data: Extract<UseCaseOutput, { kind: "positioning" }> }) {
+function AdPreview({ data }: { data: Extract<UseCaseOutput, { kind: "adPreview" }> }) {
   return (
     <div className="space-y-4">
       <SampleBadge />
-      <div className="relative h-72 w-full rounded-2xl border border-white/10 grid-bg sm:h-80">
-        <div className="absolute inset-x-0 top-1 text-center text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">{data.axes.y.split("←→")[1]}</div>
-        <div className="absolute inset-x-0 bottom-1 text-center text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">{data.axes.y.split("←→")[0]}</div>
-        <div className="absolute inset-y-0 left-1 flex items-center text-[9px] font-semibold tracking-widest text-muted-foreground [writing-mode:vertical-lr]">{data.axes.x.split("←→")[0]}</div>
-        <div className="absolute inset-y-0 right-1 flex items-center text-[9px] font-semibold tracking-widest text-muted-foreground [writing-mode:vertical-lr]">{data.axes.x.split("←→")[1]}</div>
-        {data.points.map((p, i) => (
-          <motion.div
-            key={p.name}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.12 }}
-            className={`absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
-              p.name.startsWith("Open")
-                ? "border-dashed border-cyan-300/60 bg-cyan-300/10 text-cyan-200"
-                : p.ours
-                  ? "glow-primary border-fuchsia-300/70 bg-fuchsia-400/20 text-fuchsia-100"
-                  : "border-white/20 bg-card text-foreground/80"
-            }`}
-            style={{ left: `${p.x}%`, top: `${p.y}%` }}
-          >
-            {p.name}
+      <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Ad variations</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {data.variations.map((v, i) => (
+          <motion.div key={i} {...fade(i)} className="rounded-2xl border border-[#E8E6E1] bg-white p-4 shadow-sm">
+            <span className="mb-2 inline-flex rounded-full bg-[#D97757]/10 px-2 py-0.5 text-[10px] font-bold text-[#D97757]">
+              Variation {i + 1}
+            </span>
+            <p className="mt-1 text-sm font-bold text-[#1C1C1C]">{v.headline}</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-[#6B6B66]">{v.body}</p>
+            <div className="mt-3 rounded-lg bg-[#D97757] px-3 py-1.5 text-center text-xs font-bold text-white">{v.cta}</div>
           </motion.div>
         ))}
-      </div>
-      <div className="glass rounded-2xl p-4">
-        <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">Takeaway</p>
-        <p className="mt-1.5 text-sm leading-relaxed text-foreground/90">{data.takeaway}</p>
       </div>
     </div>
   );
 }
 
-// ── Calendar (routine output) ────────────────────────────────────────────────
+// ── Social Preview ──────────────────────────────────────────────────────────────
 
-function CalendarOut({ data }: { data: Extract<UseCaseOutput, { kind: "calendar" }> }) {
+function SocialPreview({ data }: { data: Extract<UseCaseOutput, { kind: "socialPreview" }> }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <SampleBadge />
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        {data.entries.map((e, i) => (
-          <motion.div key={e.day} {...fade(i)} className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent p-4">
-            <p className="text-xs font-bold tracking-widest text-cyan-300">{e.day}</p>
-            <p className="mt-1.5 text-sm font-semibold">{e.focus}</p>
-            <div className="mt-2.5 flex flex-wrap gap-1.5">
-              {e.blocks.map((b) => (
-                <span key={b} className="rounded-full bg-white/[0.07] px-2 py-0.5 text-[10px] font-semibold tracking-wide text-muted-foreground">
-                  {b}
-                </span>
+      <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Social content concepts</p>
+      {data.posts.map((post, i) => (
+        <motion.div key={i} {...fade(i)} className="rounded-2xl border border-[#E8E6E1] bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="rounded-full bg-[#D97757]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#D97757] uppercase tracking-wider">{post.platform}</span>
+            {post.visualDirection && (
+              <span className="text-[10px] text-[#6B6B66]">Visual: {post.visualDirection}</span>
+            )}
+          </div>
+          <p className="text-sm leading-relaxed text-[#1C1C1C]">{post.caption}</p>
+          {post.hashtags.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {post.hashtags.map((h) => (
+                <span key={h} className="text-[11px] text-[#7B8EC9]">{h}</span>
               ))}
+            </div>
+          )}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+// ── Email Preview ───────────────────────────────────────────────────────────────
+
+function EmailPreview({ data }: { data: Extract<UseCaseOutput, { kind: "emailPreview" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="rounded-2xl border border-[#E8E6E1] bg-white p-5 shadow-sm">
+        <div className="space-y-2 border-b border-[#E8E6E1] pb-3 mb-3">
+          <p className="text-xs text-[#6B6B66]">Subject: <span className="font-semibold text-[#1C1C1C]">{data.subject}</span></p>
+          <p className="text-xs text-[#6B6B66]">Preheader: <span className="text-[#6B6B66]">{data.preheader}</span></p>
+        </div>
+        <div className="text-sm leading-relaxed text-[#1C1C1C] whitespace-pre-line">{data.body}</div>
+        <div className="mt-4 rounded-lg bg-[#D97757] px-4 py-2.5 text-center text-sm font-bold text-white">{data.cta}</div>
+      </div>
+      <div className="rounded-2xl border border-[#D97757]/20 bg-[#D97757]/[0.04] p-4">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Why this works</p>
+        <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
+          {Object.entries(data.reasoning).map(([k, v]) => (
+            <div key={k} className="rounded-lg bg-white border border-[#E8E6E1] px-3 py-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">{k}</p>
+              <p className="mt-0.5 text-xs text-[#1C1C1C]">{v}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Analytics Dashboard ─────────────────────────────────────────────────────────
+
+function Dashboard({ data }: { data: Extract<UseCaseOutput, { kind: "dashboard" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+        {data.metrics.map((m, i) => (
+          <motion.div key={m.name} {...fade(i)} className="rounded-xl border border-[#E8E6E1] bg-white p-3 text-center">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">{m.name}</p>
+            <p className="mt-1 text-xl font-bold text-[#1C1C1C]">{m.value}</p>
+            <div className="mt-1 flex items-center justify-center gap-1">
+              <TrendIcon trend={m.trend} />
+              <span className={`text-[10px] font-semibold ${m.trend === "up" ? "text-[#6B9E8A]" : m.trend === "down" ? "text-[#E5534B]" : "text-[#6B6B66]"}`}>
+                {m.change}
+              </span>
             </div>
           </motion.div>
         ))}
       </div>
-      <div className="glass rounded-2xl p-4 text-center">
-        <p className="text-gradient text-sm font-extrabold tracking-wide">PROMPTS + SKILLS + CONNECTORS + LOOPS = MARKETING ROUTINE ↺</p>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl border border-[#6B9E8A]/30 bg-[#6B9E8A]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#6B9E8A]">What worked</p>
+          <ul className="mt-1.5 space-y-1">
+            {data.whatWorked.map((w) => (
+              <li key={w} className="text-xs text-[#1C1C1C]">✓ {w}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-[#E5534B]/20 bg-[#E5534B]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#E5534B]">What didn't</p>
+          <ul className="mt-1.5 space-y-1">
+            {data.whatDidNot.map((w) => (
+              <li key={w} className="text-xs text-[#1C1C1C]">✗ {w}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-[#D97757]/20 bg-[#D97757]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Test next</p>
+          <p className="mt-1 text-xs text-[#1C1C1C]">{data.nextTest}</p>
+        </div>
       </div>
     </div>
   );
 }
 
-// ── Dispatcher ───────────────────────────────────────────────────────────────
+// ── A/B Comparison ──────────────────────────────────────────────────────────────
+
+function AbComparison({ data }: { data: Extract<UseCaseOutput, { kind: "abComparison" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="grid gap-3 sm:grid-cols-2">
+        {[data.variantA, data.variantB].map((v, i) => (
+          <div key={i} className={`rounded-2xl border p-4 ${i === 1 ? "border-[#6B9E8A]/30 bg-[#6B9E8A]/[0.04]" : "border-[#E8E6E1] bg-white"}`}>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#6B6B66]">{v.label}</p>
+            <p className="mt-2 text-2xl font-bold text-[#1C1C1C]">{v.result}</p>
+          </div>
+        ))}
+      </div>
+      <div className="rounded-2xl border border-[#D97757]/20 bg-[#D97757]/[0.04] p-4">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Hypothesis</p>
+        <p className="mt-1 text-sm text-[#1C1C1C]">{data.hypothesis}</p>
+      </div>
+      <div className="rounded-2xl border border-[#E8E6E1] bg-white p-4">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#6B6B66]">Suggested next test</p>
+        <p className="mt-1 text-sm text-[#1C1C1C]">{data.nextTest}</p>
+      </div>
+    </div>
+  );
+}
+
+// ── Diagnosis Card (Campaign Optimization) ─────────────────────────────────────
+
+function DiagnosisCard({ data }: { data: Extract<UseCaseOutput, { kind: "diagnosisCard" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="rounded-2xl border border-[#E8E6E1] bg-white p-5">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Diagnosis</p>
+        <p className="mt-2 text-lg font-bold text-[#1C1C1C]">{data.diagnosis}</p>
+        <div className="mt-2 inline-flex rounded-full bg-[#F2C88F]/15 px-2.5 py-0.5 text-[10px] font-bold text-[#D97757]">
+          Confidence: {data.confidence}
+        </div>
+      </div>
+      <div className="rounded-2xl border border-[#6B9E8A]/30 bg-[#6B9E8A]/[0.04] p-4">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#6B9E8A]">Proposed experiment</p>
+        <p className="mt-1 text-sm font-semibold text-[#1C1C1C]">{data.experiment}</p>
+        <p className="mt-1 text-xs text-[#6B6B66]">Expected impact: {data.expectedImpact}</p>
+      </div>
+      <div className="rounded-xl border border-[#E8E6E1] bg-[#FAFAF8] p-3">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Measurement plan</p>
+        <p className="mt-0.5 text-xs text-[#1C1C1C]">{data.measurementPlan}</p>
+      </div>
+    </div>
+  );
+}
+
+// ── Feature Scorecard ──────────────────────────────────────────────────────────
+
+function FeatureScorecard({ data }: { data: Extract<UseCaseOutput, { kind: "featureScorecard" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="rounded-2xl border border-[#D97757]/20 bg-[#D97757]/[0.04] p-5">
+        <div className="flex items-center gap-3">
+          <p className="text-lg font-bold text-[#1C1C1C]">{data.feature}</p>
+          <span className="rounded-full bg-[#D97757]/10 px-2.5 py-0.5 text-xs font-bold text-[#D97757]">{data.mentionCount} mentions</span>
+        </div>
+        <p className="mt-1 text-xs text-[#6B6B66]">Competitor presence: {data.competitorPresence}</p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-xl border border-[#6B9E8A]/30 bg-[#6B9E8A]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#6B9E8A]">For building this</p>
+          <ul className="mt-1.5 space-y-1">
+            {data.forPoints.map((p) => (
+              <li key={p} className="text-xs text-[#1C1C1C]">✓ {p}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-xl border border-[#E5534B]/20 bg-[#E5534B]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#E5534B]">Against building this</p>
+          <ul className="mt-1.5 space-y-1">
+            {data.againstPoints.map((p) => (
+              <li key={p} className="text-xs text-[#1C1C1C]">✗ {p}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Positioning Cards ──────────────────────────────────────────────────────────
+
+function PositioningCards({ data }: { data: Extract<UseCaseOutput, { kind: "positioningCards" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      {data.angles.map((a, i) => (
+        <motion.div key={i} {...fade(i)} className="rounded-2xl border border-[#E8E6E1] bg-white p-4 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Angle {i + 1}</p>
+          <p className="mt-1 text-base font-bold text-[#1C1C1C]">{a.angle}</p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <div className="rounded-lg bg-[#FAFAF8] border border-[#E8E6E1] px-3 py-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Evidence</p>
+              <p className="mt-0.5 text-xs text-[#1C1C1C]">{a.evidence}</p>
+            </div>
+            <div className="rounded-lg bg-[#FAFAF8] border border-[#E8E6E1] px-3 py-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Differentiation</p>
+              <p className="mt-0.5 text-xs text-[#1C1C1C]">{a.differentiation}</p>
+            </div>
+          </div>
+          <p className="mt-2 text-[10px] text-[#E5534B]">Risk: {a.risks}</p>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+// ── Evidence Split (Market Trends) ─────────────────────────────────────────────
+
+function EvidenceSplit({ data }: { data: Extract<UseCaseOutput, { kind: "evidenceSplit" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl border border-[#6B9E8A]/30 bg-[#6B9E8A]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#6B9E8A]">Supporting evidence</p>
+          <ul className="mt-2 space-y-1.5">
+            {data.supporting.map((s) => (
+              <li key={s} className="flex items-start gap-2 text-xs text-[#1C1C1C]">
+                <span className="mt-0.5 text-[#6B9E8A]">✓</span> {s}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-[#E5534B]/20 bg-[#E5534B]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#E5534B]">Conflicting evidence</p>
+          <ul className="mt-2 space-y-1.5">
+            {data.conflicting.map((c) => (
+              <li key={c} className="flex items-start gap-2 text-xs text-[#1C1C1C]">
+                <span className="mt-0.5 text-[#E5534B]">✗</span> {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="rounded-2xl border border-[#D97757]/20 bg-[#D97757]/[0.04] p-4 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Confidence read</p>
+        <p className="mt-1 text-lg font-bold text-[#1C1C1C]">{data.confidenceRead}</p>
+      </div>
+    </div>
+  );
+}
+
+// ── Messaging Breakdown (Competitor Campaign) ──────────────────────────────────
+
+function MessagingBreakdown({ data }: { data: Extract<UseCaseOutput, { kind: "messagingBreakdown" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="rounded-2xl border border-[#E8E6E1] bg-white p-5">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#6B6B66]">Competitor</p>
+        <p className="mt-1 text-lg font-bold text-[#1C1C1C]">{data.competitor}</p>
+      </div>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {[
+          { label: "Messaging", value: data.messaging },
+          { label: "Target Audience", value: data.audience },
+          { label: "Positioning", value: data.positioning },
+          { label: "What's New", value: data.whatsNew },
+        ].map((f) => (
+          <div key={f.label} className="rounded-xl border border-[#E8E6E1] bg-white p-3">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">{f.label}</p>
+            <p className="mt-0.5 text-xs text-[#1C1C1C]">{f.value}</p>
+          </div>
+        ))}
+      </div>
+      <div className="rounded-xl border border-dashed border-[#F2C88F]/30 bg-[#F2C88F]/[0.06] p-3">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#D97757]">Inference (not confirmed)</p>
+        <p className="mt-0.5 text-xs text-[#6B6B66]">{data.inference}</p>
+      </div>
+    </div>
+  );
+}
+
+// ── Launch Timeline ─────────────────────────────────────────────────────────────
+
+function LaunchTimeline({ data }: { data: Extract<UseCaseOutput, { kind: "launchTimeline" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="rounded-2xl border border-[#6B9E8A]/30 bg-[#6B9E8A]/[0.04] p-5 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Recommended window</p>
+        <p className="mt-1 text-xl font-bold text-[#1C1C1C]">{data.recommendedWindow}</p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-xl border border-[#6B9E8A]/20 bg-[#6B9E8A]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#6B9E8A]">Reasons</p>
+          <ul className="mt-1.5 space-y-1">{data.reasons.map((r) => <li key={r} className="text-xs text-[#1C1C1C]">✓ {r}</li>)}</ul>
+        </div>
+        <div className="rounded-xl border border-[#E5534B]/20 bg-[#E5534B]/[0.04] p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#E5534B]">Risks</p>
+          <ul className="mt-1.5 space-y-1">{data.risks.map((r) => <li key={r} className="text-xs text-[#1C1C1C]">⚠ {r}</li>)}</ul>
+        </div>
+      </div>
+      <div className="rounded-xl border border-[#E8E6E1] bg-[#FAFAF8] p-3">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Open questions</p>
+        <ul className="mt-1 space-y-0.5">{data.openQuestions.map((q) => <li key={q} className="text-xs text-[#6B6B66]">? {q}</li>)}</ul>
+      </div>
+    </div>
+  );
+}
+
+// ── Cost Efficiency ─────────────────────────────────────────────────────────────
+
+function CostEfficiency({ data }: { data: Extract<UseCaseOutput, { kind: "costEfficiency" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="overflow-x-auto rounded-2xl border border-[#E8E6E1] bg-white">
+        <table className="w-full min-w-[450px] text-left text-sm">
+          <thead>
+            <tr className="border-b border-[#E8E6E1]">
+              <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Channel</th>
+              <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Spend</th>
+              <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Efficiency</th>
+              <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Investigate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.rankings.map((r) => (
+              <tr key={r.channel} className="border-b border-[#F2F1EE] last:border-0">
+                <td className="px-4 py-2.5 font-semibold text-[#1C1C1C]">{r.channel}</td>
+                <td className="px-4 py-2.5 text-[#6B6B66]">{r.spend}</td>
+                <td className="px-4 py-2.5 font-semibold text-[#1C1C1C]">{r.efficiency}</td>
+                <td className="px-4 py-2.5 text-xs text-[#6B6B66]">{r.investigation}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// ── Sales Timeline ──────────────────────────────────────────────────────────────
+
+function SalesTimeline({ data }: { data: Extract<UseCaseOutput, { kind: "salesTimeline" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      {data.associations.map((a, i) => (
+        <motion.div key={i} {...fade(i)} className="rounded-2xl border border-[#E8E6E1] bg-white p-4 shadow-sm">
+          <p className="text-sm font-bold text-[#1C1C1C]">{a.campaign}</p>
+          <p className="mt-1 text-xs text-[#6B6B66]">Correlation: {a.correlation}</p>
+          <span className="mt-1 inline-flex rounded-full bg-[#F2C88F]/15 px-2 py-0.5 text-[10px] font-bold text-[#D97757]">Confidence: {a.confidence}</span>
+          <p className="mt-1 text-[10px] text-[#6B6B66] italic">{a.caveat}</p>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+// ── Weekly Digest ──────────────────────────────────────────────────────────────
+
+function WeeklyDigest({ data }: { data: Extract<UseCaseOutput, { kind: "weeklyDigest" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      {data.sections.map((s, i) => (
+        <motion.div key={i} {...fade(i)} className="rounded-2xl border border-[#E8E6E1] bg-white p-4 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">{s.area}</p>
+          <div className="mt-2 grid gap-2 sm:grid-cols-3">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">What's new</p>
+              <ul className="mt-1 space-y-0.5">{s.whatsNew.map((n) => <li key={n} className="text-xs text-[#1C1C1C]">• {n}</li>)}</ul>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B6B66]">Watch</p>
+              <ul className="mt-1 space-y-0.5">{s.whatToWatch.map((w) => <li key={w} className="text-xs text-[#1C1C1C]">👁 {w}</li>)}</ul>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B9E8A]">Action</p>
+              <p className="mt-1 text-xs font-semibold text-[#1C1C1C]">{s.recommendedAction}</p>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+// ── Routine Calendar ───────────────────────────────────────────────────────────
+
+function RoutineCalendar({ data }: { data: Extract<UseCaseOutput, { kind: "routineCalendar" }> }) {
+  return (
+    <div className="space-y-4">
+      <SampleBadge />
+      <div className="rounded-2xl border border-[#D97757]/20 bg-[#D97757]/[0.04] p-4 text-center">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#D97757]">Your weekly marketing routine</p>
+        <p className="mt-1 text-xs text-[#6B6B66]">Educational framing — this is a playbook your team follows, not software that runs itself.</p>
+      </div>
+      <div className="grid gap-2">
+        {data.days.map((d, i) => (
+          <motion.div key={i} {...fade(i)} className="flex items-center gap-3 rounded-xl border border-[#E8E6E1] bg-white p-3">
+            <span className="w-20 shrink-0 rounded-lg bg-[#D97757]/10 px-2.5 py-1 text-center text-xs font-bold text-[#D97757]">{d.day}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-[#1C1C1C]">{d.task}</p>
+              <p className="text-[10px] text-[#6B6B66]">Skill: {d.skill} · Connector: {d.connector}</p>
+            </div>
+            <span className="text-[10px] text-[#6B6B66]">Owner: {d.owner}</span>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Output Router ──────────────────────────────────────────────────────────────
 
 export function OutputRenderer({ output }: { output: UseCaseOutput }) {
+  if (!output) {
+    return (
+      <div className="rounded-2xl border border-[#E8E6E1] bg-[#FAFAF8] p-8 text-center">
+        <p className="text-sm text-[#6B6B66]">Output will appear here after running the analysis.</p>
+      </div>
+    );
+  }
+
   switch (output.kind) {
-    case "competitorDashboard": return <CompetitorDashboard data={output} />;
-    case "themes": return <Themes data={output} />;
-    case "scorecard": return <Scorecard data={output} />;
+    case "themeClusters": return <ThemeClusters data={output} />;
+    case "comparisonMatrix": return <ComparisonMatrix data={output} />;
+    case "opportunityCard": return <OpportunityCard data={output} />;
     case "campaignCanvas": return <CampaignCanvas data={output} />;
-    case "copyLab": return <CopyLab data={output} />;
+    case "adPreview": return <AdPreview data={output} />;
+    case "socialPreview": return <SocialPreview data={output} />;
     case "emailPreview": return <EmailPreview data={output} />;
-    case "socialBoard": return <SocialBoard data={output} />;
-    case "analytics": return <Analytics data={output} />;
-    case "experiment": return <Experiment data={output} />;
-    case "insights": return <Insights data={output} />;
-    case "positioning": return <PositioningMap data={output} />;
-    case "calendar": return <CalendarOut data={output} />;
+    case "dashboard": return <Dashboard data={output} />;
+    case "abComparison": return <AbComparison data={output} />;
+    case "diagnosisCard": return <DiagnosisCard data={output} />;
+    case "featureScorecard": return <FeatureScorecard data={output} />;
+    case "positioningCards": return <PositioningCards data={output} />;
+    case "evidenceSplit": return <EvidenceSplit data={output} />;
+    case "messagingBreakdown": return <MessagingBreakdown data={output} />;
+    case "launchTimeline": return <LaunchTimeline data={output} />;
+    case "costEfficiency": return <CostEfficiency data={output} />;
+    case "salesTimeline": return <SalesTimeline data={output} />;
+    case "weeklyDigest": return <WeeklyDigest data={output} />;
+    case "routineCalendar": return <RoutineCalendar data={output} />;
+    default: {
+      const _exhaustive: never = output;
+      return (
+        <div className="rounded-2xl border border-[#E8E6E1] bg-[#FAFAF8] p-6 text-center">
+          <p className="text-sm text-[#6B6B66]">Visual output type not yet implemented.</p>
+        </div>
+      );
+    }
   }
 }

@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { useLab } from "@/context/LabContext";
 
 const LINKS = [
-  { label: "Learn", href: "#learn" },
+  { label: "How It Works", href: "#how-it-works" },
   { label: "Building Blocks", href: "#blocks" },
   { label: "Use Cases", href: "#usecases" },
-  { label: "Workflow Lab", href: "#workflow" },
-  { label: "About", href: "#about" },
+  { label: "Learn", href: "#learn" },
+  { label: "Build a Workflow", href: "#builder" },
 ];
 
 export function Nav() {
@@ -39,7 +39,7 @@ export function Nav() {
     >
       {/* scroll progress */}
       <motion.div
-        className="absolute inset-x-0 top-0 h-[2px] origin-left bg-gradient-to-r from-cyan-400 via-sky-400 to-fuchsia-400"
+        className="absolute inset-x-0 top-0 h-[2px] origin-left bg-gradient-to-r from-[#D97757] via-[#F2C88F] to-[#D97757]"
         style={{ scaleX: progress }}
       />
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -48,66 +48,70 @@ export function Nav() {
           className="flex items-center gap-2.5 font-semibold tracking-tight"
           aria-label="Claude Marketing Lab — back to top"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-cyan-400/30 to-fuchsia-500/30 ring-1 ring-white/15">
-            <FlaskConical className="h-4.5 w-4.5 text-cyan-300" />
-          </span>
-          <span className="text-sm sm:text-base">
-            Claude <span className="text-gradient">Marketing Lab</span>
-          </span>
+          <FlaskConical className="h-5 w-5 text-[#D97757]" />
+          <span className="hidden text-sm sm:inline">Claude Marketing Lab</span>
         </button>
 
+        {/* desktop nav */}
         <div className="hidden items-center gap-1 lg:flex">
           {LINKS.map((l) => (
             <button
               key={l.href}
               onClick={() => go(l.href)}
-              className="rounded-full px-3.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
+              className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {l.label}
             </button>
           ))}
-          {/* journey progress pill */}
-          <div className="ml-3 flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px] shadow-emerald-400/70" />
-            Journey · {progressPercent}%
-          </div>
-          <Button
-            size="sm"
-            onClick={() => go("#usecases")}
-            className="ml-3 rounded-full bg-gradient-to-r from-cyan-400 to-sky-500 font-semibold text-slate-950 hover:opacity-90"
-          >
-            Start Workflow
-          </Button>
         </div>
 
-        <button
-          className="grid h-9 w-9 place-items-center rounded-lg border border-white/10 lg:hidden"
-          onClick={() => setOpen(!open)}
-          aria-expanded={open}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </button>
+        <div className="flex items-center gap-3">
+          {progressPercent > 0 && (
+            <span className="hidden rounded-full border border-[#D97757]/30 bg-[#D97757]/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-[#D97757] sm:inline">
+              {progressPercent}% explored
+            </span>
+          )}
+          <Button
+            size="sm"
+            className="hidden rounded-full bg-[#D97757] px-5 font-semibold text-white hover:bg-[#c06545] lg:inline-flex"
+            onClick={() => go("#usecases")}
+          >
+            Start a Workflow
+          </Button>
+          <button
+            className="rounded-lg p-2 text-muted-foreground hover:text-foreground lg:hidden"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </nav>
 
+      {/* mobile menu */}
       {open && (
-        <div className="glass border-t border-white/10 px-4 pb-4 lg:hidden">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass border-t border-white/5 px-4 pb-4 pt-2 lg:hidden"
+        >
           {LINKS.map((l) => (
             <button
               key={l.href}
               onClick={() => go(l.href)}
-              className="block w-full rounded-lg px-3 py-3 text-left text-sm text-muted-foreground hover:bg-white/5 hover:text-foreground"
+              className="block w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground hover:text-foreground"
             >
               {l.label}
             </button>
           ))}
           <Button
+            size="sm"
+            className="mt-2 w-full rounded-full bg-[#D97757] font-semibold text-white"
             onClick={() => go("#usecases")}
-            className="mt-2 w-full rounded-full bg-gradient-to-r from-cyan-400 to-sky-500 font-semibold text-slate-950"
           >
-            Start Workflow · {progressPercent}% complete
+            Start a Workflow
           </Button>
-        </div>
+        </motion.div>
       )}
     </header>
   );

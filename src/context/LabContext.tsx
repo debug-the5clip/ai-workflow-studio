@@ -26,6 +26,7 @@ interface LabContextValue extends LabState {
   setLastUseCase: (id: string | null) => void;
   progressPercent: number;
   resetProgress: () => void;
+  quizScore: { correct: number; total: number };
 }
 
 const STORAGE_KEY = "claude-marketing-lab-v1";
@@ -112,6 +113,12 @@ export function LabProvider({ children }: { children: ReactNode }) {
     return Math.round((done / 5) * 100);
   }, [state]);
 
+  const quizScore = useMemo(() => {
+    const correct = Object.keys(state.quizAnswers).length;
+    const total = 8;
+    return { correct, total };
+  }, [state.quizAnswers]);
+
   const value = useMemo(
     () => ({
       ...state,
@@ -122,8 +129,9 @@ export function LabProvider({ children }: { children: ReactNode }) {
       setLastUseCase,
       progressPercent,
       resetProgress,
+      quizScore,
     }),
-    [state, markSectionVisited, completeUseCase, answerQuiz, learnFlashcard, setLastUseCase, progressPercent, resetProgress],
+    [state, markSectionVisited, completeUseCase, answerQuiz, learnFlashcard, setLastUseCase, progressPercent, resetProgress, quizScore],
   );
 
   return <LabContext.Provider value={value}>{children}</LabContext.Provider>;

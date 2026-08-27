@@ -226,11 +226,11 @@ export const QUIZZES: Quiz[] = [
 ];
 
 export const FLASHCARDS = [
-  { term: "PROMPT", character: "speech-bubble", definition: "One instruction asking Claude to do one piece of work.", example: "\"Summarize these 40 reviews into top complaints.\"" },
-  { term: "SKILL", character: "toolbox", definition: "A reusable method for performing a type of work consistently.", example: "Competitor Intelligence Skill: collect → categorize → compare → gaps → insight." },
-  { term: "CONNECTOR", character: "bridge", definition: "Where information comes FROM — authorized sources linked into your workflow.", example: "Uploaded review spreadsheets, saved competitor pages, internal reports." },
-  { term: "LOOP", character: "circular-arrow", definition: "A repeating cycle that turns results into improving next cycles.", example: "Research → Insight → Action → Measure → Learn → repeat." },
-  { term: "ROUTINE", character: "calendar", definition: "A scheduled rhythm that runs loops and skills without relying on memory.", example: "Monday customer intel, Tuesday competitor intel, Friday performance." },
+  { term: "PROMPT", character: "speech-bubble", definition: "One instruction asking Claude to do one piece of work.", example: "\"Summarize these 40 reviews into top complaints.\"", whyItMatters: "A good prompt is the fastest way to get a usable answer for a one-off question. Don't over-build — use a Prompt when you won't ask the same question again." },
+  { term: "SKILL", character: "toolbox", definition: "A reusable method for performing a type of work consistently.", example: "Competitor Intelligence Skill: collect → categorize → compare → gaps → insight.", whyItMatters: "A Skill is only worth building when you'll ask the same kind of question repeatedly, or when the method matters as much as the answer." },
+  { term: "CONNECTOR", character: "bridge", definition: "Where information comes FROM — authorized sources linked into your workflow.", example: "Uploaded review spreadsheets, saved competitor pages, internal reports.", whyItMatters: 'A Connector turns "Claude thinks" into "Claude knows" because it works with your real, permissioned data.' },
+  { term: "LOOP", character: "circular-arrow", definition: "A repeating cycle that turns results into improving next cycles.", example: "Research → Insight → Action → Measure → Learn → repeat.", whyItMatters: "A Loop is what makes an analysis get sharper over time instead of staying static. Without a loop, insights are one-offs." },
+  { term: "ROUTINE", character: "calendar", definition: "A scheduled rhythm that runs loops and skills without relying on memory.", example: "Monday customer intel, Tuesday competitor intel, Friday performance.", whyItMatters: 'A Routine turns "something we should really do" into "something that happens automatically, on time, every time."' },
 ];
 
 // ─── Trust section ────────────────────────────────────────────────────────────
