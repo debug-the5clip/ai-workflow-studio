@@ -25,7 +25,7 @@ export function Trust() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto max-w-4xl">
           {/* AI + Human section */}
-          <div className="glass-light rounded-3xl p-6 shadow-md shadow-black/[0.04] sm:p-8">
+          <div className="glass-light rounded-3xl p-6 shadow-md shadow-black/[0.04] sm:p-8 tilt-card hover-glow">
             <div className="mb-6 flex items-center gap-3">
               <ShieldCheck className="h-6 w-6 text-[#D97757]" />
               <div>

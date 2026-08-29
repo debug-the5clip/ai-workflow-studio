@@ -3,6 +3,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CircleCheck, RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLab } from "@/context/LabContext";
+import { useMagneticTilt } from "@/hooks/useMagneticTilt";
+
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { ref, onMouseMove, onMouseLeave } = useMagneticTilt(5);
+  return (
+    <div ref={ref as any} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={`tilt-card hover-glow ${className ?? ""}`}>
+      {children}
+    </div>
+  );
+}
 
 const GOALS = [
   { id: "customer-research", emoji: "🔎", label: "Customer Research" },
@@ -89,12 +99,11 @@ export function FinalBuilder() {
                 key={goal.id}
                 onClick={() => { setSelectedGoal(goal.id); setShowAssembled(false); }}
                 aria-pressed={on}
-                whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.97 }}
-                className={`relative rounded-3xl border p-5 text-center transition-all focus-visible:outline-none ${
+                className={`relative tilt-card rounded-3xl border p-5 text-center transition-all focus-visible:outline-none ${
                   on
                     ? "border-[#D97757]/50 bg-[#D97757]/[0.06] shadow-md shadow-[#D97757]/10"
-                    : "border-[#E2E0DB] bg-white/70 hover:border-[#D97757]/25"
+                    : "border-[#E2E0DB] bg-white/70 hover:border-[#D97757]/25 hover-glow"
                 }`}
               >
                 <span className="text-3xl">{goal.emoji}</span>
@@ -154,7 +163,7 @@ export function FinalBuilder() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.12 }}
-                    className="glass-light rounded-2xl p-4 shadow-sm shadow-black/[0.04]"
+                    className="glass-light rounded-2xl p-4 shadow-sm shadow-black/[0.04] tilt-card hover-glow"
                   >
                     <p className="text-xs font-bold tracking-widest text-[#D97757]">{block.block}</p>
                     <p className="mt-1.5 text-xs leading-relaxed text-[#6B6B66]">{block.note}</p>

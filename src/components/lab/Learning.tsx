@@ -3,6 +3,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import { BrainCircuit, CheckCircle2, RotateCcw, XCircle } from "lucide-react";
 import { useLab } from "@/context/LabContext";
 import { FLASHCARDS, QUIZZES, type Quiz } from "@/data/content";
+import { useMagneticTilt } from "@/hooks/useMagneticTilt";
+
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { ref, onMouseMove, onMouseLeave } = useMagneticTilt(4);
+  return (
+    <div ref={ref as any} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={`tilt-card hover-glow ${className ?? ""}`}>
+      {children}
+    </div>
+  );
+}
 
 // ── Quiz ─────────────────────────────────────────────────────────────────────
 
@@ -24,12 +34,12 @@ function QuizCard({ quiz, index }: { quiz: Quiz; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ delay: Math.min(index * 0.06, 0.3) }}
-      className="glass-light rounded-3xl p-5 shadow-md shadow-black/[0.04]"
+      className=""
     >
-      <div className="flex items-center justify-between gap-2">
-        <span className="rounded-full bg-[#D97757]/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#D97757]">
-          Challenge · {quiz.topic}
-        </span>
+      <TiltCard className="glass-light rounded-3xl p-5 shadow-md shadow-black/[0.04]">      <div className="flex items-center justify-between gap-2">
+          <span className="rounded-full bg-[#D97757]/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#D97757]">
+            Challenge · {quiz.topic}
+          </span>
         {answered && (
           <span className={`flex items-center gap-1 text-xs font-semibold ${correct ? "text-[#6B9E8A]" : "text-rose-500"}`}>
             {correct ? <CheckCircle2 className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />}
@@ -82,6 +92,7 @@ function QuizCard({ quiz, index }: { quiz: Quiz; index: number }) {
           </motion.div>
         )}
       </AnimatePresence>
+      </TiltCard>
     </motion.div>
   );
 }
@@ -115,7 +126,7 @@ function Flashcard({ card, index }: { card: typeof FLASHCARDS[number]; index: nu
         }`}
       >
         {/* Front */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl border border-[#E2E0DB] bg-gradient-to-br from-white to-[#F5F4F0] p-6 shadow-md shadow-black/[0.04] [backface-visibility:hidden]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl border border-[#E2E0DB] bg-gradient-to-br from-white to-[#F5F4F0] p-6 shadow-md shadow-black/[0.04] [backface-visibility:hidden] hover-glow">
           <span className="text-4xl" role="img" aria-hidden>
             {CHARACTER_EMOJI[card.character] || card.character}
           </span>
@@ -124,7 +135,7 @@ function Flashcard({ card, index }: { card: typeof FLASHCARDS[number]; index: nu
         </div>
 
         {/* Back */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl border border-[#D97757]/30 bg-gradient-to-br from-[#D97757]/5 to-white p-6 shadow-md shadow-black/[0.04] [backface-visibility:hidden] [transform:rotateY(180deg)]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl border border-[#D97757]/30 bg-gradient-to-br from-[#D97757]/5 to-white p-6 shadow-md shadow-black/[0.04] [backface-visibility:hidden] [transform:rotateY(180deg)] hover-glow">
           <p className="text-center text-sm leading-relaxed text-[#4A4A46]">{card.definition}</p>
           <p className="mt-3 text-center text-xs text-[#6B6B66] italic">"{card.example}"</p>
           {showWhy && (

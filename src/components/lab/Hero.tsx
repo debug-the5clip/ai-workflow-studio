@@ -200,7 +200,7 @@ export function Hero() {
                     tabIndex={0}
                     role="button"
                     aria-label={`${el.label}: ${el.insight}`}
-                    className="glass-light cursor-default rounded-xl px-3 py-2 text-[11px] font-semibold tracking-widest text-[#4A4A46] transition-all hover:border-[#D97757]/40 hover:text-[#D97757] focus-visible:border-[#D97757]/40 focus-visible:outline-none sm:text-xs"
+                    className="glass-light cursor-default rounded-xl px-3 py-2 text-[11px] font-semibold tracking-widest text-[#4A4A46] transition-all hover:border-[#D97757]/40 hover:text-[#D97757] focus-visible:border-[#D97757]/40 focus-visible:outline-none sm:text-xs hover-glow"
                   >
                     {el.label}
                     <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-48 -translate-x-1/2 rounded-xl border border-[#E2E0DB] bg-white p-2.5 text-[11px] font-normal leading-snug normal-case tracking-normal text-[#4A4A46] opacity-0 shadow-xl shadow-black/[0.06] transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">

@@ -8,6 +8,21 @@ import { Learning } from "@/components/lab/Learning";
 import { FinalBuilder } from "@/components/lab/FinalBuilder";
 import { Trust, Footer } from "@/components/lab/Trust";
 import { motion } from "framer-motion";
+import { useMagneticTilt } from "@/hooks/useMagneticTilt";
+
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { ref, onMouseMove, onMouseLeave } = useMagneticTilt(5);
+  return (
+    <div
+      ref={ref as any}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      className={`tilt-card hover-glow ${className ?? ""}`}
+    >
+      {children}
+    </div>
+  );
+}
 
 const HOW_IT_WORKS = [
   {
@@ -57,10 +72,12 @@ export default function Landing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ delay: i * 0.1 }}
-                  className={`glass-light rounded-2xl border ${item.border} bg-gradient-to-br ${item.color} p-6 shadow-sm shadow-black/[0.03]`}
                 >
-                  <span className="text-xs font-bold tracking-widest text-[#D97757]">{item.step}</span>
-                  <p className="mt-3 text-sm leading-relaxed text-[#6B6B66]">{item.description}</p>
+                  <TiltCard className={`glass-light rounded-2xl border ${item.border} bg-gradient-to-br ${item.color} p-6 shadow-sm shadow-black/[0.03]`}
+                  >
+                    <span className="relative z-10 text-xs font-bold tracking-widest text-[#D97757]">{item.step}</span>
+                    <p className="relative z-10 mt-3 text-sm leading-relaxed text-[#6B6B66]">{item.description}</p>
+                  </TiltCard>
                 </motion.div>
               ))}
             </div>

@@ -18,6 +18,7 @@ import { RUN_STAGES } from "@/lib/ai-engine";
 import type { UseCase } from "@/lib/lab-types";
 import { COMPANY_CONTEXT, USE_CASES } from "@/data/useCases";
 import { OutputRenderer } from "@/components/lab/outputs";
+import { useMagneticTilt } from "@/hooks/useMagneticTilt";
 
 const CATEGORIES = ["All", "Research", "Strategy", "Content", "Performance", "Operations"] as const;
 
@@ -371,7 +372,7 @@ function UseCaseGrid({ onOpen }: { onOpen: (uc: UseCase) => void }) {
             viewport={{ once: true, margin: "-40px" }}
             transition={{ delay: Math.min(i * 0.03, 0.3) }}
             onClick={() => onOpen(uc)}
-            className={`group relative overflow-hidden rounded-2xl border p-4 text-left transition-all hover:-translate-y-1 hover:border-[#D97757]/40 hover:shadow-lg hover:shadow-[#D97757]/8 focus-visible:border-[#D97757]/50 focus-visible:outline-none ${
+            className={`group relative overflow-hidden rounded-2xl border p-4 text-left transition-all tilt-card hover-glow focus-visible:border-[#D97757]/50 focus-visible:outline-none ${
               completedUseCases.includes(uc.id)
                 ? "border-[#6B9E8A]/25 bg-[#6B9E8A]/[0.04]"
                 : "border-[#E2E0DB] bg-white/70"

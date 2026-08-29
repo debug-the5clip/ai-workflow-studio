@@ -2,6 +2,16 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, GitBranch, Mail, MessageSquareText, Repeat, Wrench, Calendar } from "lucide-react";
 import { useLab } from "@/context/LabContext";
+import { useMagneticTilt } from "@/hooks/useMagneticTilt";
+
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { ref, onMouseMove, onMouseLeave } = useMagneticTilt(4);
+  return (
+    <div ref={ref as any} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={`tilt-card hover-glow ${className ?? ""}`}>
+      {children}
+    </div>
+  );
+}
 
 type TabId = "prompt" | "skill" | "connector" | "loop" | "routine";
 
@@ -93,10 +103,10 @@ export function BuildingBlocks() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
+                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all tilt-card ${
                   active
                     ? "border border-[#D97757]/40 bg-[#D97757]/10 text-[#D97757] shadow-sm shadow-[#D97757]/10"
-                    : "border border-[#E2E0DB] bg-white/70 text-[#6B6B66] hover:border-[#D97757]/25 hover:text-[#1C1C1C]"
+                    : "border border-[#E2E0DB] bg-white/70 text-[#6B6B66] hover:border-[#D97757]/25 hover:text-[#1C1C1C] hover-glow"
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -115,8 +125,8 @@ export function BuildingBlocks() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.25 }}
-              className="glass-light rounded-3xl p-6 shadow-lg shadow-black/[0.04] sm:p-8"
             >
+              <TiltCard className="glass-light rounded-3xl p-6 shadow-lg shadow-black/[0.04] sm:p-8">
               <p className="mb-1 text-xs font-bold uppercase tracking-[0.25em] text-[#D97757]">
                 {activeTab} — {content.definition}
               </p>
@@ -125,7 +135,7 @@ export function BuildingBlocks() {
                 <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#9A968F]">Example</p>
                 <p className="text-sm leading-relaxed text-[#4A4A46]">{content.example}</p>
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-[#6B6B66]">{content.detail}</p>
+              <p className="mt-4 text-sm leading-relaxed text-[#6B6B66]">{content.detail}</p>              </TiltCard>
             </motion.div>
           </AnimatePresence>
         </div>

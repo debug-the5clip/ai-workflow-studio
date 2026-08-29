@@ -32,7 +32,7 @@ function NodeCard({
         animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         onClick={() => onOpen(node)}
-        className="group relative w-full max-w-md rounded-2xl border border-[#E2E0DB] bg-white/80 p-5 text-left shadow-sm shadow-black/[0.03] backdrop-blur transition-all hover:border-[#D97757]/40 hover:shadow-lg hover:shadow-[#D97757]/8 focus-visible:border-[#D97757]/50 focus-visible:outline-none"
+        className="group relative w-full max-w-md rounded-2xl border border-[#E2E0DB] bg-white/80 p-5 text-left shadow-sm shadow-black/[0.03] backdrop-blur transition-all tilt-card hover-glow focus-visible:border-[#D97757]/50 focus-visible:outline-none"
       >
         <span className="absolute -top-2.5 left-5 rounded-full bg-[#D97757] px-2 py-0.5 text-[10px] font-bold text-white">
           {String(index + 1).padStart(2, "0")}
