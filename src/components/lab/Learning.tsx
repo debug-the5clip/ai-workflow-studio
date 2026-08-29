@@ -8,7 +8,7 @@ import { useMagneticTilt } from "@/hooks/useMagneticTilt";
 function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
   const { ref, onMouseMove, onMouseLeave } = useMagneticTilt(4);
   return (
-    <div ref={ref as any} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={`tilt-card hover-glow ${className ?? ""}`}>
+    <div ref={ref} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={`tilt-card hover-glow ${className ?? ""}`}>
       {children}
     </div>
   );

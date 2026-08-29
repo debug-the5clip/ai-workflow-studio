@@ -1,4 +1,4 @@
-import { useCallback, useRef, type RefObject } from "react";
+import { useCallback, useRef } from "react";
 
 /**
  * Returns a ref + mouse-move / mouse-leave handlers that produce a subtle
@@ -10,7 +10,7 @@ import { useCallback, useRef, type RefObject } from "react";
  *   <div ref={ref} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className="tilt-card ...">
  */
 export function useMagneticTilt(maxTilt = 6) {
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const onMouseMove = useCallback(
     (e: React.MouseEvent) => {
@@ -34,5 +34,5 @@ export function useMagneticTilt(maxTilt = 6) {
     el.style.transform = "perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)";
   }, []);
 
-  return { ref: ref as RefObject<HTMLElement>, onMouseMove, onMouseLeave };
+  return { ref, onMouseMove, onMouseLeave };
 }

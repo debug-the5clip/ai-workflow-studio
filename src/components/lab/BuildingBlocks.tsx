@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, GitBranch, Mail, MessageSquareText, Repeat, Wrench, Calendar } from "lucide-react";
+import { BookOpen, GitBranch, MessageSquareText, Repeat, Wrench, Calendar } from "lucide-react";
 import { useLab } from "@/context/LabContext";
 import { useMagneticTilt } from "@/hooks/useMagneticTilt";
 
 function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
   const { ref, onMouseMove, onMouseLeave } = useMagneticTilt(4);
   return (
-    <div ref={ref as any} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={`tilt-card hover-glow ${className ?? ""}`}>
+    <div ref={ref} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={`tilt-card hover-glow ${className ?? ""}`}>
       {children}
     </div>
   );

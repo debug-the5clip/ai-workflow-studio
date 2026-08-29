@@ -3,16 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CircleCheck, RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLab } from "@/context/LabContext";
-import { useMagneticTilt } from "@/hooks/useMagneticTilt";
-
-function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
-  const { ref, onMouseMove, onMouseLeave } = useMagneticTilt(5);
-  return (
-    <div ref={ref as any} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={`tilt-card hover-glow ${className ?? ""}`}>
-      {children}
-    </div>
-  );
-}
 
 const GOALS = [
   { id: "customer-research", emoji: "🔎", label: "Customer Research" },

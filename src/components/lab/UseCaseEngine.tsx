@@ -18,7 +18,6 @@ import { RUN_STAGES } from "@/lib/ai-engine";
 import type { UseCase } from "@/lib/lab-types";
 import { COMPANY_CONTEXT, USE_CASES } from "@/data/useCases";
 import { OutputRenderer } from "@/components/lab/outputs";
-import { useMagneticTilt } from "@/hooks/useMagneticTilt";
 
 const CATEGORIES = ["All", "Research", "Strategy", "Content", "Performance", "Operations"] as const;
 
