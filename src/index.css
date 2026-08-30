@@ -23,40 +23,39 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-border: var(--border);
-  /* Lab-specific tokens — playful periwinkle palette */
   --color-clay: #FF7B72;
-  --color-blue: #2563EB;
-  --color-purple: #7C5CFC;
+  --color-blue: #4A7BF7;
+  --color-purple: #8B6CFC;
   --color-coral: #FF7B72;
   --color-pink: #FF8FA3;
   --color-yellow: #FFD84D;
   --color-orange: #FF9B54;
   --color-green: #67C587;
-  --color-periwinkle: #EEF3FF;
-  --color-periwinkle-deep: #D6E0FF;
+  --color-cream: #FAF9F6;
+  --color-warm-white: #FFFFFF;
 }
 
-/* Claude Marketing Lab — Bright Playful Theme */
+/* Claude Marketing Lab — Warm Playful Theme */
 :root {
   --radius: 1rem;
-  --background: #EEF3FF;
-  --foreground: #111111;
+  --background: #FAF9F6;
+  --foreground: #2D2D2D;
   --card: #FFFFFF;
-  --card-foreground: #111111;
+  --card-foreground: #2D2D2D;
   --popover: #FFFFFF;
-  --popover-foreground: #111111;
-  --primary: #2563EB;
+  --popover-foreground: #2D2D2D;
+  --primary: #6C5CE7;
   --primary-foreground: #FFFFFF;
-  --secondary: #F4F6FF;
-  --secondary-foreground: #444444;
-  --muted: #F0F2FA;
-  --muted-foreground: #7A7A8A;
+  --secondary: #FFF8F0;
+  --secondary-foreground: #5A5A5A;
+  --muted: #F5F3EF;
+  --muted-foreground: #8A8A82;
   --accent: #FF7B72;
   --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
-  --border: #D6E0FF;
-  --input: #D6E0FF;
-  --ring: rgba(37, 99, 235, 0.35);
+  --border: #E8E4DE;
+  --input: #E8E4DE;
+  --ring: rgba(108, 92, 231, 0.35);
 }
 
 @layer base {
@@ -66,9 +65,9 @@
   body {
     @apply bg-background text-foreground;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -5%, rgba(37, 99, 235, 0.06), transparent),
-      radial-gradient(ellipse 50% 40% at 85% 100%, rgba(255, 123, 114, 0.05), transparent),
-      radial-gradient(ellipse 60% 50% at 15% 80%, rgba(124, 92, 252, 0.04), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -5%, rgba(108, 92, 231, 0.04), transparent),
+      radial-gradient(ellipse 50% 40% at 85% 100%, rgba(255, 123, 114, 0.03), transparent),
+      radial-gradient(ellipse 60% 50% at 15% 80%, rgba(103, 197, 135, 0.03), transparent);
     background-attachment: fixed;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
@@ -81,14 +80,14 @@
 @layer utilities {
   /* Glossy white card — main landing panels */
   .glass {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px) saturate(1.5);
-    -webkit-backdrop-filter: blur(20px) saturate(1.5);
-    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
     box-shadow:
-      0 2px 8px rgba(37, 99, 235, 0.04),
+      0 2px 8px rgba(0, 0, 0, 0.03),
       0 8px 32px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      inset 0 1px 0 rgba(255, 255, 255, 0.95);
   }
   /* Elevated white card */
   .glass-light {
@@ -97,21 +96,21 @@
     -webkit-backdrop-filter: blur(16px) saturate(1.4);
     border: 1.5px solid rgba(255, 255, 255, 0.85);
     box-shadow:
-      0 2px 4px rgba(37, 99, 235, 0.03),
+      0 2px 4px rgba(0, 0, 0, 0.02),
       0 8px 24px rgba(0, 0, 0, 0.05),
       inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
-  /* Hero periwinkle panel — the large rounded container */
+  /* Hero warm panel — the large rounded container */
   .hero-panel {
-    background: linear-gradient(145deg, #EEF3FF 0%, #E0E9FF 40%, #F0F4FF 100%);
-    border: 2px solid rgba(255, 255, 255, 0.7);
+    background: linear-gradient(145deg, #FFF8F0 0%, #FFF0E5 30%, #F5F0FF 70%, #F0F4FF 100%);
+    border: 2px solid rgba(255, 255, 255, 0.8);
     box-shadow:
-      0 4px 16px rgba(37, 99, 235, 0.06),
+      0 4px 16px rgba(0, 0, 0, 0.03),
       0 16px 48px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
   .text-gradient {
-    background: linear-gradient(135deg, #2563EB 0%, #7C5CFC 50%, #FF7B72 100%);
+    background: linear-gradient(135deg, #6C5CE7 0%, #8B6CFC 40%, #FF7B72 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -123,21 +122,21 @@
     color: transparent;
   }
   .text-gradient-cool {
-    background: linear-gradient(135deg, #2563EB 0%, #7C5CFC 100%);
+    background: linear-gradient(135deg, #4A7BF7 0%, #8B6CFC 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   /* Decorative dot grid */
   .dot-grid {
-    background-image: radial-gradient(circle, rgba(37, 99, 235, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(108, 92, 231, 0.08) 1px, transparent 1px);
     background-size: 24px 24px;
   }
   /* Perspective container for 3D flip cards */
   .perspective-800 {
     perspective: 800px;
   }
-  /* Tilt card with blue glow */
+  /* Tilt card with warm glow */
   .tilt-card {
     transition: transform 0.15s ease-out, box-shadow 0.25s ease;
     transform-style: preserve-3d;
@@ -145,9 +144,9 @@
   }
   .tilt-card:hover {
     box-shadow:
-      0 8px 30px rgba(37, 99, 235, 0.1),
-      0 0 40px rgba(124, 92, 252, 0.05),
-      0 2px 8px rgba(0, 0, 0, 0.04);
+      0 8px 30px rgba(108, 92, 231, 0.08),
+      0 0 40px rgba(255, 123, 114, 0.04),
+      0 2px 8px rgba(0, 0, 0, 0.03);
   }
   /* Hover glow — colorful aura on cards */
   .hover-glow {
@@ -163,10 +162,10 @@
     pointer-events: none;
     background: linear-gradient(
       135deg,
-      rgba(37, 99, 235, 0.1),
-      rgba(124, 92, 252, 0.08),
+      rgba(108, 92, 231, 0.08),
       rgba(255, 123, 114, 0.06),
-      rgba(255, 216, 77, 0.06)
+      rgba(255, 216, 77, 0.05),
+      rgba(103, 197, 135, 0.05)
     );
     z-index: 0;
   }
@@ -213,11 +212,16 @@
   0%, 100% { opacity: 0.6; }
   50% { opacity: 1; }
 }
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
 
 .float-slow { animation: float-slow 6s ease-in-out infinite; }
 .float-medium { animation: float-medium 4s ease-in-out infinite; }
 .wiggle { animation: wiggle 3s ease-in-out infinite; }
 .pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
+.sparkle { animation: sparkle 2s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   *,

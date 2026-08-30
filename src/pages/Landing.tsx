@@ -10,6 +10,7 @@ import { Trust, Footer } from "@/components/lab/Trust";
 import { motion } from "framer-motion";
 import { useMagneticTilt } from "@/hooks/useMagneticTilt";
 import { FloatingDecorations, Squiggle } from "@/components/lab/Decorations";
+import { PlantDecoration, RobotDecoration } from "@/components/lab/Illustrations";
 
 function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
   const { ref, onMouseMove, onMouseLeave } = useMagneticTilt(5);
@@ -31,18 +32,18 @@ const HOW_IT_WORKS = [
     emoji: "📖",
     description:
       "See the five building blocks Claude marketers use: Prompt, Skill, Connector, Loop, Routine — explained through real examples, not definitions.",
-    color: "from-[#2563EB]/[0.08] to-[#2563EB]/[0.02]",
-    border: "border-[#2563EB]/15",
-    accent: "#2563EB",
+    color: "from-[#4A7BF7]/[0.08] to-[#4A7BF7]/[0.02]",
+    border: "border-[#4A7BF7]/15",
+    accent: "#4A7BF7",
   },
   {
     step: "BUILD",
     emoji: "🛠️",
     description:
       "Choose a business problem. Claude Marketing Lab walks you through the exact information, capability, and instruction it takes to solve it.",
-    color: "from-[#7C5CFC]/[0.08] to-[#7C5CFC]/[0.02]",
-    border: "border-[#7C5CFC]/15",
-    accent: "#7C5CFC",
+    color: "from-[#8B6CFC]/[0.08] to-[#8B6CFC]/[0.02]",
+    border: "border-[#8B6CFC]/15",
+    accent: "#8B6CFC",
   },
   {
     step: "REVIEW",
@@ -61,7 +62,7 @@ const CHANNELS = [
   { name: "Notion", type: "connector" as const, color: "#111111" },
   { name: "Instagram", type: "channel" as const, color: "#E4405F" },
   { name: "YouTube", type: "channel" as const, color: "#FF0000" },
-  { name: "Web Search", type: "connector" as const, color: "#2563EB" },
+  { name: "Web Search", type: "connector" as const, color: "#4A7BF7" },
   { name: "Email", type: "channel" as const, color: "#FF9B54" },
   { name: "Spreadsheets", type: "source" as const, color: "#67C587" },
 ];
@@ -83,11 +84,11 @@ export default function Landing() {
               {CHANNELS.map((ch) => (
                 <div
                   key={ch.name}
-                  className="flex items-center gap-2 rounded-full border border-[#D6E0FF] bg-white/80 px-4 py-2 text-xs font-medium text-[#444444] shadow-sm"
+                  className="flex items-center gap-2 rounded-full border border-[#E8E4DE] bg-white/80 px-4 py-2 text-xs font-medium text-[#5A5A5A] shadow-sm"
                 >
                   <span className="h-2 w-2 rounded-full" style={{ background: ch.color }} />
                   {ch.name}
-                  <span className="rounded-full bg-[#F4F6FF] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#7A7A8A]">
+                  <span className="rounded-full bg-[#FAF9F6] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#8A8A82]">
                     {ch.type}
                   </span>
                 </div>
@@ -106,7 +107,7 @@ export default function Landing() {
               </div>
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#FF7B72]">How it works</p>
               <h2
-                className="mt-3 text-balance text-3xl font-extrabold tracking-tight text-[#111111] sm:text-5xl"
+                className="mt-3 text-balance text-3xl font-extrabold tracking-tight text-[#2D2D2D] sm:text-5xl"
                 style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
               >
                 Three steps to <span className="text-gradient">understanding</span>.
@@ -131,7 +132,7 @@ export default function Landing() {
                     >
                       {item.step}
                     </span>
-                    <p className="mt-3 text-sm leading-relaxed text-[#7A7A8A]">
+                    <p className="mt-3 text-sm leading-relaxed text-[#8A8A82]">
                       {item.description}
                     </p>
                   </TiltCard>
@@ -143,7 +144,7 @@ export default function Landing() {
 
         {/* Squiggle divider */}
         <div className="flex justify-center py-4">
-          <Squiggle color="#D6E0FF" className="opacity-60" />
+          <Squiggle color="#E8E4DE" className="opacity-60" />
         </div>
 
         <WorkflowSection />
@@ -155,7 +156,7 @@ export default function Landing() {
         <BuildingBlocks />
 
         <div className="flex justify-center py-4">
-          <Squiggle color="#7C5CFC" className="opacity-30" />
+          <Squiggle color="#8B6CFC" className="opacity-30" />
         </div>
 
         <UseCaseEngine />
@@ -171,6 +172,17 @@ export default function Landing() {
         </div>
 
         <FinalBuilder />
+
+        {/* Decorative illustrations in lower area */}
+        <div className="pointer-events-none relative">
+          <div className="absolute bottom-0 left-4 w-20 opacity-40 sm:left-12 sm:w-28">
+            <PlantDecoration />
+          </div>
+          <div className="absolute bottom-0 right-4 w-16 opacity-40 sm:right-12 sm:w-24">
+            <RobotDecoration />
+          </div>
+        </div>
+
         <Trust />
         <Footer />
       </div>

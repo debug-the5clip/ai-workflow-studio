@@ -8,107 +8,182 @@ import { motion } from "framer-motion";
 /** Hero illustration: friendly AI character with marketing workflow board */
 export function HeroIllustration() {
   return (
-    <div className="relative mx-auto w-full max-w-md" aria-hidden>
-      <svg viewBox="0 0 400 380" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+    <div className="relative mx-auto w-full max-w-sm" aria-hidden>
+      {/* Speech bubble */}
+      <div className="relative mb-3 ml-8">
+        <div className="inline-block rounded-2xl border border-[#E8E4DE] bg-white px-5 py-3 shadow-md shadow-black/[0.03]">
+          <p className="text-sm font-semibold text-[#2D2D2D]">
+            Hi! I'm your AI Workflow Assistant 👋
+          </p>
+          <p className="mt-1 text-xs text-[#8A8A82]">
+            Tell me what you want to accomplish,<br />I'll plan the steps for you!
+          </p>
+        </div>
+        {/* Tail */}
+        <div className="absolute -bottom-2 left-8 h-4 w-4 rotate-45 border-b border-r border-[#E8E4DE] bg-white" />
+      </div>
+
+      <svg viewBox="0 0 400 340" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
         {/* Background circle */}
-        <circle cx="200" cy="190" r="160" fill="#E0E9FF" opacity="0.5" />
-        <circle cx="200" cy="190" r="120" fill="#EEF3FF" opacity="0.6" />
+        <circle cx="200" cy="170" r="140" fill="#FFF0E5" opacity="0.5" />
+        <circle cx="200" cy="170" r="100" fill="#FAF9F6" opacity="0.6" />
 
         {/* Character body — friendly rounded form */}
         {/* Legs */}
-        <rect x="170" y="280" width="24" height="50" rx="12" fill="#FF9B54" />
-        <rect x="206" y="280" width="24" height="50" rx="12" fill="#FF9B54" />
+        <rect x="170" y="250" width="22" height="46" rx="11" fill="#FF9B54" />
+        <rect x="208" y="250" width="22" height="46" rx="11" fill="#FF9B54" />
         {/* Shoes */}
-        <ellipse cx="182" cy="332" rx="16" ry="8" fill="#2563EB" />
-        <ellipse cx="218" cy="332" rx="16" ry="8" fill="#2563EB" />
+        <ellipse cx="181" cy="298" rx="15" ry="7" fill="#6C5CE7" />
+        <ellipse cx="219" cy="298" rx="15" ry="7" fill="#6C5CE7" />
 
         {/* Torso */}
-        <rect x="160" y="210" width="80" height="75" rx="20" fill="#2563EB" />
+        <rect x="160" y="185" width="80" height="70" rx="20" fill="#6C5CE7" />
         {/* Shirt collar */}
-        <path d="M185 210 L200 225 L215 210" fill="#1D4ED8" />
+        <path d="M185 185 L200 200 L215 185" fill="#5A4BD1" />
+        {/* Pocket */}
+        <rect x="182" y="210" width="16" height="12" rx="3" fill="#5A4BD1" opacity="0.5" />
 
         {/* Arms */}
-        <rect x="130" y="220" width="35" height="18" rx="9" fill="#F5CBA7" />
-        <rect x="235" y="215" width="40" height="18" rx="9" fill="#F5CBA7" />
+        <rect x="130" y="195" width="35" height="16" rx="8" fill="#F5CBA7" />
+        <rect x="235" y="192" width="40" height="16" rx="8" fill="#F5CBA7" />
         {/* Hands */}
-        <circle cx="130" cy="229" r="10" fill="#F5CBA7" />
-        <circle cx="275" cy="224" r="10" fill="#F5CBA7" />
+        <circle cx="130" cy="203" r="9" fill="#F5CBA7" />
+        <circle cx="275" cy="200" r="9" fill="#F5CBA7" />
 
         {/* Head */}
-        <circle cx="200" cy="175" r="50" fill="#F5CBA7" />
+        <circle cx="200" cy="150" r="46" fill="#F5CBA7" />
         {/* Hair */}
-        <path d="M155 165 C155 130 180 115 200 115 C220 115 245 130 245 165 C245 150 230 140 200 140 C170 140 155 150 155 165" fill="#4A3728" />
+        <path d="M158 142 C158 110 178 96 200 96 C222 96 242 110 242 142 C242 128 228 118 200 118 C172 118 158 128 158 142" fill="#4A3728" />
         {/* Eyes */}
-        <circle cx="185" cy="172" r="5" fill="#111111" />
-        <circle cx="215" cy="172" r="5" fill="#111111" />
-        <circle cx="187" cy="170" r="2" fill="white" />
-        <circle cx="217" cy="170" r="2" fill="white" />
+        <circle cx="186" cy="148" r="4.5" fill="#2D2D2D" />
+        <circle cx="214" cy="148" r="4.5" fill="#2D2D2D" />
+        <circle cx="188" cy="146" r="1.8" fill="white" />
+        <circle cx="216" cy="146" r="1.8" fill="white" />
         {/* Smile */}
-        <path d="M188 185 Q200 195 212 185" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+        <path d="M190 160 Q200 168 210 160" stroke="#2D2D2D" strokeWidth="2.2" strokeLinecap="round" fill="none" />
         {/* Blush */}
-        <circle cx="175" cy="182" r="6" fill="#FF8FA3" opacity="0.4" />
-        <circle cx="225" cy="182" r="6" fill="#FF8FA3" opacity="0.4" />
+        <circle cx="176" cy="157" r="5" fill="#FF8FA3" opacity="0.35" />
+        <circle cx="224" cy="157" r="5" fill="#FF8FA3" opacity="0.35" />
 
         {/* Workflow board — floating to the right */}
-        <g transform="translate(280, 140)">
-          <rect x="0" y="0" width="100" height="130" rx="12" fill="white" stroke="#D6E0FF" strokeWidth="2" />
+        <g transform="translate(280, 115)">
+          <rect x="0" y="0" width="96" height="120" rx="12" fill="white" stroke="#E8E4DE" strokeWidth="1.5" />
           {/* Board header */}
-          <rect x="0" y="0" width="100" height="24" rx="12" fill="#EEF3FF" />
-          <rect x="0" y="12" width="100" height="12" fill="#EEF3FF" />
-          <circle cx="14" cy="12" r="4" fill="#FF7B72" />
-          <circle cx="26" cy="12" r="4" fill="#FFD84D" />
-          <circle cx="38" cy="12" r="4" fill="#67C587" />
+          <rect x="0" y="0" width="96" height="22" rx="12" fill="#FFF8F0" />
+          <rect x="0" y="10" width="96" height="12" fill="#FFF8F0" />
+          <circle cx="14" cy="11" r="3.5" fill="#FF7B72" />
+          <circle cx="24" cy="11" r="3.5" fill="#FFD84D" />
+          <circle cx="34" cy="11" r="3.5" fill="#67C587" />
           {/* Workflow items */}
-          <rect x="10" y="32" width="80" height="8" rx="4" fill="#EEF3FF" />
-          <rect x="10" y="46" width="65" height="8" rx="4" fill="#F0F4FF" />
-          <rect x="10" y="60" width="72" height="8" rx="4" fill="#EEF3FF" />
-          <rect x="10" y="74" width="58" height="8" rx="4" fill="#F0F4FF" />
-          <rect x="10" y="88" width="70" height="8" rx="4" fill="#EEF3FF" />
+          <rect x="10" y="30" width="76" height="7" rx="3.5" fill="#FFF0E5" />
+          <rect x="10" y="42" width="60" height="7" rx="3.5" fill="#F5F0FF" />
+          <rect x="10" y="54" width="68" height="7" rx="3.5" fill="#FFF0E5" />
+          <rect x="10" y="66" width="54" height="7" rx="3.5" fill="#F5F0FF" />
+          <rect x="10" y="78" width="66" height="7" rx="3.5" fill="#FFF0E5" />
           {/* Accent dots */}
-          <circle cx="10" cy="36" r="2" fill="#2563EB" />
-          <circle cx="10" cy="50" r="2" fill="#FF7B72" />
-          <circle cx="10" cy="64" r="2" fill="#7C5CFC" />
-          <circle cx="10" cy="78" r="2" fill="#67C587" />
-          <circle cx="10" cy="92" r="2" fill="#FFD84D" />
+          <circle cx="10" cy="33.5" r="1.8" fill="#4A7BF7" />
+          <circle cx="10" cy="45.5" r="1.8" fill="#FF7B72" />
+          <circle cx="10" cy="57.5" r="1.8" fill="#8B6CFC" />
+          <circle cx="10" cy="69.5" r="1.8" fill="#67C587" />
+          <circle cx="10" cy="81.5" r="1.8" fill="#FFD84D" />
           {/* Mini chart */}
-          <rect x="10" y="104" width="12" height="16" rx="2" fill="#2563EB" opacity="0.3" />
-          <rect x="26" y="110" width="12" height="10" rx="2" fill="#7C5CFC" opacity="0.3" />
-          <rect x="42" y="106" width="12" height="14" rx="2" fill="#FF7B72" opacity="0.3" />
-          <rect x="58" y="100" width="12" height="20" rx="2" fill="#67C587" opacity="0.3" />
-          <rect x="74" y="108" width="12" height="12" rx="2" fill="#FFD84D" opacity="0.3" />
+          <rect x="10" y="92" width="10" height="14" rx="2" fill="#4A7BF7" opacity="0.25" />
+          <rect x="24" y="96" width="10" height="10" rx="2" fill="#8B6CFC" opacity="0.25" />
+          <rect x="38" y="93" width="10" height="13" rx="2" fill="#FF7B72" opacity="0.25" />
+          <rect x="52" y="90" width="10" height="16" rx="2" fill="#67C587" opacity="0.25" />
+          <rect x="66" y="95" width="10" height="11" rx="2" fill="#FFD84D" opacity="0.25" />
         </g>
 
-        {/* Floating speech bubble from character */}
-        <g transform="translate(80, 110)">
-          <rect x="0" y="0" width="70" height="40" rx="12" fill="white" stroke="#D6E0FF" strokeWidth="1.5" />
-          <path d="M15 40 L20 52 L30 40" fill="white" stroke="#D6E0FF" strokeWidth="1.5" />
-          <text x="12" y="18" fontSize="9" fontWeight="700" fill="#2563EB">Prompt</text>
-          <text x="12" y="30" fontSize="8" fill="#7A7A8A">→ Action</text>
+        {/* Floating UI element left */}
+        <g transform="translate(50, 110)">
+          <rect x="0" y="0" width="65" height="36" rx="10" fill="white" stroke="#E8E4DE" strokeWidth="1.2" />
+          <text x="10" y="16" fontSize="8" fontWeight="700" fill="#6C5CE7">Prompt</text>
+          <text x="10" y="28" fontSize="7" fill="#8A8A82">→ Action</text>
         </g>
 
-        {/* Decorative elements around the illustration */}
+        {/* Decorative elements */}
         {/* Squiggly line */}
-        <path d="M60 260 Q75 250 90 260 Q105 270 120 260" stroke="#FFD84D" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+        <path d="M60 240 Q75 230 90 240 Q105 250 120 240" stroke="#FFD84D" strokeWidth="2.5" strokeLinecap="round" fill="none" />
         {/* Dots */}
-        <circle cx="320" cy="100" r="4" fill="#FF7B72" opacity="0.5" />
-        <circle cx="80" cy="310" r="3" fill="#7C5CFC" opacity="0.4" />
-        <circle cx="340" cy="280" r="5" fill="#FFD84D" opacity="0.4" />
-        <circle cx="60" cy="140" r="3" fill="#67C587" opacity="0.5" />
+        <circle cx="320" cy="85" r="3.5" fill="#FF7B72" opacity="0.45" />
+        <circle cx="75" cy="285" r="2.5" fill="#8B6CFC" opacity="0.35" />
+        <circle cx="340" cy="260" r="4" fill="#FFD84D" opacity="0.35" />
+        <circle cx="55" cy="130" r="2.5" fill="#67C587" opacity="0.45" />
         {/* Star */}
-        <path d="M350 160 L353 167 L360 167 L354 172 L356 179 L350 175 L344 179 L346 172 L340 167 L347 167Z" fill="#FFD84D" opacity="0.5" />
+        <path d="M350 140 L352.5 146 L359 146 L354 150 L355.5 156 L350 152.5 L344.5 156 L346 150 L341 146 L347.5 146Z" fill="#FFD84D" opacity="0.45" />
         {/* Plus signs */}
-        <path d="M55 195 L60 195 M57.5 192.5 L57.5 197.5" stroke="#67C587" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-        <path d="M335 220 L340 220 M337.5 217.5 L337.5 222.5" stroke="#FF7B72" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+        <path d="M50 180 L55 180 M52.5 177.5 L52.5 182.5" stroke="#67C587" strokeWidth="1.8" strokeLinecap="round" opacity="0.35" />
+        <path d="M340 200 L345 200 M342.5 197.5 L342.5 202.5" stroke="#FF7B72" strokeWidth="1.8" strokeLinecap="round" opacity="0.35" />
       </svg>
     </div>
+  );
+}
+
+/** Decorative plant illustration — bottom left corner */
+export function PlantDecoration() {
+  return (
+    <svg viewBox="0 0 120 140" fill="none" className="w-full h-auto" aria-hidden>
+      {/* Pot */}
+      <path d="M35 100 L45 135 L75 135 L85 100Z" fill="#FF9B54" opacity="0.7" />
+      <rect x="30" y="95" width="60" height="10" rx="5" fill="#FF9B54" opacity="0.85" />
+      {/* Soil */}
+      <ellipse cx="60" cy="100" rx="25" ry="4" fill="#8B6C4E" opacity="0.3" />
+      {/* Stems */}
+      <path d="M60 95 Q55 70 50 55" stroke="#67C587" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.6" />
+      <path d="M60 95 Q65 75 72 60" stroke="#67C587" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.6" />
+      <path d="M60 95 Q60 70 58 45" stroke="#67C587" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.5" />
+      {/* Leaves */}
+      <ellipse cx="48" cy="52" rx="12" ry="7" fill="#67C587" opacity="0.4" transform="rotate(-20 48 52)" />
+      <ellipse cx="74" cy="57" rx="11" ry="6" fill="#67C587" opacity="0.35" transform="rotate(15 74 57)" />
+      <ellipse cx="58" cy="42" rx="10" ry="6" fill="#67C587" opacity="0.45" transform="rotate(-5 58 42)" />
+      {/* Small flower */}
+      <circle cx="56" cy="38" r="3" fill="#FFD84D" opacity="0.6" />
+      <circle cx="56" cy="38" r="1.5" fill="#FF9B54" opacity="0.5" />
+    </svg>
+  );
+}
+
+/** Decorative robot illustration — bottom right corner */
+export function RobotDecoration() {
+  return (
+    <svg viewBox="0 0 100 120" fill="none" className="w-full h-auto" aria-hidden>
+      {/* Antenna */}
+      <line x1="50" y1="20" x2="50" y2="10" stroke="#8B6CFC" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+      <circle cx="50" cy="8" r="3.5" fill="#FFD84D" opacity="0.6" />
+      {/* Head */}
+      <rect x="30" y="20" width="40" height="30" rx="10" fill="white" stroke="#E8E4DE" strokeWidth="1.5" />
+      {/* Eyes */}
+      <circle cx="42" cy="35" r="4" fill="#6C5CE7" opacity="0.6" />
+      <circle cx="58" cy="35" r="4" fill="#FF7B72" opacity="0.6" />
+      <circle cx="43" cy="34" r="1.5" fill="white" />
+      <circle cx="59" cy="34" r="1.5" fill="white" />
+      {/* Mouth */}
+      <path d="M42 42 Q50 47 58 42" stroke="#8B6CFC" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.4" />
+      {/* Body */}
+      <rect x="34" y="52" width="32" height="28" rx="8" fill="white" stroke="#E8E4DE" strokeWidth="1.5" />
+      {/* Heart / button on body */}
+      <circle cx="50" cy="66" r="4" fill="#FF7B72" opacity="0.4" />
+      {/* Arms */}
+      <rect x="20" y="56" width="14" height="8" rx="4" fill="white" stroke="#E8E4DE" strokeWidth="1" />
+      <rect x="66" y="56" width="14" height="8" rx="4" fill="white" stroke="#E8E4DE" strokeWidth="1" />
+      {/* Legs */}
+      <rect x="38" y="80" width="8" height="14" rx="4" fill="white" stroke="#E8E4DE" strokeWidth="1" />
+      <rect x="54" y="80" width="8" height="14" rx="4" fill="white" stroke="#E8E4DE" strokeWidth="1" />
+      {/* Feet */}
+      <ellipse cx="42" cy="96" rx="7" ry="4" fill="#6C5CE7" opacity="0.3" />
+      <ellipse cx="58" cy="96" rx="7" ry="4" fill="#FF7B72" opacity="0.3" />
+      {/* Sparkles around */}
+      <path d="M22 25 L24 28 L27 28 L24.5 30 L25.5 33 L22 31 L18.5 33 L19.5 30 L17 28 L20 28Z" fill="#FFD84D" opacity="0.35" />
+      <path d="M78 45 L79.5 47.5 L82 47.5 L80 49 L80.8 51.5 L78 50 L75.2 51.5 L76 49 L74 47.5 L76.5 47.5Z" fill="#FF7B72" opacity="0.3" />
+    </svg>
   );
 }
 
 /** Small inline character illustrations for building blocks / flashcards */
 export function CharacterIcon({ type }: { type: "prompt" | "skill" | "connector" | "loop" | "routine" }) {
   const configs = {
-    prompt: { color: "#2563EB", label: "💬", bg: "#EEF3FF" },
-    skill: { color: "#7C5CFC", label: "🧰", bg: "#F0EDFF" },
+    prompt: { color: "#4A7BF7", label: "💬", bg: "#F0F4FF" },
+    skill: { color: "#8B6CFC", label: "🧰", bg: "#F5F0FF" },
     connector: { color: "#67C587", label: "🔗", bg: "#EDFFF4" },
     loop: { color: "#FF9B54", label: "🔄", bg: "#FFF4ED" },
     routine: { color: "#FF7B72", label: "📅", bg: "#FFEEED" },
@@ -125,7 +200,7 @@ export function CharacterIcon({ type }: { type: "prompt" | "skill" | "connector"
 }
 
 /** Animated workflow arrow connector */
-export function AnimatedArrow({ color = "#2563EB", vertical = true }: { color?: string; vertical?: boolean }) {
+export function AnimatedArrow({ color = "#6C5CE7", vertical = true }: { color?: string; vertical?: boolean }) {
   if (vertical) {
     return (
       <motion.div

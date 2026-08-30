@@ -26,13 +26,13 @@ export function Trust() {
       <FloatingDecorations preset="default" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto max-w-4xl">
-          <div className="rounded-3xl border border-[#D6E0FF] bg-white p-6 shadow-lg shadow-blue-500/5 sm:p-8 tilt-card hover-glow">
+          <div className="rounded-3xl border border-[#E8E4DE] bg-white p-6 shadow-lg shadow-black/[0.03] sm:p-8 tilt-card hover-glow">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#7C5CFC]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#6C5CE7] to-[#8B6CFC]">
                 <ShieldCheck className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-[#111111]" style={{ fontFamily: "'Georgia', serif" }}>AI + Human Judgment</h2>
+                <h2 className="text-xl font-bold text-[#2D2D2D]" style={{ fontFamily: "'Georgia', serif" }}>AI + Human Judgment</h2>
                 <p className="text-xs text-[#B0B0BA]">The best marketing combines both.</p>
               </div>
             </div>
@@ -42,7 +42,7 @@ export function Trust() {
                 <p className="mb-3 text-xs font-bold uppercase tracking-widest text-[#67C587]">Claude can help</p>
                 <ul className="space-y-2">
                   {CAN_HELP.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-[#444444]">
+                    <li key={item} className="flex items-start gap-2 text-sm text-[#5A5A5A]">
                       <span className="mt-0.5 text-[#67C587]">✓</span> {item}
                     </li>
                   ))}
@@ -52,7 +52,7 @@ export function Trust() {
                 <p className="mb-3 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">Humans should</p>
                 <ul className="space-y-2">
                   {HUMANS_SHOULD.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-[#444444]">
+                    <li key={item} className="flex items-start gap-2 text-sm text-[#5A5A5A]">
                       <span className="mt-0.5 text-[#FF7B72]">→</span> {item}
                     </li>
                   ))}
@@ -61,8 +61,8 @@ export function Trust() {
             </div>
           </div>
 
-          <div className="mt-8 rounded-2xl border border-[#D6E0FF] bg-white/60 p-5 text-center shadow-sm">
-            <p className="text-xs leading-relaxed text-[#7A7A8A]">
+          <div className="mt-8 rounded-2xl border border-[#E8E4DE] bg-white/60 p-5 text-center shadow-sm">
+            <p className="text-xs leading-relaxed text-[#8A8A82]">
               Claude Marketing Lab is an educational simulation. Some data shown is
               sample data for demonstration. Real workflows depend on your actual
               connected sources and require human review before business decisions.
@@ -76,11 +76,11 @@ export function Trust() {
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#D6E0FF]/60 py-8">
+    <footer className="border-t border-[#E8E4DE]/60 py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-2">
-            <Squiggle color="#D6E0FF" className="opacity-40" />
+            <Squiggle color="#E8E4DE" className="opacity-40" />
           </div>
           <p className="text-xs text-[#B0B0BA]">
             Claude Marketing Lab — An educational experience for marketing teams.

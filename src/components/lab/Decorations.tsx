@@ -2,7 +2,7 @@
  * Reusable playful SVG decorations — inspired by the reference's hand-drawn
  * floating elements (squiggles, arrows, dots, stars, circles).
  *
- * All colors come from the periwinkle palette tokens.
+ * All colors come from the warm playful palette tokens.
  */
 
 export function Squiggle({ className = "", color = "#FF7B72" }: { className?: string; color?: string }) {
@@ -19,7 +19,7 @@ export function Squiggle({ className = "", color = "#FF7B72" }: { className?: st
   );
 }
 
-export function CurvedArrow({ className = "", color = "#2563EB", flip = false }: { className?: string; color?: string; flip?: boolean }) {
+export function CurvedArrow({ className = "", color = "#6C5CE7", flip = false }: { className?: string; color?: string; flip?: boolean }) {
   return (
     <svg className={className} width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden style={flip ? { transform: "scaleX(-1)" } : undefined}>
       <path
@@ -60,7 +60,7 @@ export function Star({ className = "", color = "#FFD84D", size = 20 }: { classNa
   );
 }
 
-export function Circle({ className = "", color = "#7C5CFC", size = 24, hollow = false }: { className?: string; color?: string; size?: number; hollow?: boolean }) {
+export function Circle({ className = "", color = "#8B6CFC", size = 24, hollow = false }: { className?: string; color?: string; size?: number; hollow?: boolean }) {
   return (
     <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
       <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2.5" fill={hollow ? "none" : color} opacity={hollow ? 1 : 0.2} />
@@ -84,33 +84,33 @@ export function FloatingDecorations({ preset = "default" }: { preset?: "hero" | 
         <Squiggle className="absolute left-[5%] top-[15%] float-slow opacity-40" color="#FF7B72" />
         <Dot className="absolute right-[8%] top-[10%] float-medium" color="#FFD84D" size={10} />
         <Star className="absolute left-[12%] bottom-[20%] wiggle opacity-50" color="#FFD84D" />
-        <Circle className="absolute right-[15%] bottom-[15%] float-slow opacity-30" color="#7C5CFC" hollow />
+        <Circle className="absolute right-[15%] bottom-[15%] float-slow opacity-30" color="#8B6CFC" hollow />
         <Dot className="absolute left-[25%] top-[5%] pulse-soft" color="#67C587" size={6} />
-        <CurvedArrow className="absolute right-[5%] top-[40%] float-medium opacity-25" color="#2563EB" />
+        <CurvedArrow className="absolute right-[5%] top-[40%] float-medium opacity-25" color="#6C5CE7" />
         <Dot className="absolute left-[3%] top-[50%] float-slow" color="#FF8FA3" size={8} />
         <Circle className="absolute right-[3%] top-[25%] wiggle opacity-20" color="#FF9B54" size={16} hollow />
       </>
     ),
     workflow: (
       <>
-        <Squiggle className="absolute right-[8%] top-[10%] float-slow opacity-30" color="#7C5CFC" />
+        <Squiggle className="absolute right-[8%] top-[10%] float-slow opacity-30" color="#8B6CFC" />
         <Dot className="absolute left-[5%] top-[30%] float-medium" color="#FFD84D" size={8} />
         <Star className="absolute right-[12%] bottom-[10%] wiggle opacity-40" color="#FF7B72" size={16} />
-        <Circle className="absolute left-[10%] bottom-[20%] float-slow opacity-25" color="#2563EB" hollow />
+        <Circle className="absolute left-[10%] bottom-[20%] float-slow opacity-25" color="#6C5CE7" hollow />
       </>
     ),
     learn: (
       <>
         <Squiggle className="absolute left-[3%] top-[20%] float-slow opacity-25" color="#67C587" />
         <Dot className="absolute right-[6%] top-[15%] pulse-soft" color="#FF7B72" size={10} />
-        <CurvedArrow className="absolute left-[8%] bottom-[15%] float-medium opacity-20" color="#7C5CFC" flip />
+        <CurvedArrow className="absolute left-[8%] bottom-[15%] float-medium opacity-20" color="#8B6CFC" flip />
         <Star className="absolute right-[10%] bottom-[25%] wiggle opacity-35" color="#FFD84D" size={14} />
       </>
     ),
     default: (
       <>
         <Dot className="absolute left-[5%] top-[20%] float-slow" color="#FFD84D" size={8} />
-        <Circle className="absolute right-[8%] top-[30%] float-medium opacity-25" color="#7C5CFC" hollow />
+        <Circle className="absolute right-[8%] top-[30%] float-medium opacity-25" color="#8B6CFC" hollow />
         <Star className="absolute left-[10%] bottom-[20%] wiggle opacity-30" color="#FF7B72" size={14} />
       </>
     ),
