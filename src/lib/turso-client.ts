@@ -7,7 +7,7 @@
  * TURSO_AUTH_TOKEN never reaches the browser.
  */
 
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -40,8 +40,11 @@ export interface WorkflowStats {
  *   await save({ ... });
  */
 export function useTursoWorkflows(userId: string | null) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const saveMutation = useMutation((api as any).turso.saveWorkflow);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const deleteMutation = useMutation((api as any).turso.deleteWorkflow);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const statsMutation = useMutation((api as any).turso.getStats);
 
   const save = async (workflow: {
