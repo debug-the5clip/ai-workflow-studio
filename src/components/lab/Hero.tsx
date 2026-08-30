@@ -4,6 +4,8 @@ import { ArrowDown, Play, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FLOATING_ELEMENTS, HERO_EXAMPLES } from "@/data/content";
 import { USE_CASES } from "@/data/useCases";
+import { HeroIllustration } from "@/components/lab/Illustrations";
+import { FloatingDecorations } from "@/components/lab/Decorations";
 
 // Positions on an elliptical orbit around the hero visual (percent-based)
 const ORBIT = [
@@ -17,34 +19,7 @@ const ORBIT = [
   { x: 6, y: 44 },
 ];
 
-function AiCore() {
-  return (
-    <div className="relative grid place-items-center" aria-hidden>
-      {/* pulsing rings */}
-      {[0, 1, 2].map((i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full border border-[#D97757]/15"
-          style={{ width: 220 + i * 90, height: 220 + i * 90 }}
-          animate={{ scale: [1, 1.08, 1], opacity: [0.6, 0.15, 0.6] }}
-          transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.8 }}
-        />
-      ))}
-      {/* core */}
-      <motion.div
-        className="relative h-44 w-44 rounded-full bg-gradient-to-br from-[#D97757] via-[#E8956F] to-[#F2C88F] shadow-lg shadow-[#D97757]/20"
-        animate={{ y: [0, -10, 0], rotate: [0, 6, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="absolute inset-3 rounded-full border border-white/40 backdrop-blur-sm" />
-        <div className="absolute inset-6 rounded-full border border-white/20" />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold text-white/90">
-          ✦
-        </div>
-      </motion.div>
-    </div>
-  );
-}
+const ACCENT_COLORS = ["#2563EB", "#FF7B72", "#7C5CFC", "#FFD84D", "#67C587", "#FF9B54", "#2563EB", "#FF8FA3"];
 
 function PreviewChain({ useCaseId }: { useCaseId: string }) {
   const uc = USE_CASES.find((u) => u.id === useCaseId);
@@ -61,10 +36,10 @@ function PreviewChain({ useCaseId }: { useCaseId: string }) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-light mt-5 rounded-2xl p-4 shadow-lg shadow-black/[0.04] sm:p-5"
+      className="mt-5 rounded-3xl border border-[#D6E0FF] bg-white p-5 shadow-lg shadow-blue-500/5 sm:p-6"
     >
-      <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#D97757]">
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#D97757]" />
+      <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#2563EB]">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#2563EB]" />
         Workflow preview · {uc.title}
       </p>
       <div className="grid gap-2">
@@ -74,16 +49,16 @@ function PreviewChain({ useCaseId }: { useCaseId: string }) {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.08 }}
-            className="flex flex-col gap-0.5 rounded-xl border border-[#E2E0DB]/60 bg-[#F5F4F0]/60 px-3 py-2 sm:flex-row sm:items-center sm:gap-3"
+            className="flex flex-col gap-0.5 rounded-2xl border border-[#D6E0FF]/50 bg-[#F4F6FF] px-4 py-2.5 sm:flex-row sm:items-center sm:gap-3"
           >
-            <span className="w-40 shrink-0 text-[11px] font-bold tracking-wider text-[#D97757]">{row.k}</span>
-            <span className="text-sm text-[#4A4A46] line-clamp-2">{row.v}</span>
+            <span className="w-40 shrink-0 text-[11px] font-bold tracking-wider text-[#2563EB]">{row.k}</span>
+            <span className="text-sm text-[#444444] line-clamp-2">{row.v}</span>
           </motion.div>
         ))}
       </div>
       <Button
         size="sm"
-        className="mt-4 w-full rounded-full bg-[#D97757] font-semibold text-white sm:w-auto hover:bg-[#c06545]"
+        className="mt-4 w-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#7C5CFC] font-semibold text-white shadow-md shadow-blue-500/15 sm:w-auto hover:shadow-lg"
         onClick={() => {
           document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" });
           window.dispatchEvent(new CustomEvent("open-use-case", { detail: useCaseId }));
@@ -119,72 +94,92 @@ export function Hero() {
   };
 
   return (
-    <section id="learn" className="relative overflow-hidden pb-24 pt-32 sm:pt-40">
-      {/* aurora blobs — soft warm glow on light bg */}
-      <div className="aurora-blob left-[8%] top-[12%] h-72 w-72 bg-[#D97757]/10" />
-      <div className="aurora-blob right-[5%] top-[45%] h-80 w-80 bg-[#C47AB0]/8" />
-      <div className="grid-bg pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_35%,black,transparent)]" />
+    <section id="learn" className="relative overflow-hidden pb-16 pt-32 sm:pb-24 sm:pt-40">
+      <FloatingDecorations preset="hero" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-[#D97757]/20 bg-[#D97757]/6 px-4 py-1.5 text-xs uppercase tracking-widest font-semibold text-[#D97757]"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#D97757] shadow-[0_0_10px] shadow-[#D97757]" />
-            An interactive Claude learning lab for marketers
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.08 }}
-            className="text-balance text-4xl font-bold leading-[1.08] tracking-tight text-[#1C1C1C] sm:text-6xl lg:text-7xl"
-          >
-            Don't read about{" "}
-            <span className="text-gradient">AI marketing</span>. Run it.
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.16 }}
-            className="mx-auto mt-5 max-w-xl text-pretty text-base text-[#6B6B66] sm:text-lg"
-          >
-            Pick a real marketing problem. Watch how Claude breaks it down, what
-            information it needs, and what a finished, reviewable answer looks like
-            — then take the same approach into your own work.
-          </motion.p>
+        {/* ═══ Large rounded periwinkle hero container ═══ */}
+        <div className="hero-panel relative overflow-hidden rounded-[2rem] p-6 sm:rounded-[3rem] sm:p-10 lg:p-14">
+          {/* Decorative dots inside hero */}
+          <div className="absolute right-8 top-8 h-3 w-3 rounded-full bg-[#FFD84D] opacity-50 float-slow" />
+          <div className="absolute bottom-12 left-8 h-2 w-2 rounded-full bg-[#FF7B72] opacity-40 float-medium" />
+          <div className="absolute right-1/4 top-1/3 h-2 w-2 rounded-full bg-[#67C587] opacity-40 pulse-soft" />
 
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.24 }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-3"
-          >
-            <Button
-              size="lg"
-              className="rounded-full bg-[#D97757] px-7 font-semibold text-white glow-primary hover:bg-[#c06545]"
-              onClick={() => document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              Start a Workflow
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-full border-[#E2E0DB] bg-white/70 px-7 text-[#4A4A46] hover:bg-white hover:text-[#1C1C1C]"
-              onClick={() => document.querySelector("#blocks")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              <Play className="mr-2 h-4 w-4" /> See How Claude Actually Works
-            </Button>
-          </motion.div>
+          <div className="relative mx-auto max-w-7xl">
+            <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+              {/* Left: text content */}
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#2563EB]/15 bg-[#2563EB]/6 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#2563EB]"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB] shadow-[0_0_8px] shadow-[#2563EB]" />
+                  Interactive learning lab for marketers
+                </motion.div>
+                <motion.h1
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08 }}
+                  className="font-display text-balance text-4xl font-extrabold leading-[1.08] tracking-tight text-[#111111] sm:text-5xl lg:text-6xl"
+                  style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
+                >
+                  Turn Claude into your{" "}
+                  <span className="text-gradient">Marketing Copilot</span>.
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.16 }}
+                  className="mx-auto mt-5 max-w-xl text-pretty text-base text-[#7A7A8A] sm:text-lg"
+                >
+                  Learn how to turn prompts, Skills, Connectors, Loops and Routines into
+                  real marketing workflows that solve actual business problems.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.24 }}
+                  className="mt-8 flex flex-wrap items-center gap-3"
+                >
+                  <Button
+                    size="lg"
+                    className="rounded-full bg-gradient-to-r from-[#2563EB] to-[#7C5CFC] px-7 font-semibold text-white shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/25"
+                    onClick={() => document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" })}
+                  >
+                    Start Exploring
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="rounded-full border-[#D6E0FF] bg-white/70 px-7 text-[#444444] hover:border-[#2563EB]/30 hover:bg-white hover:text-[#2563EB]"
+                    onClick={() => document.querySelector("#blocks")?.scrollIntoView({ behavior: "smooth" })}
+                  >
+                    <Play className="mr-2 h-4 w-4" /> See How It Works
+                  </Button>
+                </motion.div>
+              </div>
+
+              {/* Right: illustration */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="flex justify-center"
+              >
+                <HeroIllustration />
+              </motion.div>
+            </div>
+          </div>
         </div>
 
-        {/* ── Interactive visual ─────────────────────────────────────────── */}
-        <div className="relative mx-auto mt-16 max-w-4xl">
-          <div className="relative flex min-h-[340px] items-center justify-center sm:min-h-[400px]">
-            <AiCore />
+        {/* ── Floating marketing elements around hero ── */}
+        <div className="relative mx-auto mt-12 max-w-4xl">
+          <div className="relative flex min-h-[180px] items-center justify-center">
             {FLOATING_ELEMENTS.map((el, i) => {
               const pos = ORBIT[i % ORBIT.length];
+              const color = ACCENT_COLORS[i % ACCENT_COLORS.length];
               return (
                 <motion.div
                   key={el.label}
@@ -200,10 +195,15 @@ export function Hero() {
                     tabIndex={0}
                     role="button"
                     aria-label={`${el.label}: ${el.insight}`}
-                    className="glass-light cursor-default rounded-xl px-3 py-2 text-[11px] font-semibold tracking-widest text-[#4A4A46] transition-all hover:border-[#D97757]/40 hover:text-[#D97757] focus-visible:border-[#D97757]/40 focus-visible:outline-none sm:text-xs hover-glow"
+                    className="cursor-default rounded-full border-2 px-4 py-2 text-[11px] font-bold tracking-widest transition-all focus-visible:outline-none sm:text-xs hover-glow"
+                    style={{
+                      borderColor: `${color}25`,
+                      background: `${color}08`,
+                      color: color,
+                    }}
                   >
                     {el.label}
-                    <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-48 -translate-x-1/2 rounded-xl border border-[#E2E0DB] bg-white p-2.5 text-[11px] font-normal leading-snug normal-case tracking-normal text-[#4A4A46] opacity-0 shadow-xl shadow-black/[0.06] transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+                    <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-48 -translate-x-1/2 rounded-2xl border border-[#D6E0FF] bg-white p-3 text-[11px] font-normal leading-snug normal-case tracking-normal text-[#444444] opacity-0 shadow-xl shadow-blue-500/5 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
                       {el.insight}
                     </div>
                   </div>
@@ -212,24 +212,24 @@ export function Hero() {
             })}
           </div>
 
-          {/* ── Prompt field ─────────────────────────────────────────────── */}
+          {/* ── Prompt field ── */}
           <div className="mx-auto mt-6 max-w-2xl">
-            <label htmlFor="hero-goal" className="mb-2 block text-center text-sm font-medium text-[#4A4A46]">
+            <label htmlFor="hero-goal" className="mb-2 block text-center text-sm font-medium text-[#444444]">
               What do you want to accomplish?
             </label>
-            <div className="glass flex items-center gap-2 rounded-2xl p-2 pl-4 shadow-md shadow-black/[0.03]">
+            <div className="glass flex items-center gap-2 rounded-2xl p-2 pl-4 shadow-lg shadow-blue-500/5">
               <input
                 id="hero-goal"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && submit()}
                 placeholder="Analyze what competitors are doing in the luggage market…"
-                className="h-10 flex-1 bg-transparent text-sm outline-none placeholder:text-[#9A968F]"
+                className="h-10 flex-1 bg-transparent text-sm outline-none placeholder:text-[#B0B0BA]"
               />
               <Button
                 size="sm"
                 onClick={submit}
-                className="rounded-xl bg-[#D97757] px-4 font-semibold text-white hover:bg-[#c06545]"
+                className="rounded-xl bg-gradient-to-r from-[#2563EB] to-[#7C5CFC] px-4 font-semibold text-white hover:shadow-lg"
                 aria-label="Show recommended workflow"
               >
                 <Send className="h-4 w-4" />
@@ -243,7 +243,7 @@ export function Hero() {
                     setQuery(ex.text.replace("…", ""));
                     setPreviewId(ex.useCaseId);
                   }}
-                  className="rounded-full border border-[#E2E0DB] bg-white/60 px-3 py-1.5 text-xs text-[#6B6B66] transition-colors hover:border-[#D97757]/30 hover:text-[#D97757]"
+                  className="rounded-full border border-[#D6E0FF] bg-white/70 px-3 py-1.5 text-xs text-[#7A7A8A] transition-all hover:border-[#2563EB]/30 hover:bg-[#2563EB]/5 hover:text-[#2563EB]"
                 >
                   {ex.text}
                 </button>
@@ -254,7 +254,7 @@ export function Hero() {
         </div>
 
         <div className="mt-14 flex justify-center">
-          <ArrowDown className="h-5 w-5 animate-bounce text-[#9A968F]" />
+          <ArrowDown className="h-5 w-5 animate-bounce text-[#B0B0BA]" />
         </div>
       </div>
     </section>

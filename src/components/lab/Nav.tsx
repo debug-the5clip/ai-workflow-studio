@@ -34,21 +34,25 @@ export function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass shadow-md shadow-black/5" : "bg-transparent"
+        scrolled
+          ? "glass shadow-lg shadow-blue-500/5"
+          : "bg-transparent"
       }`}
     >
-      {/* scroll progress */}
+      {/* scroll progress — blue to purple gradient */}
       <motion.div
-        className="absolute inset-x-0 top-0 h-[2px] origin-left bg-gradient-to-r from-[#D97757] via-[#C47AB0] to-[#D97757]"
+        className="absolute inset-x-0 top-0 h-[3px] origin-left bg-gradient-to-r from-[#2563EB] via-[#7C5CFC] to-[#FF7B72]"
         style={{ scaleX: progress }}
       />
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center gap-2.5 font-semibold tracking-tight text-[#1C1C1C]"
+          className="flex items-center gap-2.5 font-bold tracking-tight text-[#111111]"
           aria-label="Claude Marketing Lab — back to top"
         >
-          <FlaskConical className="h-5 w-5 text-[#D97757]" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-[#2563EB] to-[#7C5CFC]">
+            <FlaskConical className="h-4 w-4 text-white" />
+          </div>
           <span className="hidden text-sm sm:inline">Claude Marketing Lab</span>
         </button>
 
@@ -58,7 +62,7 @@ export function Nav() {
             <button
               key={l.href}
               onClick={() => go(l.href)}
-              className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-[#6B6B66] transition-colors hover:text-[#1C1C1C]"
+              className="rounded-full px-4 py-1.5 text-[13px] font-medium text-[#7A7A8A] transition-all hover:bg-[#2563EB]/8 hover:text-[#2563EB]"
             >
               {l.label}
             </button>
@@ -67,19 +71,19 @@ export function Nav() {
 
         <div className="flex items-center gap-3">
           {progressPercent > 0 && (
-            <span className="hidden rounded-full border border-[#D97757]/30 bg-[#D97757]/8 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-[#D97757] sm:inline">
+            <span className="hidden rounded-full border border-[#2563EB]/20 bg-[#2563EB]/6 px-3 py-1 text-[10px] font-bold tracking-wider text-[#2563EB] sm:inline">
               {progressPercent}% explored
             </span>
           )}
           <Button
             size="sm"
-            className="hidden rounded-full bg-[#D97757] px-5 font-semibold text-white hover:bg-[#c06545] lg:inline-flex"
+            className="hidden rounded-full bg-gradient-to-r from-[#2563EB] to-[#7C5CFC] px-5 font-semibold text-white shadow-md shadow-blue-500/15 hover:shadow-lg hover:shadow-blue-500/20 lg:inline-flex"
             onClick={() => go("#usecases")}
           >
             Start a Workflow
           </Button>
           <button
-            className="rounded-lg p-2 text-[#6B6B66] hover:text-[#1C1C1C] lg:hidden"
+            className="rounded-xl p-2 text-[#7A7A8A] hover:bg-[#2563EB]/8 hover:text-[#2563EB] lg:hidden"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
@@ -93,20 +97,20 @@ export function Nav() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass border-t border-white/40 px-4 pb-4 pt-2 lg:hidden"
+          className="glass border-t border-[#D6E0FF]/60 px-4 pb-4 pt-2 lg:hidden"
         >
           {LINKS.map((l) => (
             <button
               key={l.href}
               onClick={() => go(l.href)}
-              className="block w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-[#6B6B66] hover:text-[#1C1C1C]"
+              className="block w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium text-[#7A7A8A] hover:bg-[#2563EB]/8 hover:text-[#2563EB]"
             >
               {l.label}
             </button>
           ))}
           <Button
             size="sm"
-            className="mt-2 w-full rounded-full bg-[#D97757] font-semibold text-white"
+            className="mt-2 w-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#7C5CFC] font-semibold text-white"
             onClick={() => go("#usecases")}
           >
             Start a Workflow

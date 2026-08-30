@@ -3,55 +3,56 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CircleCheck, RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLab } from "@/context/LabContext";
+import { FloatingDecorations, Squiggle } from "@/components/lab/Decorations";
 
 const GOALS = [
-  { id: "customer-research", emoji: "🔎", label: "Customer Research" },
-  { id: "competitor-analysis", emoji: "🕵️", label: "Competitor Analysis" },
-  { id: "campaign-planning", emoji: "📣", label: "Campaign" },
-  { id: "instagram-content", emoji: "📱", label: "Content" },
-  { id: "campaign-analysis", emoji: "📊", label: "Analytics" },
+  { id: "customer-research", emoji: "🔎", label: "Customer Research", color: "#2563EB" },
+  { id: "competitor-analysis", emoji: "🕵️", label: "Competitor Analysis", color: "#7C5CFC" },
+  { id: "campaign-planning", emoji: "📣", label: "Campaign", color: "#FF7B72" },
+  { id: "instagram-content", emoji: "📱", label: "Content", color: "#FF9B54" },
+  { id: "campaign-analysis", emoji: "📊", label: "Analytics", color: "#67C587" },
 ] as const;
 
-const GOAL_ASSEMBLY: Record<string, { block: string; note: string }[]> = {
+const GOAL_ASSEMBLY: Record<string, { block: string; note: string; color: string }[]> = {
   "customer-research": [
-    { block: "PROMPT", note: "Structured instructions for customer research — context, evidence types, output format." },
-    { block: "SKILL", note: "Customer Research Skill: consistent theme-clustering method every time." },
-    { block: "CONNECTOR", note: "Google Drive for review exports + Public Web Source for supplementary data." },
-    { block: "HUMAN REVIEW", note: "Verify themes match what sales/support actually hears." },
-    { block: "LOOP", note: "Re-run every quarter. Track which themes grow or shrink." },
-    { block: "ROUTINE", note: "Add to monthly research cadence — same day, same structure, every month." },
+    { block: "PROMPT", note: "Structured instructions for customer research — context, evidence types, output format.", color: "#2563EB" },
+    { block: "SKILL", note: "Customer Research Skill: consistent theme-clustering method every time.", color: "#7C5CFC" },
+    { block: "CONNECTOR", note: "Google Drive for review exports + Public Web Source for supplementary data.", color: "#67C587" },
+    { block: "HUMAN REVIEW", note: "Verify themes match what sales/support actually hears.", color: "#FF7B72" },
+    { block: "LOOP", note: "Re-run every quarter. Track which themes grow or shrink.", color: "#FF9B54" },
+    { block: "ROUTINE", note: "Add to monthly research cadence — same day, same structure, every month.", color: "#FFD84D" },
   ],
   "competitor-analysis": [
-    { block: "PROMPT", note: "Structured competitor comparison — pricing, positioning, sentiment, gaps." },
-    { block: "SKILL", note: "Competitor Intelligence Skill: locked-in comparison structure every quarter." },
-    { block: "CONNECTOR", note: "Web Search for public data + Google Drive for past reports." },
-    { block: "HUMAN REVIEW", note: "Verify prices are current, complaints are recent, gaps are real." },
-    { block: "LOOP", note: "Run quarterly. Track competitor evolution and emerging gaps." },
-    { block: "ROUTINE", note: "Quarterly competitor audit — same day, same competitors, same dimensions." },
+    { block: "PROMPT", note: "Structured competitor comparison — pricing, positioning, sentiment, gaps.", color: "#2563EB" },
+    { block: "SKILL", note: "Competitor Intelligence Skill: locked-in comparison structure every quarter.", color: "#7C5CFC" },
+    { block: "CONNECTOR", note: "Web Search for public data + Google Drive for past reports.", color: "#67C587" },
+    { block: "HUMAN REVIEW", note: "Verify prices are current, complaints are recent, gaps are real.", color: "#FF7B72" },
+    { block: "LOOP", note: "Run quarterly. Track competitor evolution and emerging gaps.", color: "#FF9B54" },
+    { block: "ROUTINE", note: "Quarterly competitor audit — same day, same competitors, same dimensions.", color: "#FFD84D" },
   ],
   "campaign-planning": [
-    { block: "PROMPT", note: "Campaign brief — insight, message, audience, channels, CTA, metrics." },
-    { block: "SKILL", note: "Campaign Planning Skill: every brief follows the same structure." },
-    { block: "CONNECTOR", note: "Google Drive for brand docs + Google Calendar for timing alignment." },
-    { block: "HUMAN REVIEW", note: "Verify insight matches customer research. Check brand voice consistency." },
-    { block: "LOOP", note: "Feed campaign results back into the next planning cycle." },
-    { block: "ROUTINE", note: "Pre-launch campaign planning — always 4 weeks before launch." },
+    { block: "PROMPT", note: "Campaign brief — insight, message, audience, channels, CTA, metrics.", color: "#2563EB" },
+    { block: "SKILL", note: "Campaign Planning Skill: every brief follows the same structure.", color: "#7C5CFC" },
+    { block: "CONNECTOR", note: "Google Drive for brand docs + Google Calendar for timing alignment.", color: "#67C587" },
+    { block: "HUMAN REVIEW", note: "Verify insight matches customer research. Check brand voice consistency.", color: "#FF7B72" },
+    { block: "LOOP", note: "Feed campaign results back into the next planning cycle.", color: "#FF9B54" },
+    { block: "ROUTINE", note: "Pre-launch campaign planning — always 4 weeks before launch.", color: "#FFD84D" },
   ],
   "instagram-content": [
-    { block: "PROMPT", note: "Content repurposing — source material to Instagram captions, hashtags, visual direction." },
-    { block: "SKILL", note: "Content Repurposing Skill: consistent platform adaptation every time." },
-    { block: "CONNECTOR", note: "Google Drive for source content + Notion for brand guidelines." },
-    { block: "HUMAN REVIEW", note: "Check brand visual guidelines, platform policy compliance, hashtag trends." },
-    { block: "LOOP", note: "Batch-create weekly. Track engagement per content type." },
-    { block: "ROUTINE", note: "Weekly content batch — Monday morning, same structure, every week." },
+    { block: "PROMPT", note: "Content repurposing — source material to Instagram captions, hashtags, visual direction.", color: "#2563EB" },
+    { block: "SKILL", note: "Content Repurposing Skill: consistent platform adaptation every time.", color: "#7C5CFC" },
+    { block: "CONNECTOR", note: "Google Drive for source content + Notion for brand guidelines.", color: "#67C587" },
+    { block: "HUMAN REVIEW", note: "Check brand visual guidelines, platform policy compliance, hashtag trends.", color: "#FF7B72" },
+    { block: "LOOP", note: "Batch-create weekly. Track engagement per content type.", color: "#FF9B54" },
+    { block: "ROUTINE", note: "Weekly content batch — Monday morning, same structure, every week.", color: "#FFD84D" },
   ],
   "campaign-analysis": [
-    { block: "PROMPT", note: "Performance analysis — what worked, what didn't, what to test next." },
-    { block: "SKILL", note: "Campaign Analysis Skill: standardized success metrics across campaigns." },
-    { block: "CONNECTOR", note: "Connected analytics data + Google Drive for campaign brief." },
-    { block: "HUMAN REVIEW", note: "Correlation vs. causation check. External factors review." },
-    { block: "LOOP", note: "Core optimization loop: run → measure → learn → experiment → run again." },
-    { block: "ROUTINE", note: "Post-campaign readout — 48 hours after every campaign ends." },
+    { block: "PROMPT", note: "Performance analysis — what worked, what didn't, what to test next.", color: "#2563EB" },
+    { block: "SKILL", note: "Campaign Analysis Skill: standardized success metrics across campaigns.", color: "#7C5CFC" },
+    { block: "CONNECTOR", note: "Connected analytics data + Google Drive for campaign brief.", color: "#67C587" },
+    { block: "HUMAN REVIEW", note: "Correlation vs. causation check. External factors review.", color: "#FF7B72" },
+    { block: "LOOP", note: "Core optimization loop: run → measure → learn → experiment → run again.", color: "#FF9B54" },
+    { block: "ROUTINE", note: "Post-campaign readout — 48 hours after every campaign ends.", color: "#FFD84D" },
   ],
 };
 
@@ -66,21 +67,27 @@ export function FinalBuilder() {
 
   return (
     <section id="builder" className="relative py-24 sm:py-32">
-      <div className="aurora-blob right-[15%] bottom-[10%] h-80 w-80 bg-[#7B8EC9]/6" />
+      <FloatingDecorations preset="default" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto mb-12 max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D97757]">The Grand Assembly</p>
-          <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-[#1C1C1C] sm:text-5xl">
+          <div className="mb-4 flex justify-center">
+            <Squiggle color="#FFD84D" className="opacity-50" />
+          </div>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#FF9B54]">The Grand Assembly</p>
+          <h2
+            className="mt-3 text-balance text-3xl font-extrabold tracking-tight text-[#111111] sm:text-5xl"
+            style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
+          >
             Build your own{" "}
             <span className="text-gradient">Claude marketing workflow</span>.
           </h2>
-          <p className="mt-4 text-[#6B6B66]">
+          <p className="mt-4 text-[#7A7A8A]">
             Pick your primary goal. We'll assemble the complete system — Prompt + Skill + Connector +
             Human Review + Loop + Routine — the same architecture a real marketing team would run.
           </p>
         </div>
 
-        {/* Goal picker */}
+        {/* Goal picker — colorful cards */}
         <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {GOALS.map((goal) => {
             const on = selectedGoal === goal.id;
@@ -90,18 +97,22 @@ export function FinalBuilder() {
                 onClick={() => { setSelectedGoal(goal.id); setShowAssembled(false); }}
                 aria-pressed={on}
                 whileTap={{ scale: 0.97 }}
-                className={`relative tilt-card rounded-3xl border p-5 text-center transition-all focus-visible:outline-none ${
-                  on
-                    ? "border-[#D97757]/50 bg-[#D97757]/[0.06] shadow-md shadow-[#D97757]/10"
-                    : "border-[#E2E0DB] bg-white/70 hover:border-[#D97757]/25 hover-glow"
-                }`}
+                className="relative tilt-card rounded-3xl border p-5 text-center transition-all focus-visible:outline-none"
+                style={{
+                  borderColor: on ? `${goal.color}60` : "#D6E0FF",
+                  background: on ? `${goal.color}0D` : "rgba(255,255,255,0.7)",
+                  boxShadow: on ? `0 4px 16px ${goal.color}15` : "none",
+                }}
               >
                 <span className="text-3xl">{goal.emoji}</span>
-                <p className="mt-2 text-sm font-bold text-[#1C1C1C]">{goal.label}</p>
+                <p className="mt-2 text-sm font-bold text-[#111111]">{goal.label}</p>
                 <span
-                  className={`absolute right-3 top-3 grid h-5 w-5 place-items-center rounded-full border transition-colors ${
-                    on ? "border-[#D97757] bg-[#D97757] text-white" : "border-[#E2E0DB] text-transparent"
-                  }`}
+                  className="absolute right-3 top-3 grid h-5 w-5 place-items-center rounded-full border transition-colors"
+                  style={{
+                    borderColor: on ? goal.color : "#D6E0FF",
+                    background: on ? goal.color : "transparent",
+                    color: on ? "white" : "transparent",
+                  }}
                 >
                   <CircleCheck className="h-3 w-3" />
                 </span>
@@ -117,8 +128,8 @@ export function FinalBuilder() {
             onClick={() => setShowAssembled(true)}
             className={`rounded-full px-8 font-semibold ${
               selectedGoal
-                ? "bg-[#D97757] text-white glow-primary hover:bg-[#c06545]"
-                : "bg-[#E2E0DB] text-[#9A968F]"
+                ? "bg-gradient-to-r from-[#2563EB] to-[#7C5CFC] text-white shadow-lg shadow-blue-500/20 hover:shadow-xl"
+                : "bg-[#D6E0FF] text-[#B0B0BA]"
             }`}
           >
             <Sparkles className="mr-2 h-4 w-4" />
@@ -128,7 +139,7 @@ export function FinalBuilder() {
             <Button
               variant="outline"
               size="lg"
-              className="rounded-full border-[#E2E0DB] text-[#6B6B66]"
+              className="rounded-full border-[#D6E0FF] text-[#7A7A8A]"
               onClick={() => { setSelectedGoal(null); setShowAssembled(false); }}
             >
               <RotateCcw className="mr-2 h-4 w-4" /> Start over
@@ -145,7 +156,6 @@ export function FinalBuilder() {
               animate={{ opacity: 1, y: 0 }}
               className="mx-auto mt-16 max-w-3xl"
             >
-              {/* Assembly blocks */}
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {assembled.map((block, i) => (
                   <motion.div
@@ -153,23 +163,23 @@ export function FinalBuilder() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.12 }}
-                    className="glass-light rounded-2xl p-4 shadow-sm shadow-black/[0.04] tilt-card hover-glow"
+                    className="rounded-2xl border bg-white p-4 shadow-sm shadow-blue-500/5 tilt-card hover-glow"
+                    style={{ borderColor: `${block.color}25` }}
                   >
-                    <p className="text-xs font-bold tracking-widest text-[#D97757]">{block.block}</p>
-                    <p className="mt-1.5 text-xs leading-relaxed text-[#6B6B66]">{block.note}</p>
+                    <p className="text-xs font-bold tracking-widest" style={{ color: block.color }}>{block.block}</p>
+                    <p className="mt-1.5 text-xs leading-relaxed text-[#7A7A8A]">{block.note}</p>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Final assembled card */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8 }}
-                className="mt-8 rounded-3xl border border-[#D97757]/20 bg-gradient-to-br from-[#D97757]/[0.06] to-[#C47AB0]/[0.04] p-6 text-center shadow-md shadow-[#D97757]/5"
+                className="mt-8 rounded-3xl border-2 border-[#2563EB]/15 bg-gradient-to-br from-[#2563EB]/[0.04] to-[#7C5CFC]/[0.04] p-6 text-center shadow-md shadow-blue-500/5"
               >
-                <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#D97757]">Your Claude-Assisted Marketing System</p>
-                <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#4A4A46]">
+                <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#2563EB]">Your Claude-Assisted Marketing System</p>
+                <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#444444]">
                   {selectedGoal === "customer-research" && "Every month, a Customer Research Skill uses your connected review data to cluster customer themes, a human reviews the findings, and validated insights feed into your content and product planning Loop."}
                   {selectedGoal === "competitor-analysis" && "Every quarter, a Competitor Intelligence Skill uses web research and your past reports to compare your top competitors, a human reviews the findings, and gaps get added to your campaign planning Loop."}
                   {selectedGoal === "campaign-planning" && "Before every launch, a Campaign Planning Skill pulls from your brand docs and calendar to build a structured brief, a human reviews the strategy, and results feed back into the next planning cycle."}
@@ -177,12 +187,11 @@ export function FinalBuilder() {
                   {selectedGoal === "campaign-analysis" && "After every campaign, a Campaign Analysis Skill structures the performance data into what worked/didn't/test next, a human reviews the insights, and experiments feed into your next campaign Loop."}
                 </p>
 
-                {/* Chain visualization */}
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
                   {CHAIN.map((step, i) => (
                     <span key={step} className="flex items-center gap-2">
-                      <span className="rounded-full bg-[#E2E0DB]/60 px-3 py-1 text-xs font-bold text-[#4A4A46]">{step}</span>
-                      {i < CHAIN.length - 1 && <span className="text-[#9A968F]">→</span>}
+                      <span className="rounded-full bg-[#EEF3FF] px-3 py-1 text-xs font-bold text-[#2563EB]">{step}</span>
+                      {i < CHAIN.length - 1 && <span className="text-[#B0B0BA]">→</span>}
                     </span>
                   ))}
                 </div>
@@ -190,7 +199,7 @@ export function FinalBuilder() {
                 <div className="mt-6 flex flex-wrap justify-center gap-3">
                   <Button
                     size="sm"
-                    className="rounded-full bg-[#D97757] px-5 font-semibold text-white hover:bg-[#c06545]"
+                    className="rounded-full bg-gradient-to-r from-[#2563EB] to-[#7C5CFC] px-5 font-semibold text-white shadow-md shadow-blue-500/15"
                     onClick={() => {
                       const useCaseMap: Record<string, string> = {
                         "customer-research": "customer-research",
@@ -211,7 +220,7 @@ export function FinalBuilder() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-full border-[#E2E0DB] text-[#6B6B66]"
+                    className="rounded-full border-[#D6E0FF] text-[#7A7A8A]"
                     onClick={() => { setSelectedGoal(null); setShowAssembled(false); }}
                   >
                     Explore Another Goal
@@ -222,16 +231,15 @@ export function FinalBuilder() {
           )}
         </AnimatePresence>
 
-        {/* Progress */}
         {progressPercent > 0 && (
           <div className="mx-auto mt-16 max-w-md text-center">
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#E2E0DB]">
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#D6E0FF]">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#D97757] to-[#C47AB0]"
+                className="h-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#7C5CFC]"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
-            <p className="mt-2 text-xs text-[#6B6B66]">
+            <p className="mt-2 text-xs text-[#7A7A8A]">
               {progressPercent}% of the lab explored
               {progressPercent === 100 && " — you've completed the full journey!"}
             </p>
@@ -239,7 +247,7 @@ export function FinalBuilder() {
               <Button
                 variant="outline"
                 size="sm"
-                className="mt-3 rounded-full border-[#E2E0DB] text-[#6B6B66]"
+                className="mt-3 rounded-full border-[#D6E0FF] text-[#7A7A8A]"
                 onClick={resetProgress}
               >
                 <RotateCcw className="mr-1.5 h-3.5 w-3.5" /> Start fresh
