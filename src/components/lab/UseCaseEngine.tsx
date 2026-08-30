@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
+
+
 import {
   ArrowLeft,
   ArrowRight,
@@ -388,6 +390,13 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const { completeUseCase } = useLab();
 
+  // Lock body scroll while wizard is open
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
   const total = uc.steps.length;
   const isOutputStep = step === 5;
 
@@ -430,11 +439,9 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
   }, [running, outputReady]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[60] flex flex-col bg-[#FAF9F6]"
+    <div
+      className="flex flex-col"
+      style={{ position: "fixed", inset: 0, zIndex: 10000, backgroundColor: "#FAF9F6", isolation: "isolate" }}
       role="dialog"
       aria-modal="true"
       aria-label={`${uc.title} workflow`}
@@ -558,7 +565,7 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
           )}
         </Button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -649,12 +656,11 @@ export function UseCaseEngine() {
         <UseCaseGrid onOpen={setActive} />
       </div>
 
-      <AnimatePresence>
-        {active && createPortal(
-          <Wizard uc={active} onClose={() => setActive(null)} />,
-          document.body
-        )}
-      </AnimatePresence>
+      {/* Wizard portalled to body so it escapes all stacking contexts */}
+      {active && createPortal(
+        <Wizard uc={active} onClose={() => setActive(null)} />,
+        document.body
+      )}
     </section>
   );
 }
