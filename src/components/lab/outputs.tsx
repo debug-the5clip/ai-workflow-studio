@@ -683,7 +683,7 @@ export function OutputRenderer({ output }: { output: UseCaseOutput }) {
     case "weeklyDigest": return <WeeklyDigest data={output} />;
     case "routineCalendar": return <RoutineCalendar data={output} />;
     default: {
-      const _exhaustive: never = output;
+      void output;
       return (
         <div className="rounded-2xl border border-[#E8E6E1] bg-[#FAFAF8] p-6 text-center">
           <p className="text-sm text-[#6B6B66]">Visual output type not yet implemented.</p>

@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useLab } from "@/context/LabContext";
 import { RUN_STAGES } from "@/lib/ai-engine";
-import type { UseCase } from "@/lib/lab-types";
+import type { UseCase, UseCaseOutput } from "@/lib/lab-types";
 import { COMPANY_CONTEXT, USE_CASES } from "@/data/useCases";
 import { OutputRenderer } from "@/components/lab/outputs";
 
@@ -258,7 +258,7 @@ function SkillVisualInline() {
 }
 
 // ── Connector step visual (compact for workflow) ───────────────────────────────
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ConnectorVisualInline() {
   return (
     <div className="rounded-2xl border border-[#E8E6E1] bg-[#FAFAF8] p-4">
@@ -410,6 +410,17 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
   const total = uc.steps.length;
   const isOutputStep = step === 6;
 
+  const goNext = useCallback(() => {
+    if (isOutputStep && !running && !outputReady) { setRunning(true); return; }
+    if (step === total - 1) {
+      completeUseCase(uc.id);
+      onClose();
+      setTimeout(() => document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" }), 100);
+      return;
+    }
+    setStep((s) => s + 1);
+  }, [step, total, isOutputStep, running, outputReady, completeUseCase, uc.id, onClose]);
+
   // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -427,17 +438,6 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
   useEffect(() => {
     contentRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
-
-  const goNext = useCallback(() => {
-    if (isOutputStep && !running && !outputReady) { setRunning(true); return; }
-    if (step === total - 1) {
-      completeUseCase(uc.id);
-      onClose();
-      setTimeout(() => document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" }), 100);
-      return;
-    }
-    setStep((s) => s + 1);
-  }, [step, total, isOutputStep, running, outputReady, completeUseCase, uc.id, onClose]);
 
   const goPrev = () => setStep((s) => Math.max(0, s - 1));
 
@@ -564,7 +564,7 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
 
                       {isOutputStep && outputReady && (
                         <div className="space-y-5">
-                          <OutputRenderer output={uc.output as any} />
+                          <OutputRenderer output={uc.output as UseCaseOutput} />
 
                           {/* Review checklist */}
                           <div className="rounded-2xl border border-[#E8E6E1] bg-white p-4">
