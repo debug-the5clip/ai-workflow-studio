@@ -103,16 +103,72 @@ export function Hero() {
           <div className="absolute bottom-12 left-8 h-2 w-2 rounded-full bg-[#FF7B72] opacity-40 float-medium" />
           <div className="absolute right-1/4 top-1/3 h-2 w-2 rounded-full bg-[#67C587] opacity-40 pulse-soft" />
 
-          {/* Centered illustration */}
-          <div className="relative mx-auto max-w-lg">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              className="flex justify-center"
-            >
-              <HeroIllustration />
-            </motion.div>
+          <div className="relative mx-auto max-w-7xl">
+            <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+              {/* Left: text content */}
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#6C5CE7]/15 bg-[#6C5CE7]/6 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#6C5CE7]"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#6C5CE7] shadow-[0_0_8px] shadow-[#6C5CE7]" />
+                  Interactive learning lab for marketers
+                </motion.div>
+                <motion.h1
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08 }}
+                  className="font-display text-balance text-4xl font-extrabold leading-[1.08] tracking-tight text-[#2D2D2D] sm:text-5xl lg:text-6xl"
+                  style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
+                >
+                  Turn Claude into your{" "}
+                  <span className="text-gradient">Marketing Copilot</span>.
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.16 }}
+                  className="mx-auto mt-5 max-w-xl text-pretty text-base text-[#8A8A82] sm:text-lg"
+                >
+                  Learn how to turn prompts, Skills, Connectors, Loops and Routines into
+                  real marketing workflows that solve actual business problems.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.24 }}
+                  className="mt-8 flex flex-wrap items-center gap-3"
+                >
+                  <Button
+                    size="lg"
+                    className="rounded-full bg-gradient-to-r from-[#6C5CE7] to-[#8B6CFC] px-7 font-semibold text-white shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/25"
+                    onClick={() => document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" })}
+                  >
+                    Start Exploring
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="rounded-full border-[#E8E4DE] bg-white/70 px-7 text-[#5A5A5A] hover:border-[#6C5CE7]/30 hover:bg-white hover:text-[#6C5CE7]"
+                    onClick={() => document.querySelector("#blocks")?.scrollIntoView({ behavior: "smooth" })}
+                  >
+                    See How It Works
+                  </Button>
+                </motion.div>
+              </div>
+
+              {/* Right: illustration */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="flex justify-center"
+              >
+                <HeroIllustration />
+              </motion.div>
+            </div>
           </div>
         </div>
 
