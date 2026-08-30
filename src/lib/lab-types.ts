@@ -1,6 +1,6 @@
 // ─── Core types for Claude Marketing Lab ─────────────────────────────────────
 
-export type Category = "Research" | "Strategy" | "Content" | "Performance" | "Operations";
+export type Category = "Research" | "Strategy" | "Marketing" | "Sales" | "Product" | "Customer" | "Content" | "Performance" | "Operations";
 
 export type CapabilityLabel = "Prompt" | "Skill" | "Connector" | "Loop" | "Routine";
 

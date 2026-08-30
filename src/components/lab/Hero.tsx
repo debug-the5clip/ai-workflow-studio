@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowDown, Send, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowDown, ArrowRight, Send, Sparkles, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HERO_EXAMPLES } from "@/data/content";
 import { USE_CASES } from "@/data/useCases";
@@ -18,37 +18,40 @@ const CATEGORIES = [
   { id: "product", label: "Product", emoji: "💡", color: "#FFD84D", bg: "#FFF8E5" },
 ];
 
-function PreviewChain({ useCaseId }: { useCaseId: string }) {
+function ProblemAnalysis({ useCaseId }: { useCaseId: string }) {
   const uc = USE_CASES.find((u) => u.id === useCaseId);
   if (!uc) return null;
-  const chain = [
-    { k: "BUSINESS GOAL", v: uc.goal },
-    { k: "WORKFLOW", v: `${uc.category} workflow · ${uc.steps.length} guided steps` },
-    { k: "SKILL", v: uc.capabilityReason.split(".")[0] ?? "Structured analysis method" },
-    { k: "CONNECTOR", v: uc.sources[0]?.name ?? "Public web source" },
-    { k: "PROMPT", v: uc.prompt.split("\n")[0] },
-    { k: "EXPECTED OUTPUT", v: uc.outputDescription },
+
+  const analysis = [
+    { k: "Problem Category", v: uc.category, icon: "🏷️" },
+    { k: "Recommended Workflow", v: `${uc.title} — ${uc.steps.length} guided steps`, icon: "🔄" },
+    { k: "Recommended Skill", v: uc.skillDetails?.name || uc.capability, icon: "🧰" },
+    { k: "Information Needed", v: uc.evidenceNeeded.slice(0, 3).join(", ") + (uc.evidenceNeeded.length > 3 ? "…" : ""), icon: "📋" },
+    { k: "Recommended Connectors", v: uc.connectorDetails?.map((c) => c.name).join(", ") || uc.sources.map((s) => s.name).join(", "), icon: "🔗" },
+    { k: "Expected Output", v: uc.outputDescription, icon: "📊" },
   ];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-5 rounded-3xl border border-[#E8E4DE] bg-white p-5 shadow-md shadow-black/[0.03] sm:p-6"
+      className="mt-5 rounded-3xl border border-[#67C587]/20 bg-[#67C587]/[0.03] p-5 shadow-sm sm:p-6"
     >
-      <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#6C5CE7]">
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#6C5CE7]" />
-        Workflow preview · {uc.title}
+      <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#67C587]">
+        <CheckCircle2 className="h-4 w-4" />
+        Here's what I think you're trying to solve
       </p>
       <div className="grid gap-2">
-        {chain.map((row, i) => (
+        {analysis.map((row, i) => (
           <motion.div
             key={row.k}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.08 }}
-            className="flex flex-col gap-0.5 rounded-2xl border border-[#E8E4DE]/50 bg-[#FFF8F0] px-4 py-2.5 sm:flex-row sm:items-center sm:gap-3"
+            transition={{ delay: i * 0.06 }}
+            className="flex flex-col gap-0.5 rounded-2xl border border-[#67C587]/10 bg-white px-4 py-2.5 sm:flex-row sm:items-center sm:gap-3"
           >
-            <span className="w-40 shrink-0 text-[11px] font-bold tracking-wider text-[#6C5CE7]">{row.k}</span>
+            <span className="text-sm">{row.icon}</span>
+            <span className="w-40 shrink-0 text-[11px] font-bold tracking-wider text-[#67C587]">{row.k}</span>
             <span className="text-sm text-[#5A5A5A] line-clamp-2">{row.v}</span>
           </motion.div>
         ))}
@@ -61,6 +64,7 @@ function PreviewChain({ useCaseId }: { useCaseId: string }) {
           window.dispatchEvent(new CustomEvent("open-use-case", { detail: useCaseId }));
         }}
       >
+        <ArrowRight className="mr-1.5 h-3.5 w-3.5" />
         Open the full {uc.title} workflow
       </Button>
     </motion.div>
@@ -84,6 +88,9 @@ export function Hero() {
     if (q.includes("email")) return "email-marketing";
     if (q.includes("social") || q.includes("instagram")) return "instagram-content";
     if (q.includes("test")) return "ab-testing";
+    if (q.includes("complaint") || q.includes("wheel") || q.includes("quality")) return "customer-complaint-analysis";
+    if (q.includes("sales") && (q.includes("decline") || q.includes("drop") || q.includes("fell"))) return "sales-decline-investigation";
+    if (q.includes("product") && q.includes("launch")) return "product-launch-planning";
     return null;
   }, [query]);
 
@@ -265,8 +272,10 @@ export function Hero() {
               </span>
             </div>
 
-            {/* Workflow Preview */}
-            {previewId && <PreviewChain useCaseId={previewId} />}
+            {/* Problem Analysis Preview */}
+            <AnimatePresence mode="wait">
+              {previewId && <ProblemAnalysis key={previewId} useCaseId={previewId} />}
+            </AnimatePresence>
           </div>
         </div>
 

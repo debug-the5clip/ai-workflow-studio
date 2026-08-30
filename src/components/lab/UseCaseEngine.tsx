@@ -22,11 +22,14 @@ import type { UseCase, UseCaseOutput } from "@/lib/lab-types";
 import { COMPANY_CONTEXT, USE_CASES } from "@/data/useCases";
 import { OutputRenderer } from "@/components/lab/outputs";
 
-const CATEGORIES = ["All", "Research", "Strategy", "Content", "Performance", "Operations"] as const;
+const CATEGORIES = ["All", "Marketing", "Sales", "Product", "Customer", "Research", "Content", "Performance", "Operations"] as const;
 
 const CATEGORY_EMOJI: Record<string, string> = {
+  Marketing: "📣",
+  Sales: "💰",
+  Product: "💡",
+  Customer: "👥",
   Research: "🔬",
-  Strategy: "🎯",
   Content: "✍️",
   Performance: "📊",
   Operations: "⚙️",
@@ -488,6 +491,43 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
               <Repeat className="h-4 w-4" /> Make it repeatable
             </p>
             <p className="text-sm text-[#2D2D2D]">{uc.loopTip}</p>
+          </div>
+
+          {/* What would you like to do next? */}
+          <div className="rounded-2xl border border-[#6C5CE7]/15 bg-[#6C5CE7]/[0.04] p-5">
+            <p className="mb-3 text-sm font-bold text-[#2D2D2D]">What would you like to do next?</p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {uc.nextActions.map((a) => (
+                <button
+                  key={a.label}
+                  className="rounded-xl border border-[#E8E4DE] bg-white p-3 text-left transition-all hover:border-[#6C5CE7]/30 hover:bg-[#6C5CE7]/[0.02] hover:shadow-sm"
+                  onClick={() => {
+                    document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  <p className="text-sm font-semibold text-[#6C5CE7]">{a.label}</p>
+                  <p className="mt-0.5 text-xs text-[#8A8A82]">{a.description}</p>
+                </button>
+              ))}
+              <button
+                className="rounded-xl border border-[#E8E4DE] bg-white p-3 text-left transition-all hover:border-[#67C587]/30 hover:bg-[#67C587]/[0.02] hover:shadow-sm"
+                onClick={() => {
+                  document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                <p className="text-sm font-semibold text-[#67C587]">Run Another Analysis</p>
+                <p className="mt-0.5 text-xs text-[#8A8A82]">Explore a different business problem</p>
+              </button>
+              <button
+                className="rounded-xl border border-[#E8E4DE] bg-white p-3 text-left transition-all hover:border-[#FF9B54]/30 hover:bg-[#FF9B54]/[0.02] hover:shadow-sm"
+                onClick={() => {
+                  document.querySelector("#blocks")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                <p className="text-sm font-semibold text-[#FF9B54]">Learn How This Works</p>
+                <p className="mt-0.5 text-xs text-[#8A8A82]">Understand Skills, Connectors, and Loops</p>
+              </button>
+            </div>
           </div>
         </div>
       )}
