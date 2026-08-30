@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, GitBranch, MessageSquareText, Repeat, Wrench, Calendar } from "lucide-react";
 import { useLab } from "@/context/LabContext";
@@ -68,9 +68,9 @@ export function BuildingBlocks() {
   const [activeTab, setActiveTab] = useState<TabId>("prompt");
   const { markSectionVisited } = useLab();
 
-  useState(() => {
+  useEffect(() => {
     markSectionVisited("blocks");
-  });
+  }, [markSectionVisited]);
 
   const content = TAB_CONTENT[activeTab];
   const activeTabConfig = TABS.find((t) => t.id === activeTab)!;

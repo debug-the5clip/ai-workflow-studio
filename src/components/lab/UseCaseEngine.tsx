@@ -33,13 +33,16 @@ const CATEGORY_EMOJI: Record<string, string> = {
 };
 
 const STEP_META = [
-  { label: "Define", icon: "❓", color: "#8B6CFC" },
-  { label: "Evidence", icon: "📋", color: "#4A7BF7" },
-  { label: "Source", icon: "📂", color: "#FF9B54" },
+  { label: "Business Problem", icon: "❓", color: "#8B6CFC" },
+  { label: "Research Question", icon: "🔍", color: "#4A7BF7" },
+  { label: "Information Required", icon: "📋", color: "#FF9B54" },
+  { label: "Security & Data", icon: "🛡️", color: "#67C587" },
   { label: "Skill", icon: "🧰", color: "#8B6CFC" },
-  { label: "Prompt", icon: "✍️", color: "#6C5CE7" },
+  { label: "Connectors", icon: "🔗", color: "#4A7BF7" },
+  { label: "The Prompt", icon: "✍️", color: "#6C5CE7" },
   { label: "Result", icon: "📊", color: "#FF8FA3" },
-  { label: "Insight", icon: "💡", color: "#67C587" },
+  { label: "Business Insight", icon: "💡", color: "#67C587" },
+  { label: "Human Review", icon: "👤", color: "#FF9B54" },
   { label: "Action", icon: "🎯", color: "#FF7B72" },
 ];
 
@@ -149,11 +152,17 @@ function PromptAnatomy({ uc }: { uc: UseCase }) {
 
 function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: number; running: boolean; outputReady: boolean }) {
   const evidenceItems = uc.evidenceNeeded;
-  const sources = uc.sources;
   const meta = STEP_META[step] || STEP_META[0];
 
   return (
     <div className="space-y-4">
+      {/* Demo mode badge */}
+      <div className="flex items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-500" /> Demo Mode · Illustrative Output
+        </span>
+      </div>
+
       {/* Step header */}
       <div>
         <div className="flex items-center gap-2">
@@ -176,21 +185,36 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
         </p>
       </div>
 
-      {/* Step-specific content */}
+      {/* ═══ STEP 0: Business Problem ═══ */}
       {step === 0 && (
         <div className="space-y-3">
           <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">Your business question</p>
-            <p className="text-sm font-semibold text-[#2D2D2D]">{uc.goal}</p>
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">The user's problem</p>
+            <p className="text-sm leading-relaxed text-[#2D2D2D]">{uc.scenario}</p>
           </div>
-          <div className="rounded-2xl border border-[#E8E4DE] bg-[#FFF8F0] p-3">
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">Context</p>
-            <p className="text-xs leading-relaxed text-[#8A8A82]">{uc.scenario}</p>
+          <div className="rounded-2xl border border-[#6C5CE7]/20 bg-[#6C5CE7]/[0.04] p-4">
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#6C5CE7]">Business question</p>
+            <p className="text-sm font-semibold text-[#2D2D2D]">{uc.goal}</p>
           </div>
         </div>
       )}
 
+      {/* ═══ STEP 1: Research Question ═══ */}
       {step === 1 && (
+        <div className="space-y-3">
+          <div className="rounded-2xl border border-[#4A7BF7]/20 bg-[#4A7BF7]/[0.04] p-4">
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#4A7BF7]">AI converts your problem into a research question</p>
+            <p className="text-sm font-semibold text-[#2D2D2D]">{uc.goal}</p>
+          </div>
+          <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">Why this matters</p>
+            <p className="text-xs leading-relaxed text-[#8A8A82]">A vague question produces vague research. The workflow first defines exactly what needs to be discovered.</p>
+          </div>
+        </div>
+      )}
+
+      {/* ═══ STEP 2: Information Required ═══ */}
+      {step === 2 && (
         <div className="space-y-2">
           <p className="text-[10px] font-bold uppercase tracking-widest text-[#8A8A82] mb-2">Evidence Claude needs</p>
           {evidenceItems.map((item, i) => (
@@ -199,48 +223,155 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
               <span className="text-sm text-[#2D2D2D]">{item}</span>
             </div>
           ))}
+          <div className="rounded-2xl border border-[#FFD84D]/20 bg-[#FFD84D]/[0.04] p-3 mt-2">
+            <p className="text-xs font-bold text-[#FF9B54]">Before asking Claude anything, decide what evidence would actually support the answer.</p>
+          </div>
         </div>
       )}
 
-      {step === 2 && (
-        <div className="space-y-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8A8A82] mb-2">Available sources</p>
-          {sources.map((src) => (
-            <div key={src.id} className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${
-              src.type === "connector"
-                ? "border-[#6C5CE7]/30 bg-[#6C5CE7]/[0.04]"
-                : "border-dashed border-[#E8E4DE] bg-[#FFF8F0]"
-            }`}>
-              <span className="text-xl">{src.icon}</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-[#2D2D2D]">{src.name}</p>
-                <span className={`text-[9px] font-bold uppercase tracking-wider ${
-                  src.type === "connector" ? "text-[#6C5CE7]" : "text-[#8A8A82]"
-                }`}>{src.label}</span>
+      {/* ═══ STEP 3: Security & Data ═══ */}
+      {step === 3 && (
+        <div className="space-y-4">
+          {uc.securityClassification ? (
+            <>
+              <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-4">
+                <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">Data classification</p>
+                <div className="flex items-center gap-2">
+                  <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${
+                    uc.securityClassification.level === "PUBLIC" ? "bg-blue-100 text-blue-700" :
+                    uc.securityClassification.level === "INTERNAL" ? "bg-amber-100 text-amber-700" :
+                    uc.securityClassification.level === "CONFIDENTIAL" ? "bg-red-100 text-red-700" :
+                    "bg-purple-100 text-purple-700"
+                  }`}>
+                    {uc.securityClassification.level}
+                  </span>
+                  <span className="text-xs text-[#8A8A82]">{uc.securityClassification.explanation}</span>
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-[#67C587]/20 bg-white p-4">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#67C587]">Data needed</p>
+                  <ul className="space-y-1">
+                    {uc.securityClassification.dataNeeded.map((d) => (
+                      <li key={d} className="flex items-start gap-2 text-xs text-[#5A5A5A]">
+                        <span className="mt-0.5 text-[#67C587]">✓</span> {d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="rounded-2xl border border-[#FF7B72]/15 bg-white p-4">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#FF7B72]">Not needed</p>
+                  <ul className="space-y-1">
+                    {uc.securityClassification.dataNotNeeded.map((d) => (
+                      <li key={d} className="flex items-start gap-2 text-xs text-[#8A8A82]">
+                        <span className="mt-0.5 text-[#FF7B72]">✗</span> {d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">AI guardrails</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {uc.securityClassification.guardrails.map((g) => (
+                    <span key={g} className="rounded-full border border-[#E8E4DE] bg-[#FFF8F0] px-2.5 py-1 text-[10px] font-medium text-[#5A5A5A]">{g}</span>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4 text-center">
+              <p className="text-sm text-[#8A8A82]">Security classification not configured for this use case.</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══ STEP 4: Skill ═══ */}
+      {step === 4 && (
+        <div className="space-y-4">
+          <SkillVisualInline />
+          {uc.skillDetails && (
+            <div className="rounded-2xl border border-[#8B6CFC]/20 bg-[#8B6CFC]/[0.04] p-4">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#8B6CFC]">Why this skill?</p>
+              <p className="text-sm leading-relaxed text-[#2D2D2D]">{uc.skillDetails.whyRecommended}</p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <div className="rounded-xl bg-white border border-[#E8E4DE] px-3 py-2">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">Purpose</p>
+                  <p className="text-xs text-[#5A5A5A]">{uc.skillDetails.purpose}</p>
+                </div>
+                <div className="rounded-xl bg-white border border-[#E8E4DE] px-3 py-2">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">Outputs</p>
+                  <p className="text-xs text-[#5A5A5A]">{uc.skillDetails.outputs}</p>
+                </div>
               </div>
             </div>
-          ))}
+          )}
         </div>
       )}
 
-      {step === 3 && <SkillVisualInline />}
+      {/* ═══ STEP 5: Connectors ═══ */}
+      {step === 5 && (
+        <div className="space-y-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8A8A82] mb-2">Recommended connectors for this workflow</p>
+          {uc.connectorDetails && uc.connectorDetails.length > 0 ? (
+            uc.connectorDetails.map((conn) => (
+              <div key={conn.name} className="rounded-2xl border border-[#4A7BF7]/15 bg-white p-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">{conn.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[#2D2D2D]">{conn.name}</p>
+                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                      conn.status === "connected-simulated" || conn.status === "connected" ? "bg-[#67C587]/10 text-[#67C587]" :
+                      conn.status === "available" ? "bg-amber-100 text-amber-700" :
+                      "bg-[#E8E4DE] text-[#8A8A82]"
+                    }`}>
+                      {conn.status === "connected-simulated" ? "CONNECTED · DEMO" :
+                       conn.status === "connected" ? "CONNECTED" :
+                       conn.status === "available" ? "AVAILABLE" : "NOT CONNECTED"}
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                  <div className="rounded-xl bg-[#FFF8F0] px-3 py-2">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">What it provides</p>
+                    <p className="text-xs text-[#5A5A5A]">{conn.whatItProvides}</p>
+                  </div>
+                  <div className="rounded-xl bg-[#4A7BF7]/[0.04] px-3 py-2">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#4A7BF7]">Why recommended</p>
+                    <p className="text-xs text-[#5A5A5A]">{conn.whyRecommended}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4 text-center">
+              <p className="text-sm text-[#8A8A82]">No specific connectors configured for this workflow.</p>
+            </div>
+          )}
+          <div className="rounded-2xl border border-[#FFD84D]/20 bg-[#FFD84D]/[0.04] p-3">
+            <p className="text-xs font-bold text-[#FF9B54]">Connector = WHERE information comes from. Skill = HOW Claude processes it. Prompt = WHAT we ask Claude to do.</p>
+          </div>
+        </div>
+      )}
 
-      {step === 4 && <PromptAnatomy uc={uc} />}
+      {/* ═══ STEP 6: Prompt ═══ */}
+      {step === 6 && <PromptAnatomy uc={uc} />}
 
-      {step === 5 && !running && !outputReady && (
+      {/* ═══ STEP 7: Result ═══ */}
+      {step === 7 && !running && !outputReady && (
         <div className="text-center py-4">
           <p className="text-sm text-[#8A8A82]">Click "Run Analysis" in the footer to start.</p>
         </div>
       )}
 
-      {step === 5 && running && (
+      {step === 7 && running && (
         <RunPanel onDone={() => {}} />
       )}
 
-      {step === 5 && outputReady && (
+      {step === 7 && outputReady && (
         <div className="space-y-5">
           <OutputRenderer output={uc.output as UseCaseOutput} />
-
           <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
             <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">
               <ShieldCheck className="h-4 w-4" /> What should a marketer double-check?
@@ -256,25 +387,84 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
         </div>
       )}
 
-      {step === 6 && (
+      {/* ═══ STEP 8: Business Insight ═══ */}
+      {step === 8 && (
         <div className="space-y-4">
-          <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-4">
-            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">Key insight</p>
-            <p className="text-sm leading-relaxed text-[#2D2D2D]">
-              {uc.outputDescription}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
-            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#8A8A82]">Evidence synthesis</p>
-            <p className="text-sm text-[#8A8A82]">
-              Claude combined {evidenceItems.length} evidence sources into a structured finding.
-              Review the output above for the complete analysis.
-            </p>
-          </div>
+          {uc.businessValue ? (
+            <>
+              <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-4">
+                <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">Business insight</p>
+                <p className="text-sm leading-relaxed text-[#2D2D2D]">{uc.businessValue.businessInsight}</p>
+              </div>
+              <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">Key findings</p>
+                <ul className="space-y-1.5">
+                  {uc.businessValue.keyFindings.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-[#5A5A5A]">
+                      <span className="mt-0.5 text-[#67C587]">→</span> {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-[#4A7BF7]/15 bg-[#4A7BF7]/[0.04] p-4">
+                <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#4A7BF7]">Business value</p>
+                <p className="text-xs leading-relaxed text-[#5A5A5A]">{uc.businessValue.valueStatement}</p>
+              </div>
+            </>
+          ) : (
+            <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-4">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">Key insight</p>
+              <p className="text-sm leading-relaxed text-[#2D2D2D]">{uc.outputDescription}</p>
+            </div>
+          )}
         </div>
       )}
 
-      {step === 7 && (
+      {/* ═══ STEP 9: Human Review ═══ */}
+      {step === 9 && (
+        <div className="space-y-4">
+          {uc.humanReview ? (
+            <>
+              <div className="rounded-2xl border border-[#FF9B54]/20 bg-[#FF9B54]/[0.04] p-4">
+                <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#FF9B54]">Human review required</p>
+                <p className="text-xs leading-relaxed text-[#8A8A82]">{uc.humanReview.explanation}</p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-[#67C587]/15 bg-white p-4">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#67C587]">AI can</p>
+                  <ul className="space-y-1">
+                    {uc.humanReview.aiCanDo.map((a) => (
+                      <li key={a} className="flex items-start gap-2 text-xs text-[#5A5A5A]">
+                        <span className="mt-0.5 text-[#67C587]">✓</span> {a}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="rounded-2xl border border-[#FF7B72]/15 bg-white p-4">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#FF7B72]">Human approval before</p>
+                  <ul className="space-y-1">
+                    {uc.humanReview.humanApprovalFor.map((h) => (
+                      <li key={h} className="flex items-start gap-2 text-xs text-[#5A5A5A]">
+                        <span className="mt-0.5 text-[#FF7B72]">⚠</span> {h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4 text-center">
+                <p className="text-xs text-[#8A8A82]">AI analysis → Recommendation → Human review → Approve → Action</p>
+              </div>
+            </>
+          ) : (
+            <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4 text-center">
+              <p className="text-sm text-[#8A8A82]">Human review configuration not set for this workflow.</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══ STEP 10: Action ═══ */}
+      {step === 10 && (
         <div className="space-y-4">
           <div className="rounded-2xl border border-[#FF7B72]/20 bg-[#FF7B72]/[0.04] p-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">Turn this insight into…</p>
@@ -287,6 +477,12 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
               ))}
             </div>
           </div>
+          {uc.businessValue && (
+            <div className="rounded-2xl border border-[#67C587]/15 bg-[#67C587]/[0.04] p-4">
+              <p className="mb-1 text-xs font-bold uppercase tracking-widest text-[#67C587]">Recommended action</p>
+              <p className="text-sm text-[#2D2D2D]">{uc.businessValue.recommendedAction}</p>
+            </div>
+          )}
           <div className="rounded-2xl border border-[#FF9B54]/20 bg-[#FF9B54]/[0.04] p-4">
             <p className="mb-1 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#FF9B54]">
               <Repeat className="h-4 w-4" /> Make it repeatable
@@ -296,8 +492,8 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
         </div>
       )}
 
-      {/* Why it matters — shown for all non-output steps */}
-      {step !== 5 && step !== 7 && (
+      {/* Why it matters — shown for steps that don't have specific panels */}
+      {step !== 7 && step !== 10 && (
         <div className="rounded-2xl border border-[#FFD84D]/20 bg-[#FFD84D]/[0.04] p-4">
           <p className="text-xs font-bold text-[#FF9B54]">Why this step matters</p>
           <p className="mt-1 text-xs leading-relaxed text-[#8A8A82]">
@@ -573,48 +769,51 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
 
 function getDefaultStepTitle(step: number): string {
   const titles = [
-    "Define the Business Question",
-    "Identify the Information Needed",
-    "Choose Your Information Source",
-    "Choose the Right Claude Capability",
-    "Build the Instruction",
-    "Run the Analysis",
-    "Understand the Result",
+    "Define the Business Problem",
+    "Convert to a Research Question",
+    "Identify the Information Required",
+    "Security & Data Classification",
+    "Choose the Right Skill",
+    "Choose the Right Connectors",
+    "Build the Prompt",
+    "Run & Review the Result",
+    "Synthesize the Business Insight",
     "Human Review",
-    "Take Action",
-    "Make It Repeatable",
+    "Take Action & Make It Repeatable",
   ];
   return titles[step] || "Step";
 }
 
 function getDefaultExplanation(step: number): string {
   const explanations = [
-    "Claude works best when it knows the decision behind the question — not just the topic. A vague topic produces a vague answer. A real business question produces a usable one.",
-    "Before asking Claude anything, decide what kind of proof would actually make the answer trustworthy — reviews, competitor pages, past campaign numbers, support tickets. Good inputs are what separate a confident-sounding guess from a grounded answer.",
-    "Some information is public (web, published reviews). Some lives inside your own tools (a shared drive, an inbox, an analytics dashboard). Claude can use both — but only your authorized tools if they're connected.",
-    "Not every task needs the same kind of setup. Some questions just need one good instruction. Others deserve a repeatable method. Pick what actually fits the size of the job.",
-    "The best marketing prompts do five things: give Claude a role, give it context, state the task plainly, tell it what sources to use, and describe the output format you need.",
-    "Claude reads what's available, organizes it, and drafts a structured answer. This is the same thing happening whether it's public web information or your connected business data — organize first, conclude second.",
-    "A wall of text isn't useful. Claude Marketing Lab always converts the raw answer into a visual structure — themes, comparisons, opportunity cards, dashboards — so you can see the shape of the finding, not just read about it.",
-    "Claude's output is a strong first draft, not a final decision. This is the point where judgment, brand knowledge, and business context get applied.",
-    "An insight only has value once it changes a decision — a campaign brief, a product note, a message test, a budget shift.",
-    "If you'd ask a version of this question again, decide now how it should come back: as a saved Skill (same method, next time you ask), a Loop (feeds its own next cycle), or a Routine (runs on a schedule).",
+    "Claude works best when it knows the decision behind the question — not just the topic. A vague business problem produces vague analysis. A specific problem produces actionable insight.",
+    "AI converts your broad business request into a specific research question that can actually be investigated. The quality of the question determines the quality of the answer.",
+    "Before asking Claude anything, decide what evidence would actually support the answer. Good inputs are what separate a confident-sounding guess from a grounded analysis.",
+    "Every workflow should consider what data is needed, what's public vs internal, and what guardrails apply. This prevents accidental data exposure and ensures responsible AI use.",
+    "Not every task needs the same kind of setup. Some questions just need one good instruction. Others deserve a repeatable method. The skill chosen determines the analytical approach.",
+    "Connectors define WHERE information comes from. Some are public (web search), some are internal (Google Drive, Notion). The workflow recommends the right connectors for this specific task.",
+    "The best marketing prompts give Claude a role, context, a clear task, source instructions, and output format. This is the instruction that drives the analysis.",
+    "Claude reads what's available, organizes it, and drafts a structured answer. The result is illustrative in demo mode — clearly labeled as sample output for learning purposes.",
+    "Raw analysis becomes business insight when you synthesize the evidence into a clear statement about what it means and why it matters for the business.",
+    "AI provides the analysis; humans decide what to do with it. This step identifies what requires human judgment before any action is taken.",
+    "An insight only has value once it changes a decision. Every workflow ends by connecting the analysis to a specific next business action.",
   ];
   return explanations[step] || "";
 }
 
 function getWhyItMatters(step: number): string {
   const reasons = [
-    "Framing the question properly prevents Claude from giving generic marketing-speak instead of actionable analysis.",
+    "Framing the problem properly prevents Claude from giving generic marketing-speak instead of actionable analysis.",
+    "Converting a business problem into a research question ensures the analysis is focused and investigable.",
     "Without deciding on evidence first, you risk asking Claude for an opinion instead of an analysis grounded in data.",
-    "Knowing where information comes from — and whether it's authorized — is what separates trustworthy output from speculation.",
-    "Choosing the right capability saves time: a Prompt for one-off questions, a Skill for recurring work, a Connector when you need real data.",
+    "Understanding data classification prevents accidental exposure of confidential information and ensures responsible AI use.",
+    "Choosing the right skill determines the analytical method: research, analysis, strategy, or content creation.",
+    "Knowing which connectors are recommended — and why — ensures the analysis has access to the right information sources.",
     "A well-structured prompt is the difference between a useless paragraph and a repeatable, reliable output.",
-    "This is where Claude does the analytical heavy lifting — organizing, comparing, and surfacing patterns from your inputs.",
-    "Visual structures make findings actionable: you can see the shape of the data instead of scrolling through text.",
-    "Human review is where brand knowledge, business context, and judgment get applied. This step is never skippable.",
+    "This is where Claude does the analytical heavy lifting. In demo mode, results are illustrative; with real connectors, they'd use your actual data.",
+    "Visual structures make findings actionable: you can see the shape of the insight instead of scrolling through text.",
+    "Human review is where brand knowledge, business context, and judgment get applied. This step is never skippable for consequential decisions.",
     "The gap between insight and impact is action. Every finding should connect to a specific next business decision.",
-    "Making the work repeatable is what transforms a one-off analysis into a compounding advantage.",
   ];
   return reasons[step] || "";
 }

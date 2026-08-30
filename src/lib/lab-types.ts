@@ -94,6 +94,47 @@ export type VisualOutputType =
   | "weeklyDigest"
   | "routineCalendar";
 
+export interface ConnectorDetail {
+  name: string;
+  icon: string;
+  status: "connected" | "connected-simulated" | "not-connected" | "available";
+  whatItProvides: string;
+  whyRecommended: string;
+  category: string;
+}
+
+export interface SkillDetail {
+  name: string;
+  category: string;
+  purpose: string;
+  whenToUse: string;
+  requiredInputs: string;
+  outputs: string;
+  whyRecommended: string;
+}
+
+export interface SecurityClassification {
+  level: "PUBLIC" | "INTERNAL" | "CONFIDENTIAL" | "SENSITIVE";
+  dataNeeded: string[];
+  dataNotNeeded: string[];
+  guardrails: string[];
+  explanation: string;
+}
+
+export interface HumanReview {
+  required: boolean;
+  aiCanDo: string[];
+  humanApprovalFor: string[];
+  explanation: string;
+}
+
+export interface BusinessValue {
+  keyFindings: string[];
+  businessInsight: string;
+  recommendedAction: string;
+  valueStatement: string;
+}
+
 export interface UseCase {
   id: string;
   title: string;
@@ -117,6 +158,12 @@ export interface UseCase {
   loopTip: string;
   repeatability: string;
   estimatedTime: string;
+  /** Extended MVP fields */
+  connectorDetails?: ConnectorDetail[];
+  skillDetails?: SkillDetail;
+  securityClassification?: SecurityClassification;
+  humanReview?: HumanReview;
+  businessValue?: BusinessValue;
   /** Legacy compat */
   summary?: string;
   output?: { kind: string; [k: string]: unknown };

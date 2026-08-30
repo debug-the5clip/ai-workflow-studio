@@ -188,8 +188,11 @@ export function Hero() {
                   className="text-2xl font-extrabold tracking-tight text-[#2D2D2D] sm:text-3xl"
                   style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
                 >
-                  What do you want to accomplish?
+                  What business problem are you trying to solve?
                 </h2>
+                <p className="mt-2 text-sm text-[#8A8A82]">
+                  Describe it in plain language. The system will recommend the right skill, connectors, and prompt.
+                </p>
                 <Sparkles className="h-5 w-5 text-[#FFD84D]" />
               </motion.div>
             </div>
@@ -222,7 +225,7 @@ export function Hero() {
 
             {/* Prompt Input */}
             <label htmlFor="hero-goal" className="mb-2 block text-center text-sm font-medium text-[#5A5A5A]">
-              Describe your task in plain language
+              Describe your business problem in plain language — no AI terms needed
             </label>
             <div className="glass flex items-center gap-2 rounded-2xl p-2 pl-4 shadow-sm">
               <input
@@ -243,7 +246,7 @@ export function Hero() {
               </Button>
             </div>
 
-            {/* Suggested Prompt Chips */}
+            {/* Suggested Business Problems */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               {HERO_EXAMPLES.map((ex) => (
                 <button
@@ -257,6 +260,9 @@ export function Hero() {
                   {ex.text}
                 </button>
               ))}
+              <span className="rounded-full border border-[#E8E4DE] bg-[#FAF9F6] px-3.5 py-1.5 text-xs text-[#8A8A82]">
+                or browse all use cases below ↓
+              </span>
             </div>
 
             {/* Workflow Preview */}

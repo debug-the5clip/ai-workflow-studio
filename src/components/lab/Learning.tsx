@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BrainCircuit, CheckCircle2, RotateCcw, XCircle } from "lucide-react";
 import { useLab } from "@/context/LabContext";
@@ -156,9 +156,9 @@ export function Learning() {
   const [tab, setTab] = useState<"quizzes" | "flashcards">("quizzes");
   const { markSectionVisited, quizScore } = useLab();
 
-  useState(() => {
+  useEffect(() => {
     markSectionVisited("learn");
-  });
+  }, [markSectionVisited]);
 
   return (
     <section id="learn-hub" className="relative py-24 sm:py-32">
