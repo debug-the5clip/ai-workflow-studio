@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -649,7 +650,10 @@ export function UseCaseEngine() {
       </div>
 
       <AnimatePresence>
-        {active && <Wizard uc={active} onClose={() => setActive(null)} />}
+        {active && createPortal(
+          <Wizard uc={active} onClose={() => setActive(null)} />,
+          document.body
+        )}
       </AnimatePresence>
     </section>
   );
