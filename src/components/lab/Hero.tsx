@@ -1,11 +1,13 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowDown, ArrowRight, Send, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowDown, ArrowRight, Loader2, Send, Sparkles, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HERO_EXAMPLES } from "@/data/content";
 import { USE_CASES } from "@/data/useCases";
 import { HeroIllustration } from "@/components/lab/Illustrations";
 import { FloatingDecorations } from "@/components/lab/Decorations";
+import { classifyProblem } from "@/lib/ai-engine";
+import type { ClassifiedProblem } from "@/lib/lab-types";
 
 const CATEGORIES = [
   { id: "market", label: "Market", emoji: "🌍", color: "#8B6CFC", bg: "#F5F0FF" },
@@ -18,17 +20,19 @@ const CATEGORIES = [
   { id: "product", label: "Product", emoji: "💡", color: "#FFD84D", bg: "#FFF8E5" },
 ];
 
-function ProblemAnalysis({ useCaseId }: { useCaseId: string }) {
+function ProblemAnalysis({ useCaseId, classification }: { useCaseId: string; classification?: ClassifiedProblem | null }) {
   const uc = USE_CASES.find((u) => u.id === useCaseId);
   if (!uc) return null;
 
+  // Use live classification data if available, fall back to static UseCase data
   const analysis = [
-    { k: "Problem Category", v: uc.category, icon: "🏷️" },
-    { k: "Recommended Workflow", v: `${uc.title} — ${uc.steps.length} guided steps`, icon: "🔄" },
-    { k: "Recommended Skill", v: uc.skillDetails?.name || uc.capability, icon: "🧰" },
-    { k: "Information Needed", v: uc.evidenceNeeded.slice(0, 3).join(", ") + (uc.evidenceNeeded.length > 3 ? "…" : ""), icon: "📋" },
-    { k: "Recommended Connectors", v: uc.connectorDetails?.map((c) => c.name).join(", ") || uc.sources.map((s) => s.name).join(", "), icon: "🔗" },
-    { k: "Expected Output", v: uc.outputDescription, icon: "📊" },
+    { k: "Problem Category", v: classification?.category || uc.category, icon: "🏷️" },
+    { k: "Recommended Workflow", v: classification ? `${classification.matchedUseCaseTitle} — guided workflow` : `${uc.title} — ${uc.steps.length} guided steps`, icon: "🔄" },
+    { k: "Why this workflow?", v: classification?.matchedReason || "Best match for your business problem", icon: "💡" },
+    { k: "Recommended Skill", v: classification?.recommendedSkill || uc.skillDetails?.name || uc.capability, icon: "🧰" },
+    { k: "Information Needed", v: (() => { const info = classification?.requiredInformation || uc.evidenceNeeded.slice(0, 3); return info.slice(0, 3).join(", ") + (info.length > 3 ? "…" : ""); })(), icon: "📋" },
+    { k: "Recommended Connectors", v: classification?.recommendedConnectors?.join(", ") || uc.connectorDetails?.map((c) => c.name).join(", ") || uc.sources.map((s) => s.name).join(", "), icon: "🔗" },
+    { k: "Expected Output", v: classification ? "Live structured analysis with business insight" : uc.outputDescription, icon: "📊" },
   ];
 
   return (
@@ -37,10 +41,22 @@ function ProblemAnalysis({ useCaseId }: { useCaseId: string }) {
       animate={{ opacity: 1, y: 0 }}
       className="mt-5 rounded-3xl border border-[#67C587]/20 bg-[#67C587]/[0.03] p-5 shadow-sm sm:p-6"
     >
-      <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#67C587]">
-        <CheckCircle2 className="h-4 w-4" />
-        Here's what I think you're trying to solve
-      </p>
+      <div className="mb-3 flex items-center justify-between">
+        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#67C587]">
+          <CheckCircle2 className="h-4 w-4" />
+          Here's what I think you're trying to solve
+        </p>
+        {classification && (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5CE7]/20 bg-[#6C5CE7]/[0.06] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#6C5CE7]">
+            <span className="h-1 w-1 rounded-full bg-[#6C5CE7]" /> Live · Claude classified
+          </span>
+        )}
+        {!classification && (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-700">
+            <span className="h-1 w-1 rounded-full bg-amber-500" /> Demo · keyword match
+          </span>
+        )}
+      </div>
       <div className="grid gap-2">
         {analysis.map((row, i) => (
           <motion.div
@@ -75,8 +91,11 @@ export function Hero() {
   const [query, setQuery] = useState("");
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [classifying, setClassifying] = useState(false);
+  const [classification, setClassification] = useState<ClassifiedProblem | null>(null);
 
-  const suggestion = useMemo(() => {
+  // Keyword-based fallback matcher (used when Claude is unavailable)
+  const fallbackMatch = useMemo(() => {
     if (query.trim().length < 3) return null;
     const q = query.toLowerCase();
     const found = HERO_EXAMPLES.find((e) => e.text.toLowerCase().includes(q.slice(0, 12)));
@@ -94,8 +113,52 @@ export function Hero() {
     return null;
   }, [query]);
 
+  // Live Claude classification
+  const handleClassify = useCallback(async (problem: string) => {
+    setClassifying(true);
+    setClassification(null);
+    try {
+      const result = await classifyProblem(problem);
+      if (result) {
+        setClassification(result);
+        setPreviewId(result.matchedUseCaseId);
+      } else {
+        // Fallback to keyword match
+        setPreviewId(fallbackMatch ?? HERO_EXAMPLES[0].useCaseId);
+      }
+    } catch {
+      setPreviewId(fallbackMatch ?? HERO_EXAMPLES[0].useCaseId);
+    } finally {
+      setClassifying(false);
+    }
+  }, [fallbackMatch]);
+
+  // Debounced auto-classify when user types
+  useEffect(() => {
+    if (query.trim().length < 5) {
+      // Defer state clearing to avoid synchronous setState in effect
+      const raf = requestAnimationFrame(() => {
+        setClassification(null);
+        setPreviewId(null);
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+    const timer = setTimeout(() => {
+      handleClassify(query);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [query, handleClassify]);
+
   const submit = () => {
-    setPreviewId(suggestion ?? HERO_EXAMPLES[0].useCaseId);
+    if (classifying) return;
+    if (classification) {
+      // Already classified via Claude
+      document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => window.dispatchEvent(new CustomEvent("open-use-case", { detail: classification.matchedUseCaseId })), 300);
+    } else if (previewId) {
+      document.querySelector("#usecases")?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => window.dispatchEvent(new CustomEvent("open-use-case", { detail: previewId })), 300);
+    }
   };
 
   return (
@@ -246,10 +309,11 @@ export function Hero() {
               <Button
                 size="sm"
                 onClick={submit}
-                className="rounded-xl bg-gradient-to-r from-[#6C5CE7] to-[#8B6CFC] px-4 font-semibold text-white hover:shadow-lg hover:shadow-purple-500/15"
+                disabled={classifying || !query.trim()}
+                className="rounded-xl bg-gradient-to-r from-[#6C5CE7] to-[#8B6CFC] px-4 font-semibold text-white hover:shadow-lg hover:shadow-purple-500/15 disabled:opacity-50"
                 aria-label="Show recommended workflow"
               >
-                <Send className="h-4 w-4" />
+                {classifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               </Button>
             </div>
 
@@ -260,6 +324,8 @@ export function Hero() {
                   key={ex.useCaseId}
                   onClick={() => {
                     setQuery(ex.text.replace("…", ""));
+                    // Trigger classification for this specific use case
+                    setClassification(null);
                     setPreviewId(ex.useCaseId);
                   }}
                   className="rounded-full border border-[#E8E4DE] bg-[#FAF9F6] px-3.5 py-1.5 text-xs text-[#8A8A82] transition-all hover:border-[#6C5CE7]/30 hover:bg-[#6C5CE7]/5 hover:text-[#6C5CE7]"
@@ -272,9 +338,23 @@ export function Hero() {
               </span>
             </div>
 
+            {/* Classifying indicator */}
+            {classifying && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4 flex items-center justify-center gap-2 rounded-2xl border border-[#6C5CE7]/10 bg-[#6C5CE7]/[0.03] p-3"
+              >
+                <Loader2 className="h-4 w-4 animate-spin text-[#6C5CE7]" />
+                <span className="text-xs font-medium text-[#6C5CE7]">Claude is analyzing your problem…</span>
+              </motion.div>
+            )}
+
             {/* Problem Analysis Preview */}
             <AnimatePresence mode="wait">
-              {previewId && <ProblemAnalysis key={previewId} useCaseId={previewId} />}
+              {previewId && !classifying && (
+                <ProblemAnalysis key={previewId} useCaseId={previewId} classification={classification} />
+              )}
             </AnimatePresence>
           </div>
         </div>

@@ -209,3 +209,39 @@ export interface CalendarEntry {
   skill: string;
   connector: string;
 }
+
+// ─── Live Claude integration types ───────────────────────────────────────────
+
+/** Response from the classifyProblem server action */
+export interface ClassifiedProblem {
+  category: Category;
+  matchedUseCaseId: string;
+  matchedUseCaseTitle: string;
+  matchedReason: string;
+  recommendedSkill: string;
+  requiredInformation: string[];
+  recommendedConnectors: string[];
+  confidence: "high" | "medium" | "low";
+  source: "live" | "simulated";
+}
+
+/** Full analysis result returned by the generateStructuredOutput action */
+export interface LiveAnalysisResult {
+  /** The structured output that can be fed directly to OutputRenderer */
+  output: UseCaseOutput;
+  /** Derived business insight for Step 8 */
+  businessInsight: string;
+  /** Key findings extracted from the analysis */
+  keyFindings: string[];
+  /** Recommended actions for Step 9 */
+  recommendedActions: NextAction[];
+  /** Human review notes for Step 10 */
+  humanReviewNotes: string;
+  /** Source of the result */
+  source: "live" | "simulated";
+  /** Model used (if live) */
+  model?: string;
+  /** Token usage (if live) */
+  inputTokens?: number;
+  outputTokens?: number;
+}

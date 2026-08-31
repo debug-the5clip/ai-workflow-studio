@@ -2,10 +2,10 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-
 import {
   ArrowLeft,
   ArrowRight,
+  AlertTriangle,
   Check,
   CircleCheck,
   CircleDashed,
@@ -13,12 +13,13 @@ import {
   Play,
   Repeat,
   ShieldCheck,
+  Sparkles,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLab } from "@/context/LabContext";
-import { RUN_STAGES } from "@/lib/ai-engine";
-import type { UseCase, UseCaseOutput } from "@/lib/lab-types";
+import { RUN_STAGES, generateLiveAnalysis } from "@/lib/ai-engine";
+import type { UseCase, UseCaseOutput, LiveAnalysisResult } from "@/lib/lab-types";
 import { COMPANY_CONTEXT, USE_CASES } from "@/data/useCases";
 import { OutputRenderer } from "@/components/lab/outputs";
 
@@ -153,18 +154,20 @@ function PromptAnatomy({ uc }: { uc: UseCase }) {
 
 // ── Step content panels ────────────────────────────────────────────────────────
 
-function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: number; running: boolean; outputReady: boolean }) {
+function StepContent({ uc, step, running, outputReady, liveResult, liveError }: { uc: UseCase; step: number; running: boolean; outputReady: boolean; liveResult: LiveAnalysisResult | null; liveError: string | null }) {
   const evidenceItems = uc.evidenceNeeded;
   const meta = STEP_META[step] || STEP_META[0];
 
   return (
     <div className="space-y-4">
-      {/* Demo mode badge */}
-      <div className="flex items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-500" /> Demo Mode · Illustrative Output
-        </span>
-      </div>
+      {/* Source badge — contextual per step */}
+      {step <= 6 && (
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-500" /> Workflow Framework · Structured Demo
+          </span>
+        </div>
+      )}
 
       {/* Step header */}
       <div>
@@ -374,13 +377,43 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
 
       {step === 7 && outputReady && (
         <div className="space-y-5">
-          <OutputRenderer output={uc.output as UseCaseOutput} />
+          {/* Source indicator */}
+          {liveResult?.source === "live" ? (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5CE7]/20 bg-[#6C5CE7]/[0.06] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#6C5CE7]">
+                <Sparkles className="h-3 w-3" /> Live Claude Output · {liveResult.model}
+              </span>
+              {liveResult.inputTokens && liveResult.outputTokens && (
+                <span className="text-[9px] text-[#8A8A82]">{liveResult.inputTokens + liveResult.outputTokens} tokens</span>
+              )}
+            </div>
+          ) : liveError ? (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                <AlertTriangle className="h-3 w-3" /> {liveError}
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                <AlertTriangle className="h-3 w-3" /> Illustrative Output · Demo Mode
+              </span>
+            </div>
+          )}
+
+          <OutputRenderer output={(liveResult?.output ?? uc.output) as UseCaseOutput} />
+
+          {/* Honest disclaimer */}
           <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
             <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">
               <ShieldCheck className="h-4 w-4" /> What should a marketer double-check?
             </p>
             <ul className="space-y-1.5">
-              {uc.reviewChecklist.map((r) => (
+              {(liveResult ? [
+                "Verify all findings against real market data",
+                "Check that competitor information is current",
+                "Validate assumptions with your team before acting"
+              ] : uc.reviewChecklist).map((r) => (
                 <li key={r} className="flex items-start gap-2 text-sm text-[#8A8A82]">
                   <CircleDashed className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#FF7B72]" /> {r}
                 </li>
@@ -393,31 +426,32 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
       {/* ═══ STEP 8: Business Insight ═══ */}
       {step === 8 && (
         <div className="space-y-4">
-          {uc.businessValue ? (
-            <>
-              <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-4">
-                <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">Business insight</p>
-                <p className="text-sm leading-relaxed text-[#2D2D2D]">{uc.businessValue.businessInsight}</p>
-              </div>
-              <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">Key findings</p>
-                <ul className="space-y-1.5">
-                  {uc.businessValue.keyFindings.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-[#5A5A5A]">
-                      <span className="mt-0.5 text-[#67C587]">→</span> {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="rounded-2xl border border-[#4A7BF7]/15 bg-[#4A7BF7]/[0.04] p-4">
-                <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#4A7BF7]">Business value</p>
-                <p className="text-xs leading-relaxed text-[#5A5A5A]">{uc.businessValue.valueStatement}</p>
-              </div>
-            </>
-          ) : (
-            <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-4">
-              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">Key insight</p>
-              <p className="text-sm leading-relaxed text-[#2D2D2D]">{uc.outputDescription}</p>
+          {/* Source badge */}
+          {liveResult?.source === "live" && (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5CE7]/20 bg-[#6C5CE7]/[0.06] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#6C5CE7]">
+                <Sparkles className="h-3 w-3" /> Derived from live Claude analysis
+              </span>
+            </div>
+          )}
+          <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-4">
+            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">Business insight</p>
+            <p className="text-sm leading-relaxed text-[#2D2D2D]">{liveResult?.businessInsight || uc.businessValue?.businessInsight || uc.outputDescription}</p>
+          </div>
+          <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#8A8A82]">Key findings</p>
+            <ul className="space-y-1.5">
+              {(liveResult?.keyFindings || uc.businessValue?.keyFindings || []).map((f, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-[#5A5A5A]">
+                  <span className="mt-0.5 text-[#67C587]">→</span> {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+          {uc.businessValue && !liveResult && (
+            <div className="rounded-2xl border border-[#4A7BF7]/15 bg-[#4A7BF7]/[0.04] p-4">
+              <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#4A7BF7]">Business value</p>
+              <p className="text-xs leading-relaxed text-[#5A5A5A]">{uc.businessValue.valueStatement}</p>
             </div>
           )}
         </div>
@@ -469,18 +503,26 @@ function StepContent({ uc, step, running, outputReady }: { uc: UseCase; step: nu
       {/* ═══ STEP 10: Action ═══ */}
       {step === 10 && (
         <div className="space-y-4">
+          {/* Source badge */}
+          {liveResult?.source === "live" && (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5CE7]/20 bg-[#6C5CE7]/[0.06] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#6C5CE7]">
+                <Sparkles className="h-3 w-3" /> Actions derived from live analysis
+              </span>
+            </div>
+          )}
           <div className="rounded-2xl border border-[#FF7B72]/20 bg-[#FF7B72]/[0.04] p-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">Turn this insight into…</p>
             <div className="grid gap-2 sm:grid-cols-2">
-              {uc.nextActions.map((a) => (
-                <div key={a.label} className="rounded-xl border border-[#E8E4DE] bg-white p-3">
+              {(liveResult?.recommendedActions || uc.nextActions).map((a, i) => (
+                <div key={i} className="rounded-xl border border-[#E8E4DE] bg-white p-3">
                   <p className="text-sm font-semibold text-[#2D2D2D]">{a.label}</p>
                   <p className="mt-0.5 text-xs text-[#8A8A82]">{a.description}</p>
                 </div>
               ))}
             </div>
           </div>
-          {uc.businessValue && (
+          {uc.businessValue && !liveResult && (
             <div className="rounded-2xl border border-[#67C587]/15 bg-[#67C587]/[0.04] p-4">
               <p className="mb-1 text-xs font-bold uppercase tracking-widest text-[#67C587]">Recommended action</p>
               <p className="text-sm text-[#2D2D2D]">{uc.businessValue.recommendedAction}</p>
@@ -623,6 +665,8 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
   const [step, setStep] = useState(0);
   const [running, setRunning] = useState(false);
   const [outputReady, setOutputReady] = useState(false);
+  const [liveResult, setLiveResult] = useState<LiveAnalysisResult | null>(null);
+  const [liveError, setLiveError] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const { completeUseCase } = useLab();
 
@@ -751,9 +795,33 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
                 transition={{ duration: 0.25 }}
               >
                 {isOutputStep && running ? (
-                  <RunPanel onDone={() => { setRunning(false); setOutputReady(true); }} />
+                  <RunPanel onDone={async () => {
+                    setRunning(false);
+                    // Attempt live Claude analysis
+                    try {
+                      const result = await generateLiveAnalysis({
+                        useCaseId: uc.id,
+                        useCaseTitle: uc.title,
+                        useCaseDescription: uc.scenario,
+                        prompt: uc.prompt,
+                        visualOutputType: uc.visualOutputType,
+                        evidenceNeeded: uc.evidenceNeeded,
+                      });
+                      if (result) {
+                        setLiveResult(result);
+                        setLiveError(null);
+                      } else {
+                        setLiveResult(null);
+                        setLiveError("Live generation unavailable — showing illustrative output.");
+                      }
+                    } catch {
+                      setLiveResult(null);
+                      setLiveError("Live generation unavailable — showing illustrative output.");
+                    }
+                    setOutputReady(true);
+                  }} />
                 ) : (
-                  <StepContent uc={uc} step={step} running={running} outputReady={outputReady} />
+                  <StepContent uc={uc} step={step} running={running} outputReady={outputReady} liveResult={liveResult} liveError={liveError} />
                 )}
               </motion.div>
             </AnimatePresence>
