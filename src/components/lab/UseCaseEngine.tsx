@@ -678,7 +678,7 @@ function Wizard({ uc, onClose }: { uc: UseCase; onClose: () => void }) {
   }, []);
 
   const total = uc.steps.length;
-  const isOutputStep = step === 5;
+  const isOutputStep = step === 7; // Result step — where RunPanel + live analysis happens
 
   const goNext = useCallback(() => {
     if (isOutputStep && !running && !outputReady) { setRunning(true); return; }

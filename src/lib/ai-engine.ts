@@ -33,7 +33,7 @@ export interface GenerateResult {
 // ─── Configuration ──────────────────────────────────────────────────────────
 
 /** Set to true to prefer live Claude calls; false forces simulated. */
-let _preferLive = true;
+let _preferLive = false; // Set to true when ANTHROPIC_API_KEY is configured in Convex env vars
 
 export function setPreferLive(prefer: boolean) {
   _preferLive = prefer;
