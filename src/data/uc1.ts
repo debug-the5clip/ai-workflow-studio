@@ -85,6 +85,47 @@ export const UC_1_8: UseCase[] = [
       recommendedAction: "Test a campaign centered on 'Travel lighter. Move easier.' with three creative directions: lightweight travel, smarter organization, and stress-free airport experience.",
       valueStatement: "Informed competitive response prevents reactive, uninformed counter-messaging and identifies strategic opportunities competitors are leaving open.",
     },
+    demoResult: {
+      executiveSummary: "The competitor's new campaign positions luggage around effortless travel rather than product specs. Messaging emphasizes lightweight design, smart organization, and stress-free journeys. Customer reactions show strong interest in the convenience narrative. This creates an opportunity for Voyara to test a counter-positioning around durability-meets-convenience.",
+      findings: [
+        {
+          finding: "Campaign message centers on travel experience, not product specs",
+          evidence: "Competitor taglines reference 'travel lighter' and 'move easier' with no technical specifications in primary messaging.",
+          interpretation: "The competitor is shifting from feature-based to emotion-based positioning.",
+          confidence: "high"
+        },
+        {
+          finding: "Target audience appears to be frequent travelers aged 28-45",
+          evidence: "Social media ads consistently show business and frequent leisure travelers in this demographic.",
+          interpretation: "The campaign targets the high-frequency traveler segment where brand loyalty is highest.",
+          confidence: "medium"
+        },
+        {
+          finding: "Customer reactions show strong engagement with the convenience narrative",
+          evidence: "Public comments emphasize lightweight, easy to carry, and organized packing as top reasons for interest.",
+          interpretation: "Convenience messaging resonates, matching high-priority customer needs in Voyara's own research.",
+          confidence: "high"
+        },
+        {
+          finding: "Competitor uses a limited-time offer to drive urgency",
+          evidence: "Campaign includes a launch-week 15% discount visible across multiple channels.",
+          interpretation: "The competitor is prioritizing volume over margin in this launch window.",
+          confidence: "medium"
+        }
+      ],
+      businessInsight: "The competitor is betting on an emotional travel-experience narrative. It leaves open an opportunity: a brand that combines the emotional travel story AND practical product proof. Voyara could test 'effortless travel, backed by real engineering' as a counter-position.",
+      recommendedActions: [
+        "Test a campaign with 'Travel lighter. Move easier.' paired with product proof points",
+        "Create three creative directions: lightweight travel, smarter organization, and stress-free airport experience",
+        "Set up a monthly loop to track competitor messaging evolution"
+      ],
+      doubleCheck: [
+        "Is the competitor discount a permanent change or limited promotion?",
+        "Has competitor messaging shifted since this analysis?",
+        "Confirm Voyara production capacity before committing to a responsive timeline",
+        "Validate with sales whether these themes match actual purchase conversations"
+      ]
+    },
   },
   { id: "market-trends", title: "Market Trend Research", emoji: "📈", category: "Research", scenario: "Is sustainable travel gear becoming a real trend or a niche?", goal: "Validate a market signal before investing.", steps: mkS(["Define the business question","Identify evidence types","Choose your information source","Choose the right Claude capability","Build the instruction","Run the analysis","Understand the result","Human review","Take action","Make it repeatable"]), evidenceNeeded: ["Industry articles","Search trend commentary","Public market reports"], sources: [WEB], capability: "Prompt", capabilityReason: "One-off trend validation does not need a reusable method.", prompt: "Research current evidence for and against growing consumer demand for sustainable travel gear. Present supporting and conflicting evidence separately. Note recency and credibility. End with a plain confidence read.", promptBreakdown: PB("Market research analyst","sustainable travel gear demand","evidence for and against growing demand","industry articles, search trends, reports","note recency and credibility, do not invent","two-column evidence split + confidence read"), whyPromptWorks: "Asking for for-and-against prevents confirmation bias.", outputDescription: "Evidence-for/against list + plain confidence read.", visualOutputType: "evidenceSplit", reviewChecklist: ["Are sources recent and reputable?","Any data gap that changes the confidence?"], nextActions: [{label:"Add to Strategy Doc",description:"Include in quarterly trends review"},{label:"Share with Product Team",description:"Use for roadmap prioritization"}], loopTip: "Re-run quarterly. Pattern tells a story no single report can.", repeatability: "Add to quarterly Routine", estimatedTime: "~4 min · 10 steps" },
   { id: "product-opportunity", title: "Product Opportunity", emoji: "💡", category: "Strategy", scenario: "Where is a real gap between what customers want and what exists?", goal: "Identify and score a product opportunity.", steps: mkS(["Define the business question","Identify evidence types","Choose your information source","Choose the right Claude capability","Build the instruction","Run the analysis","Understand the result","Human review","Take action","Make it repeatable"]), evidenceNeeded: ["Customer research findings","Competitor feature gaps","Market trend signals"], sources: [GDRIVE, WEB, SAMPLE_REV], capability: "Skill — Product Opportunity Skill", capabilityReason: "The opportunity formula (Need + Gap + Signal) should be applied consistently.", prompt: "Based on this research, identify a product opportunity. Structure as: Opportunity, Evidence (with sources), Customer Need, Competitive Context, Potential Benefit, Risks, Questions to Validate, Recommended Next Investigation. This is a hypothesis, not a guaranteed outcome.", promptBreakdown: PB("Product opportunity analyst","research findings on customers, competitors, market","identify a product opportunity with evidence","connected research + public sources","frame as hypothesis, not guaranteed outcome","opportunity card with 8 fields"), whyPromptWorks: "Requiring evidence, risks, and open questions frames output as decision-support.", outputDescription: "Opportunity card with evidence, risks, and recommended investigation.", visualOutputType: "opportunityCard", reviewChecklist: ["This is a hypothesis, not a guarantee.","Validate with real customer input.","Is the competitive gap current?"], nextActions: [{label:"Send to Product Team",description:"Present as candidate for next cycle"},{label:"Run Customer Validation",description:"Test hypothesis with actual customers"}], loopTip: "Re-run when new data arrives. Track which opportunities strengthen.", repeatability: "Save as Product Opportunity Skill", estimatedTime: "~6 min · 10 steps" },

@@ -14,12 +14,15 @@ import {
   Repeat,
   ShieldCheck,
   Sparkles,
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLab } from "@/context/LabContext";
 import { RUN_STAGES, generateLiveAnalysis } from "@/lib/ai-engine";
-import type { UseCase, UseCaseOutput, LiveAnalysisResult } from "@/lib/lab-types";
+import type { UseCase, UseCaseOutput, LiveAnalysisResult, DemoResult, DemoFinding } from "@/lib/lab-types";
 import { COMPANY_CONTEXT, USE_CASES } from "@/data/useCases";
 import { OutputRenderer } from "@/components/lab/outputs";
 
@@ -94,6 +97,110 @@ function RunPanel({ onDone }: { onDone: () => void }) {
         />
       </div>
     </motion.div>
+  );
+}
+
+// ── Polished Demo Result View (replaces OutputRenderer in demo mode) ──────────
+
+function FindingCard({ finding, index }: { finding: DemoFinding; index: number }) {
+  const confColor = finding.confidence === "high"
+    ? "bg-[#67C587]/10 text-[#67C587] border-[#67C587]/20"
+    : finding.confidence === "medium"
+    ? "bg-[#FFD84D]/15 text-[#B8860B] border-[#FFD84D]/30"
+    : "bg-[#E8E4DE] text-[#8A8A82] border-[#E8E4DE]";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08 }}
+      className="rounded-2xl border border-[#E8E4DE] bg-white p-4 shadow-sm"
+    >
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-sm font-bold text-[#2D2D2D]">{finding.finding}</p>
+        <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${confColor}`}>
+          {finding.confidence}
+        </span>
+      </div>
+      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        <div className="rounded-xl bg-[#F4F6FF] px-3 py-2">
+          <p className="text-[9px] font-bold uppercase tracking-widest text-[#4A7BF7]">Evidence</p>
+          <p className="mt-1 text-xs leading-relaxed text-[#5A5A5A]">{finding.evidence}</p>
+        </div>
+        <div className="rounded-xl bg-[#FFF8F0] px-3 py-2">
+          <p className="text-[9px] font-bold uppercase tracking-widest text-[#FF9B54]">Interpretation</p>
+          <p className="mt-1 text-xs leading-relaxed text-[#5A5A5A]">{finding.interpretation}</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function DemoResultView({ result }: { result: DemoResult }) {
+  return (
+    <div className="space-y-5">
+      {/* Demo Mode badge */}
+      <div className="flex items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-500" />
+          DEMO MODE · ILLUSTRATIVE ANALYSIS
+        </span>
+        <span className="text-[9px] text-[#8A8A82]">Illustrative result from workflow sample evidence</span>
+      </div>
+
+      {/* Executive Summary */}
+      <div className="rounded-2xl border border-[#6C5CE7]/15 bg-[#6C5CE7]/[0.04] p-5">
+        <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#6C5CE7]">
+          <BarChart3 className="h-4 w-4" /> Executive Summary
+        </p>
+        <p className="text-sm leading-relaxed text-[#2D2D2D]">{result.executiveSummary}</p>
+      </div>
+
+      {/* Key Findings */}
+      <div className="space-y-3">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#8A8A82]">Key Findings</p>
+        <div className="grid gap-3">
+          {result.findings.map((f, i) => (
+            <FindingCard key={i} finding={f} index={i} />
+          ))}
+        </div>
+      </div>
+
+      {/* Business Insight */}
+      <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-5">
+        <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">
+          <TrendingUp className="h-4 w-4" /> Business Insight
+        </p>
+        <p className="text-sm leading-relaxed text-[#2D2D2D]">{result.businessInsight}</p>
+      </div>
+
+      {/* Recommended Actions */}
+      <div className="rounded-2xl border border-[#FF7B72]/15 bg-[#FF7B72]/[0.03] p-5">
+        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">Recommended Actions</p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {result.recommendedActions.map((action, i) => (
+            <div key={i} className="flex items-start gap-2 rounded-xl border border-[#E8E4DE] bg-white px-3 py-2.5">
+              <span className="mt-0.5 text-[#FF7B72]">→</span>
+              <span className="text-xs leading-relaxed text-[#2D2D2D]">{action}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* What should a marketer double-check? */}
+      <div className="rounded-2xl border border-[#E8E4DE] bg-white p-5">
+        <p className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">
+          <ShieldCheck className="h-4 w-4" /> What should a marketer double-check?
+        </p>
+        <ul className="space-y-1.5">
+          {result.doubleCheck.map((item, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-[#8A8A82]">
+              <CircleDashed className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#FF7B72]" /> {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
 
@@ -377,49 +484,71 @@ function StepContent({ uc, step, running, outputReady, liveResult, liveError }: 
 
       {step === 7 && outputReady && (
         <div className="space-y-5">
-          {/* Source indicator */}
-          {liveResult?.source === "live" ? (
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5CE7]/20 bg-[#6C5CE7]/[0.06] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#6C5CE7]">
-                <Sparkles className="h-3 w-3" /> Live Claude Output · {liveResult.model}
-              </span>
-              {liveResult.inputTokens && liveResult.outputTokens && (
-                <span className="text-[9px] text-[#8A8A82]">{liveResult.inputTokens + liveResult.outputTokens} tokens</span>
-              )}
-            </div>
-          ) : liveError ? (
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
-                <AlertTriangle className="h-3 w-3" /> {liveError}
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
-                <AlertTriangle className="h-3 w-3" /> Illustrative Output · Demo Mode
-              </span>
-            </div>
+          {/* Live Claude output */}
+          {liveResult?.source === "live" && (
+            <>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5CE7]/20 bg-[#6C5CE7]/[0.06] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#6C5CE7]">
+                  <Sparkles className="h-3 w-3" /> Live Claude Output · {liveResult.model}
+                </span>
+                {liveResult.inputTokens && liveResult.outputTokens && (
+                  <span className="text-[9px] text-[#8A8A82]">{liveResult.inputTokens + liveResult.outputTokens} tokens</span>
+                )}
+              </div>
+              <OutputRenderer output={liveResult.output as UseCaseOutput} />
+            </>
           )}
 
-          <OutputRenderer output={(liveResult?.output ?? uc.output) as UseCaseOutput} />
-
-          {/* Honest disclaimer */}
-          <div className="rounded-2xl border border-[#E8E4DE] bg-white p-4">
-            <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">
-              <ShieldCheck className="h-4 w-4" /> What should a marketer double-check?
-            </p>
-            <ul className="space-y-1.5">
-              {(liveResult ? [
-                "Verify all findings against real market data",
-                "Check that competitor information is current",
-                "Validate assumptions with your team before acting"
-              ] : uc.reviewChecklist).map((r) => (
-                <li key={r} className="flex items-start gap-2 text-sm text-[#8A8A82]">
-                  <CircleDashed className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#FF7B72]" /> {r}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Demo / fallback result — always show polished demo view */}
+          {(!liveResult || liveResult.source !== "live") && (
+            uc.demoResult
+              ? <DemoResultView result={uc.demoResult} />
+              : (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-500" />
+                      DEMO MODE · ILLUSTRATIVE ANALYSIS
+                    </span>
+                    <span className="text-[9px] text-[#8A8A82]">Illustrative result from workflow sample evidence</span>
+                  </div>
+                  <div className="rounded-2xl border border-[#6C5CE7]/15 bg-[#6C5CE7]/[0.04] p-5">
+                    <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#6C5CE7]">Executive Summary</p>
+                    <p className="text-sm leading-relaxed text-[#2D2D2D]">{uc.outputDescription}</p>
+                  </div>
+                  {uc.businessValue && (
+                    <div className="rounded-2xl border border-[#67C587]/20 bg-[#67C587]/[0.04] p-5">
+                      <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#67C587]">Business Insight</p>
+                      <p className="text-sm leading-relaxed text-[#2D2D2D]">{uc.businessValue.businessInsight}</p>
+                    </div>
+                  )}
+                  {uc.businessValue && uc.businessValue.keyFindings.length > 0 && (
+                    <div className="rounded-2xl border border-[#E8E4DE] bg-white p-5">
+                      <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#8A8A82]">Key Findings</p>
+                      <ul className="space-y-1.5">
+                        {uc.businessValue.keyFindings.map((f, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-[#5A5A5A]">
+                            <span className="mt-0.5 text-[#67C587]">→</span> {f}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <div className="rounded-2xl border border-[#E8E4DE] bg-white p-5">
+                    <p className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#FF7B72]">
+                      <ShieldCheck className="h-4 w-4" /> What should a marketer double-check?
+                    </p>
+                    <ul className="space-y-1.5">
+                      {uc.reviewChecklist.map((r) => (
+                        <li key={r} className="flex items-start gap-2 text-sm text-[#8A8A82]">
+                          <CircleDashed className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#FF7B72]" /> {r}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )
+          )}
         </div>
       )}
 

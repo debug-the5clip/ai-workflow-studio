@@ -46,6 +46,40 @@ export const UC_17_24: UseCase[] = [
       recommendedAction: "Implement the proposed single-variable experiment with the measurement plan, then review results in two weeks.",
       valueStatement: "Structured optimization prevents reactive changes and builds compounding learning from each campaign cycle.",
     },
+    demoResult: {
+      executiveSummary: "The current campaign CTR of 1.2% is below the 2.1% benchmark. Analysis suggests the headline creative is not matching audience expectations, and targeting may be too broad. A single-variable test on the headline is the recommended first experiment.",
+      findings: [
+        {
+          finding: "Headline creative appears misaligned with audience expectations",
+          evidence: "CTR dropped after the creative refresh. Click patterns suggest the headline does not match what the audience expects.",
+          interpretation: "The headline may be too abstract. More specific, benefit-driven copy may perform better.",
+          confidence: "high"
+        },
+        {
+          finding: "Audience targeting is broader than necessary",
+          evidence: "Impressions increased but CTR decreased, suggesting diluted audience quality.",
+          interpretation: "Broader reach diluted the click rate. Tighter segments would improve efficiency.",
+          confidence: "medium"
+        },
+        {
+          finding: "Creative fatigue is not the primary issue",
+          evidence: "Creative was refreshed 3 weeks ago. Fatigue typically appears after 6-8 weeks.",
+          interpretation: "The problem is creative quality and alignment, not creative age.",
+          confidence: "high"
+        }
+      ],
+      businessInsight: "The CTR decline is most likely a creative-messaging problem, not a targeting or fatigue problem. Testing a more specific, benefit-driven headline should be the first experiment.",
+      recommendedActions: [
+        "Test a new headline variant focusing on a specific product benefit",
+        "Keep all other variables constant for 2 weeks to isolate headline impact",
+        "After the test, apply the winning approach to other campaign variants"
+      ],
+      doubleCheck: [
+        "Confirm the CTR benchmark is current and relevant to this campaign type",
+        "Check whether external factors coincided with the creative refresh",
+        "Verify the measurement setup can attribute CTR changes to the headline test"
+      ]
+    },
   },
   { id: "sales-insights", title: "Sales Insights", emoji: "💰", category: "Operations", scenario: "Which campaigns/channels are actually influencing sales?", goal: "Identify marketing-sales correlations (not proof).", steps: mkS(["Define the business question","Identify evidence needed","Choose your information source","Choose the right Claude capability","Build the instruction","Run the analysis","Understand the result","Human review","Take action","Make it repeatable"]), evidenceNeeded: ["Sales data (weekly figures)","Campaign timing and spend","External factors (seasonality, pricing)"], sources: [SAMPLE_SALES, STRIPE, SAMPLE_CAMP], capability: "Prompt + Connector (Stripe example)", capabilityReason: "Connecting sales data with campaign timing is a well-scoped analysis.", prompt: "Using this sales and campaign timing data, identify which campaigns appear most associated with sales increases. Note this shows correlation, not proof of causation. Rule out external factors where possible.", promptBreakdown: PB("Sales-marketing analyst","which campaigns influence sales","identify campaign-sales associations, rule out external factors","sales data, campaign timing, external factors","correlation vs causation, flag external factors","ranked association list with confidence notes"), whyPromptWorks: "Leading with correlation, not proof, prevents the most dangerous interpretation error.", outputDescription: "Ranked association list with correlation caveat.", visualOutputType: "salesTimeline", reviewChecklist: ["Rule out external factors.","Would finance agree with these associations?"], nextActions: [{label:"Share with Finance Team",description:"Cross-reference with their analysis"},{label:"Adjust Budget Allocation",description:"After finance review"}], loopTip: "Re-run monthly. Track how associations evolve.", repeatability: "Add to monthly Routine", estimatedTime: "~5 min · 10 steps",
     connectorDetails: [

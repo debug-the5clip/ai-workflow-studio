@@ -135,6 +135,21 @@ export interface BusinessValue {
   valueStatement: string;
 }
 
+export interface DemoFinding {
+  finding: string;
+  evidence: string;
+  interpretation: string;
+  confidence: "high" | "medium" | "low";
+}
+
+export interface DemoResult {
+  executiveSummary: string;
+  findings: DemoFinding[];
+  businessInsight: string;
+  recommendedActions: string[];
+  doubleCheck: string[];
+}
+
 export interface UseCase {
   id: string;
   title: string;
@@ -164,6 +179,7 @@ export interface UseCase {
   securityClassification?: SecurityClassification;
   humanReview?: HumanReview;
   businessValue?: BusinessValue;
+  demoResult?: DemoResult;
   /** Legacy compat */
   summary?: string;
   output?: { kind: string; [k: string]: unknown };
